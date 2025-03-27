@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="250dp"
+    android:padding="10dp"
+    android:background="@drawable/bg_gray_corner_15">
+
+    <ImageView
+        android:id="@+id/img_laptop"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"/>
+
+    <TextView
+        android:id="@+id/tv_name_of_laptop"
+        android:layout_below="@+id/img_laptop"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:text="@string/asus_vivobook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_price_of_laptop"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv_name_of_laptop"
+        android:textSize="18sp"
+        android:textColor="@color/bg_primary"
+        android:text="@string/money_sample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_marginStart="5dp"
+        android:textSize="18sp"
+        android:textColor="@color/bg_primary"
+        android:text="@string/unit_money"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv_name_of_laptop"
+        android:layout_toEndOf="@+id/tv_price_of_laptop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_sold_of_laptop"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:text="@string/sold"
+        android:layout_toStartOf="@+id/tv_quantity_sold_of_laptop"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_quantity_sold_of_laptop"
+        android:text="@string/int_example"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

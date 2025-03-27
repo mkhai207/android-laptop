@@ -1,0 +1,46 @@
+# Android generated files
+*.apk
+*.ap_
+*.aab
+
+# Gradle files
+.gradle/
+build/
+*/build/
+
+# Local configuration file (SDK path, etc.)
+local.properties
+
+# Log files
+*.log
+
+# Android Studio files
+.idea/
+*.iml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Dependency directories
+bin/
+gen/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Windows-specific files
+Thumbs.db
+desktop.ini
+
+# Miscellaneous
+captures/
+externalNativeBuild/
+
+# Gradle wrapper (optional: remove these lines if you want to push Gradle Wrapper)
+gradlew
+gradlew.bat
+gradle-wrapper.jar
+gradle-wrapper.properties

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_second">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_item_cart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_checkout"/>
+
+    <LinearLayout
+        android:id="@+id/layout_checkout"
+        android:elevation="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edt_discount"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                android:hint="@string/discount_input"
+                android:padding="8dp" />
+
+            <ImageButton
+                android:id="@+id/ib_apply_discount"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_btn_oval_black"
+                android:src="@drawable/ic_forward"
+                app:tint="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="10dp">
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_total_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="@string/int_example"
+                android:textColor="@color/bg_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_payment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/bg_primary"
+            android:text="@string/payment"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
