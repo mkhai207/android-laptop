@@ -84,14 +84,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                     int quantity = itemCart.getProduct().getQuantity();
                     int cartQuantity = Integer.parseInt(binding.tvQuantity.getText().toString());
                     if (cartQuantity < quantity){
+                        // cap nhat ui
                         binding.tvQuantity.setText(String.valueOf(cartQuantity + 1));
+                        int curQuantity = Integer.parseInt(binding.tvQuantity.getText().toString());
+                        binding.tvPrice.setText(String.valueOf(curQuantity * itemCart.getProduct().getPrice()));
+
                         if (listener != null){
                             AddToCartRequest request = new AddToCartRequest(binding.tvQuantity.getText().toString(), itemCart.getProduct().getId());
                             listener.onClickAdjustQuantity(request);
-
-                            // cap nhat gia tien
-                            int curQuantity = Integer.parseInt(binding.tvQuantity.getText().toString());
-                            binding.tvPrice.setText(String.valueOf(curQuantity * itemCart.getProduct().getPrice()));
                         }
                     }
                 }
@@ -102,14 +102,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 public void onClick(View view) {
                     int cartQuantity = Integer.parseInt(binding.tvQuantity.getText().toString());
                     if (cartQuantity > 1){
+                        // cap nhat ui
                         binding.tvQuantity.setText(String.valueOf(cartQuantity - 1));
+                        int curQuantity = Integer.parseInt(binding.tvQuantity.getText().toString());
+                        binding.tvPrice.setText(String.valueOf(curQuantity * itemCart.getProduct().getPrice()));
+
                         if (listener != null){
                             AddToCartRequest request = new AddToCartRequest(binding.tvQuantity.getText().toString(), itemCart.getProduct().getId());
                             listener.onClickAdjustQuantity(request);
-
-                            // cap nhat gia tien
-                            int curQuantity = Integer.parseInt(binding.tvQuantity.getText().toString());
-                            binding.tvPrice.setText(String.valueOf(curQuantity * itemCart.getProduct().getPrice()));
                         }
                     }
                 }

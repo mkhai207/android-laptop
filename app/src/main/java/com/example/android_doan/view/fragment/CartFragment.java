@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.CartAdapter;
@@ -55,6 +56,22 @@ public class CartFragment extends Fragment {
                 cartViewModel.removeCart(productId);
             }
 
+        });
+
+        cartViewModel.getActionResult().observe(getViewLifecycleOwner(), resource -> {
+            if (resource != null){
+                switch (resource.getStatus()){
+                    case LOADING:
+                        binding.progressBar.setVisibility(View.VISIBLE);
+                        break;
+                    case SUCCESS:
+                        binding.progressBar.setVisibility(View.GONE);
+                        break;
+                    case ERROR:
+                        Toast.makeText(requireContext(), resource.getMessage(), Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
         });
 
         super.onViewCreated(view, savedInstanceState);

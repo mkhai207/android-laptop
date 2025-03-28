@@ -15,6 +15,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layout_checkout"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/rcv_item_cart"
+        app:layout_constraintEnd_toEndOf="@id/rcv_item_cart"
+        app:layout_constraintStart_toStartOf="@id/rcv_item_cart"
+        app:layout_constraintTop_toTopOf="@id/rcv_item_cart" />
+
     <LinearLayout
         android:id="@+id/layout_checkout"
         android:elevation="5dp"
