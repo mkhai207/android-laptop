@@ -1,8 +1,10 @@
 package com.example.android_doan.data.api.user;
 
 import com.example.android_doan.data.model.request.AddToCartRequest;
+import com.example.android_doan.data.model.request.OrderRequest;
 import com.example.android_doan.data.model.response.AddToCartResponse;
 import com.example.android_doan.data.model.response.GetCartResponse;
+import com.example.android_doan.data.model.response.OrderResponse;
 import com.example.android_doan.data.model.response.ProductResponse;
 import com.example.android_doan.data.model.response.CommonResponse;
 import com.example.android_doan.data.model.response.UserResponse;
@@ -35,4 +37,10 @@ public interface UserApi {
 
     @DELETE("api/v1/carts/{cartId}")
     Single<CommonResponse> removeCartResponse(@Path("cartId") String cartId);
+
+    @POST("api/v1/orders")
+    Single<OrderResponse> placeOrder(@Body OrderRequest request);
+
+    @DELETE("api/v1/carts/clear")
+    Single<CommonResponse> clearCart();
 }

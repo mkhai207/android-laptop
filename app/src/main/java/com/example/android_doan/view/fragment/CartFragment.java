@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,18 +20,23 @@ import android.widget.Toast;
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.CartAdapter;
 import com.example.android_doan.data.model.request.AddToCartRequest;
+import com.example.android_doan.data.model.request.OrderRequest;
+import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.repository.RemoteRepository.CartRepository;
 import com.example.android_doan.databinding.FragmentCartBinding;
 import com.example.android_doan.viewmodel.CartViewModeFactory;
 import com.example.android_doan.viewmodel.CartViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CartFragment extends Fragment {
     private FragmentCartBinding binding;
     private CartViewModel cartViewModel;
     private RecyclerView rcvItemCart;
     private CartAdapter cartAdapter;
+    private List<GetCartResponse.Data> mCarts;
+    private int mTotal;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -45,6 +52,13 @@ public class CartFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         loadItemCart();
+        cartViewModel.getTotalPriceCart().observe(getViewLifecycleOwner(), total -> {
+            if (total != null){
+                mTotal = total;
+                binding.tvTotalData.setText(String.valueOf(total));
+            }
+        });
+
         cartAdapter.setListener(new CartAdapter.IOnClickItemCart() {
             @Override
             public void onClickAdjustQuantity(AddToCartRequest request) {
@@ -74,6 +88,8 @@ public class CartFragment extends Fragment {
             }
         });
 
+        setupListener();
+
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -102,10 +118,30 @@ public class CartFragment extends Fragment {
         cartViewModel.getCart();
         cartViewModel.getItemCartLiveData().observe(getViewLifecycleOwner(), itemCarts ->{
             if (itemCarts != null){
+                mCarts = itemCarts;
                 Log.d("lkhai4617", "updateItemCart: success");
                 cartAdapter.updateItemCart(itemCarts);
             } else {
                 Log.d("lkhai4617", "loadItemCart: null");
+            }
+        });
+    }
+
+    private void setupListener(){
+        binding.btnPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<GetCartResponse.Data> carts = new ArrayList<>(mCarts);
+                if (carts.isEmpty()){
+                    return;
+                }
+
+                Bundle args = new Bundle();
+                args.putSerializable(CheckoutFragment.CHECKOUT_FRAGMENT_ITEM, carts);
+                args.putInt(CheckoutFragment.CHECKOUT_FRAGMENT_TOTAL, mTotal);
+//                CheckoutFragment checkoutFragment = CheckoutFragment.newInstance(carts);
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_cartFragment_to_checkoutFragment, args);
             }
         });
     }

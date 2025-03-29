@@ -21,6 +21,8 @@ public class CartViewModel extends ViewModel {
     private CartRepository cartRepository;
     private MutableLiveData<List<GetCartResponse.Data>> itemCartLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<Integer> totalPriceCart = new MutableLiveData<>();
+
     private MutableLiveData<Resource> actionResult = new MutableLiveData<>();
 
     private CompositeDisposable disposables = new CompositeDisposable();
@@ -32,6 +34,10 @@ public class CartViewModel extends ViewModel {
 
     public MutableLiveData<List<GetCartResponse.Data>> getItemCartLiveData(){
         return itemCartLiveData;
+    }
+
+    public MutableLiveData<Integer> getTotalPriceCart(){
+        return totalPriceCart;
     }
 
     public MutableLiveData<Resource> getActionResult(){
@@ -46,6 +52,12 @@ public class CartViewModel extends ViewModel {
                 .subscribe(response -> {
                     if (response.getStatusCode() == 200 && response.getData() != null){
                         itemCartLiveData.setValue(response.getData());
+                        int total = 0;
+                        for (GetCartResponse.Data item: response.getData()){
+                            total += item.getQuantity() * item.getProduct().getPrice();
+                        }
+                        totalPriceCart.setValue(total);
+
                         actionResult.setValue(Resource.success("Get carts success", Resource.Action.GET_CART));
                     } else {
                         actionResult.setValue(Resource.error("Get carts failure", Resource.Action.GET_CART));
@@ -67,6 +79,7 @@ public class CartViewModel extends ViewModel {
                 .subscribe(response -> {
                     if (response.getStatusCode() == 200){
                         actionResult.setValue(Resource.success("Update quantity success", Resource.Action.UPDATE_QUANTITY));
+                        getCart();
                     } else {
                         actionResult.setValue(Resource.error("Update quantity failure", Resource.Action.UPDATE_QUANTITY));
                         getCart();

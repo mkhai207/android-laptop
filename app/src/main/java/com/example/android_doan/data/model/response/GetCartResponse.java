@@ -2,16 +2,17 @@ package com.example.android_doan.data.model.response;
 
 import com.example.android_doan.data.model.ProductModel;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GetCartResponse {
+public class GetCartResponse implements Serializable {
     private int statusCode;
     private String error;
     private String message;
 
     private List<Data> data;
 
-    public static class Data {
+    public static class Data implements Serializable{
         private int quantity;
         private ProductModel product;
 

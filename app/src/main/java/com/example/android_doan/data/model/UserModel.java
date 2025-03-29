@@ -10,6 +10,10 @@ public class UserModel implements Serializable {
     private String phone;
     private RoleModel role;
 
+    public UserModel(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
