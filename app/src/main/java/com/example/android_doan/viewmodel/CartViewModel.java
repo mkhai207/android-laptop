@@ -45,7 +45,7 @@ public class CartViewModel extends ViewModel {
     }
 
     public void getCart(){
-        actionResult.setValue(Resource.loading(Resource.Action.GET_CART));
+        actionResult.setValue(Resource.loading());
         Disposable disposable = cartRepository.getCart()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -58,13 +58,13 @@ public class CartViewModel extends ViewModel {
                         }
                         totalPriceCart.setValue(total);
 
-                        actionResult.setValue(Resource.success("Get carts success", Resource.Action.GET_CART));
+                        actionResult.setValue(Resource.success("Get carts success"));
                     } else {
-                        actionResult.setValue(Resource.error("Get carts failure", Resource.Action.GET_CART));
+                        actionResult.setValue(Resource.error("Get carts failure"));
                     }
                 }, throwable -> {
                     if (throwable.getMessage() != null){
-                        actionResult.setValue(Resource.error(throwable.getMessage(), Resource.Action.GET_CART));
+                        actionResult.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
 
@@ -72,21 +72,21 @@ public class CartViewModel extends ViewModel {
     }
 
     public void updateQuantity(AddToCartRequest request){
-        actionResult.setValue(Resource.loading(Resource.Action.UPDATE_QUANTITY));
+        actionResult.setValue(Resource.loading());
         Disposable disposable = cartRepository.updateQuantity(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.getStatusCode() == 200){
-                        actionResult.setValue(Resource.success("Update quantity success", Resource.Action.UPDATE_QUANTITY));
+                        actionResult.setValue(Resource.success("Update quantity success"));
                         getCart();
                     } else {
-                        actionResult.setValue(Resource.error("Update quantity failure", Resource.Action.UPDATE_QUANTITY));
+                        actionResult.setValue(Resource.error("Update quantity failure"));
                         getCart();
                     }
                 }, throwable -> {
                     if (throwable.getMessage() != null){
-                        actionResult.setValue(Resource.error(throwable.getMessage(), Resource.Action.UPDATE_QUANTITY));
+                        actionResult.setValue(Resource.error(throwable.getMessage()));
                         getCart();
                     }
                 });
@@ -94,21 +94,21 @@ public class CartViewModel extends ViewModel {
     }
 
     public void removeCart(String cartId){
-        actionResult.setValue(Resource.loading(Resource.Action.REMOVE_CART));
+        actionResult.setValue(Resource.loading());
         Disposable disposable = cartRepository.removeCart(cartId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.getStatusCode() == 200){
-                        actionResult.setValue(Resource.success("Remove success", Resource.Action.REMOVE_CART));
+                        actionResult.setValue(Resource.success("Remove success"));
                         getCart();
                     } else {
-                        actionResult.setValue(Resource.error("Remove failure", Resource.Action.REMOVE_CART));
+                        actionResult.setValue(Resource.error("Remove failure"));
                         getCart();
                     }
                 }, throwable -> {
                     if (throwable.getMessage() != null){
-                        actionResult.setValue(Resource.error(throwable.getMessage(), Resource.Action.REMOVE_CART));
+                        actionResult.setValue(Resource.error(throwable.getMessage()));
                         getCart();
                     }
                 });

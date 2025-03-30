@@ -10,6 +10,7 @@ public class BrandModel implements Serializable {
 
     @SerializedName("name")
     private String name;
+    private boolean isChecked;
 
     // Getter và Setter
     public String getId() { return id; }
@@ -17,4 +18,8 @@ public class BrandModel implements Serializable {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
 }

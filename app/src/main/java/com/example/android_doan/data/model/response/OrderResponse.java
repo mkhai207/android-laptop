@@ -63,28 +63,18 @@ public class OrderResponse implements Serializable {
         @SerializedName("createdBy")
         private String createdBy;
 
+        @SerializedName("updatedAt")
+        private String updatedAt;
+
+        @SerializedName("updatedBy")
+        private String updatedBy;
+
         @SerializedName("user")
         private UserModel user;
 
         @SerializedName("orderDetails")
         private List<OrderDetail> orderDetails;
 
-
-        public OrderData(int id, String status, double totalMoney, String paymentMethod,
-                         String shippingAddress, String name, String phone, String createdAt,
-                         String createdBy, UserModel user, List<OrderDetail> orderDetails) {
-            this.id = id;
-            this.status = status;
-            this.totalMoney = totalMoney;
-            this.paymentMethod = paymentMethod;
-            this.shippingAddress = shippingAddress;
-            this.name = name;
-            this.phone = phone;
-            this.createdAt = createdAt;
-            this.createdBy = createdBy;
-            this.user = user;
-            this.orderDetails = orderDetails;
-        }
 
         public int getId() {
             return id;
@@ -122,6 +112,14 @@ public class OrderResponse implements Serializable {
             return createdBy;
         }
 
+        public String getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public String getUpdatedBy() {
+            return updatedBy;
+        }
+
         public UserModel getUser() {
             return user;
         }
@@ -146,14 +144,6 @@ public class OrderResponse implements Serializable {
 
         @SerializedName("productThumbnail")
         private String productThumbnail;
-
-        public OrderDetail(int id, double price, int quantity, String productName, String productThumbnail) {
-            this.id = id;
-            this.price = price;
-            this.quantity = quantity;
-            this.productName = productName;
-            this.productThumbnail = productThumbnail;
-        }
 
         public int getId() {
             return id;

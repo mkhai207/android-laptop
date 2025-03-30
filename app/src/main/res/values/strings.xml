@@ -69,4 +69,20 @@
     <string name="continue_shopping">Tiếp tục mua sắm</string>
     <string name="checkout">Thanh toán</string>
     <string name="success">Thành công</string>
+    <string name="orders">Đơn hàng</string>
+    <string name="address">Địa chỉ nhận hàng</string>
+    <string name="payment_method">Phương thức thanh toán</string>
+    <string name="settings">Cài đặt</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="pending">Đang chờ</string>
+    <string name="shipping">Đang giao</string>
+    <string name="completed">Đã giao</string>
+    <string name="canceled">Đã hủy</string>
+    <string name="id">1</string>
+    <string name="date">30-3-2025</string>
+    <string name="order_id">Mã đơn hàng:</string>
+    <string name="quantity">Số lượng:</string>
+    <string name="detail">Chi tiết</string>
+    <string name="filter">Lọc</string>
+    <string name="low_to_high">Giá: Thấp đến cao</string>
 </resources>

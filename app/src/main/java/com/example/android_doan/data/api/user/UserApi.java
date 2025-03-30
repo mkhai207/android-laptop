@@ -43,4 +43,8 @@ public interface UserApi {
 
     @DELETE("api/v1/carts/clear")
     Single<CommonResponse> clearCart();
+
+    @GET("api/v1/orders/{userId}")
+    Single<OrderResponse> getOrder(@Path("userId") String userId);
+
 }

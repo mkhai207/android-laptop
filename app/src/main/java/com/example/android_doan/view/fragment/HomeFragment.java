@@ -112,25 +112,27 @@ public class HomeFragment extends Fragment {
     private void loadUserInfo(){
         homeViewModel.getUser();
         homeViewModel.getUserLiveData().observe(getViewLifecycleOwner(), userModel -> {
-            binding.tvFullName.setText(userModel.getFullName());
-            if (userModel.getAvatar() != null){
-                Glide.with(requireContext())
-                        .load("http://192.168.50.2:8080/" + userModel.getAvatar())
-                        .error(R.drawable.ic_user)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                Log.e("lkhai4617", "Glide load failed: " + e.getMessage());
-                                return false;
-                            }
+            if (userModel != null){
+                binding.tvFullName.setText(userModel.getFullName());
+                if (userModel.getAvatar() != null){
+                    Glide.with(requireContext())
+                            .load("http://192.168.50.2:8080/" + userModel.getAvatar())
+                            .error(R.drawable.ic_user)
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    Log.e("lkhai4617", "Glide load failed: " + e.getMessage());
+                                    return false;
+                                }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                Log.d("lkhai4617", "Glide load success");
-                                return false;
-                            }
-                        })
-                        .into(binding.imgAvatar);
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    Log.d("lkhai4617", "Glide load success");
+                                    return false;
+                                }
+                            })
+                            .into(binding.imgAvatar);
+                }
             }
         });
     }
