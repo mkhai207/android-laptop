@@ -21,6 +21,7 @@ import com.example.android_doan.R;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.databinding.ItemProductBinding;
+import com.example.android_doan.utils.FormatUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -98,7 +99,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                         .into(binding.imgLaptop);
             }
             binding.tvNameOfLaptop.setText(productModel.getName());
-            binding.tvPriceOfLaptop.setText(String.valueOf(productModel.getPrice()));
+            String price = FormatUtil.formatCurrency(productModel.getPrice());
+            binding.tvPriceOfLaptop.setText(price);
             binding.tvQuantitySoldOfLaptop.setText(String.valueOf(productModel.getSold()));
 
             binding.getRoot().setOnClickListener(new View.OnClickListener() {

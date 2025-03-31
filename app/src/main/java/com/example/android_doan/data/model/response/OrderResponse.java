@@ -17,7 +17,7 @@ public class OrderResponse implements Serializable {
     private String message;
 
     @SerializedName("data")
-    private OrderData data;
+    private OrderDataWrapper data;
 
     public int getStatusCode() {
         return statusCode;
@@ -31,11 +31,27 @@ public class OrderResponse implements Serializable {
         return message;
     }
 
-    public OrderData getData() {
+    public OrderDataWrapper getData() {
         return data;
     }
 
-    public static class OrderData{
+    public static class OrderDataWrapper implements Serializable{
+        @SerializedName("meta")
+        private Meta meta;
+
+        @SerializedName("result")
+        private List<OrderData> result;
+
+        public Meta getMeta() {
+            return meta;
+        }
+
+        public List<OrderData> getResult() {
+            return result;
+        }
+    }
+
+    public static class OrderData implements Serializable{
         @SerializedName("id")
         private int id;
 
@@ -74,7 +90,6 @@ public class OrderResponse implements Serializable {
 
         @SerializedName("orderDetails")
         private List<OrderDetail> orderDetails;
-
 
         public int getId() {
             return id;
@@ -129,7 +144,7 @@ public class OrderResponse implements Serializable {
         }
     }
 
-    public static class OrderDetail{
+    public static class OrderDetail implements Serializable{
         @SerializedName("id")
         private int id;
 

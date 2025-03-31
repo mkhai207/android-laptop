@@ -34,7 +34,7 @@ public class ProductModel implements Serializable {
     private String screen;
 
     @SerializedName("price")
-    private int price;
+    private double price;
 
     @SerializedName("description")
     private String description;
@@ -109,7 +109,7 @@ public class ProductModel implements Serializable {
     public String getScreen() { return screen; }
     public void setScreen(String screen) { this.screen = screen; }
 
-    public int getPrice() { return price; }
+    public double getPrice() { return price; }
     public void setPrice(int price) { this.price = price; }
 
     public String getDescription() { return description; }

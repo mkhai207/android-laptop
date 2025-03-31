@@ -24,6 +24,7 @@ import com.example.android_doan.data.model.request.OrderRequest;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.repository.RemoteRepository.CartRepository;
 import com.example.android_doan.databinding.FragmentCartBinding;
+import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.viewmodel.CartViewModeFactory;
 import com.example.android_doan.viewmodel.CartViewModel;
 
@@ -36,7 +37,7 @@ public class CartFragment extends Fragment {
     private RecyclerView rcvItemCart;
     private CartAdapter cartAdapter;
     private List<GetCartResponse.Data> mCarts;
-    private int mTotal;
+    private double mTotal;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -55,7 +56,8 @@ public class CartFragment extends Fragment {
         cartViewModel.getTotalPriceCart().observe(getViewLifecycleOwner(), total -> {
             if (total != null){
                 mTotal = total;
-                binding.tvTotalData.setText(String.valueOf(total));
+                String totalPrice = FormatUtil.formatCurrency(mTotal);
+                binding.tvTotalData.setText(totalPrice);
             }
         });
 
@@ -138,7 +140,7 @@ public class CartFragment extends Fragment {
 
                 Bundle args = new Bundle();
                 args.putSerializable(CheckoutFragment.CHECKOUT_FRAGMENT_ITEM, carts);
-                args.putInt(CheckoutFragment.CHECKOUT_FRAGMENT_TOTAL, mTotal);
+                args.putDouble(CheckoutFragment.CHECKOUT_FRAGMENT_TOTAL, mTotal);
 //                CheckoutFragment checkoutFragment = CheckoutFragment.newInstance(carts);
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(R.id.action_cartFragment_to_checkoutFragment, args);

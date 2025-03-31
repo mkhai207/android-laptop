@@ -17,6 +17,7 @@ import com.example.android_doan.adapter.ProductDetailViewPager2Adapter;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.databinding.FragmentProductDetailBinding;
+import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.viewmodel.ProductDetailViewModel;
 
 import java.util.List;
@@ -104,7 +105,8 @@ public class ProductDetailFragment extends Fragment {
         }
         binding.tvDescriptionContent.setText(productModel.getDescription());
         binding.tvNameOfLaptop.setText(productModel.getName());
-        binding.tvPriceOfLaptop.setText(String.valueOf(productModel.getPrice()));
+        String price = FormatUtil.formatCurrency(productModel.getPrice());
+        binding.tvPriceOfLaptop.setText(price);
         binding.tvColorInfo.setText(productModel.getColor());
         binding.tvCpuInfo.setText(productModel.getCpu());
         binding.tvGpuInfo.setText(productModel.getGpu());

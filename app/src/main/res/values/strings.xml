@@ -26,7 +26,7 @@
     <string name="product">Sản phẩm</string>
     <string name="view_all">Xem tất cả</string>
     <string name="asus_vivobook">Asus Vivobook</string>
-    <string name="money_sample">17000000</string>
+    <string name="ex_price">17000000</string>
     <string name="unit_money">VNĐ</string>
     <string name="sold">Đã bán:</string>
     <string name="int_example">20</string>
@@ -79,10 +79,21 @@
     <string name="completed">Đã giao</string>
     <string name="canceled">Đã hủy</string>
     <string name="id">1</string>
-    <string name="date">30-3-2025</string>
+    <string name="ex_date">30-3-2025</string>
     <string name="order_id">Mã đơn hàng:</string>
     <string name="quantity">Số lượng:</string>
     <string name="detail">Chi tiết</string>
     <string name="filter">Lọc</string>
     <string name="low_to_high">Giá: Thấp đến cao</string>
+    <string name="order_history">Lịch sử đơn hàng</string>
+    <string name="ex_shipping_method">FedEx, 3 ngày, 15$</string>
+    <string name="ex_discount">10%, Khuyến mãi</string>
+    <string name="order_info">Thông tin đơn hàng</string>
+    <string name="discount">Ưu đãi</string>
+    <string name="shipping_method">Phương thức vận chuyển</string>
+    <string name="ex_quantity_product">2 sản phẩm</string>
+    <string name="ex_order_id">Đơn hàng 1</string>
+    <string name="ex_category">Gamming</string>
+    <string name="ex_product_id">12Ne1233e1</string>
+    <string name="order_detail">Chi tiết đơn hàng</string>
 </resources>

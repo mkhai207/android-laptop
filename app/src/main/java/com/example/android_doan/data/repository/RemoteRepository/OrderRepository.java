@@ -6,7 +6,7 @@ import com.example.android_doan.data.model.response.OrderResponse;
 import io.reactivex.Single;
 
 public class OrderRepository {
-    public Single<OrderResponse> getOrder(String userId){
-        return UserService.getInstance().getOrder(userId);
+    public Single<OrderResponse> getOrder(String userId, int page, int size){
+        return UserService.getInstance().getOrder(userId, page, size);
     }
 }

@@ -89,13 +89,7 @@ public class HomeFragment extends Fragment {
             public void onClickProduct(ProductModel productModel) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("product", productModel);
-//                ProductDetailFragment productDetailFragment = new ProductDetailFragment();
-//                productDetailFragment.setArguments(bundle);
 
-//                requireActivity().getSupportFragmentManager().beginTransaction()
-//                        .add(R.id.frag_container, productDetailFragment)
-//                        .addToBackStack("product_detail_fragment")
-//                        .commit();
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(R.id.action_homeFragment_to_productDetailFragment, bundle);
             }

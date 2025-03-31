@@ -44,7 +44,12 @@
         android:id="@+id/profileFragment"
         android:name="com.example.android_doan.view.fragment.ProfileFragment"
         android:label="@string/profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_orderHistoryFragment"
+            app:destination="@id/orderHistoryFragment"
+            app:popUpTo="@id/profileFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.example.android_doan.view.fragment.ProductDetailFragment"
@@ -65,4 +70,19 @@
         android:name="com.example.android_doan.view.fragment.OrderSuccessFragment"
         android:label="@string/success"
         tools:layout="@layout/fragment_order_success" />
+    <fragment
+        android:id="@+id/orderHistoryFragment"
+        android:name="com.example.android_doan.view.fragment.OrderHistoryFragment"
+        android:label="@string/order_history"
+        tools:layout="@layout/fragment_order_history" >
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment"
+            app:popUpTo="@id/orderHistoryFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.example.android_doan.view.fragment.OrderDetailFragment"
+        android:label="@string/order_detail"
+        tools:layout="@layout/fragment_order_detail" />
 </navigation>

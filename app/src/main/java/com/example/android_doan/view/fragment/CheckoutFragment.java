@@ -24,6 +24,7 @@ import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.CheckoutRepository;
 import com.example.android_doan.databinding.FragmentCheckoutBinding;
+import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.viewmodel.CheckoutViewModel;
 import com.example.android_doan.viewmodel.CheckoutViewModelFactory;
 
@@ -34,7 +35,7 @@ import java.util.List;
 public class CheckoutFragment extends Fragment {
     private FragmentCheckoutBinding binding;
     private List<GetCartResponse.Data> mCarts;
-    private int mTotal;
+    private double mTotal;
     public static final String CHECKOUT_FRAGMENT_ITEM = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_ITEM";
     public static final String CHECKOUT_FRAGMENT_TOTAL = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_TOTAL";
     private CheckoutViewModel checkoutViewModel;
@@ -45,7 +46,7 @@ public class CheckoutFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null){
-            mTotal = args.getInt(CHECKOUT_FRAGMENT_TOTAL);
+            mTotal = args.getDouble(CHECKOUT_FRAGMENT_TOTAL);
             Serializable serializable = args.getSerializable(CHECKOUT_FRAGMENT_ITEM);
             if (serializable instanceof List) {
                 try {
@@ -85,7 +86,7 @@ public class CheckoutFragment extends Fragment {
     }
 
     private void setupData(){
-        binding.tvTotalData.setText(String.valueOf(mTotal));
+        binding.tvTotalData.setText(FormatUtil.formatCurrency(mTotal));
         checkoutViewModel.getAddress().observe(getViewLifecycleOwner(), address -> {
             if (address != null) {
                 Log.d("lkhai4617", "setupData: CheckoutFragment");
@@ -133,7 +134,7 @@ public class CheckoutFragment extends Fragment {
 
                 List<OrderRequest.OrderDetail> orderDetails = new ArrayList<>();
                 for (GetCartResponse.Data item : mCarts){
-                    long price = (long) item.getQuantity() * item.getProduct().getPrice();
+                    double price = (long) item.getQuantity() * item.getProduct().getPrice();
                     orderDetails.add(new OrderRequest.OrderDetail(price, item.getQuantity(), item.getProduct().getId()));
                 }
                 OrderRequest request = new OrderRequest(totalMoney, paymentMethod, amountPaid, status, shippingAddress, name, phone, user, orderDetails);

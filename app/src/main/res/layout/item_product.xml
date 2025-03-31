@@ -27,18 +27,7 @@
         android:layout_below="@+id/tv_name_of_laptop"
         android:textSize="18sp"
         android:textColor="@color/bg_primary"
-        android:text="@string/money_sample"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_marginStart="5dp"
-        android:textSize="18sp"
-        android:textColor="@color/bg_primary"
-        android:text="@string/unit_money"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/tv_name_of_laptop"
-        android:layout_toEndOf="@+id/tv_price_of_laptop"
+        android:text="@string/ex_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

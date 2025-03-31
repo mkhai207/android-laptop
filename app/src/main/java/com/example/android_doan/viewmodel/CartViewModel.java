@@ -21,7 +21,7 @@ public class CartViewModel extends ViewModel {
     private CartRepository cartRepository;
     private MutableLiveData<List<GetCartResponse.Data>> itemCartLiveData = new MutableLiveData<>();
 
-    private MutableLiveData<Integer> totalPriceCart = new MutableLiveData<>();
+    private MutableLiveData<Double> totalPriceCart = new MutableLiveData<>();
 
     private MutableLiveData<Resource> actionResult = new MutableLiveData<>();
 
@@ -36,7 +36,7 @@ public class CartViewModel extends ViewModel {
         return itemCartLiveData;
     }
 
-    public MutableLiveData<Integer> getTotalPriceCart(){
+    public MutableLiveData<Double> getTotalPriceCart(){
         return totalPriceCart;
     }
 
@@ -52,7 +52,7 @@ public class CartViewModel extends ViewModel {
                 .subscribe(response -> {
                     if (response.getStatusCode() == 200 && response.getData() != null){
                         itemCartLiveData.setValue(response.getData());
-                        int total = 0;
+                        double total = 0.0;
                         for (GetCartResponse.Data item: response.getData()){
                             total += item.getQuantity() * item.getProduct().getPrice();
                         }

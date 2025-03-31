@@ -13,6 +13,7 @@ import com.example.android_doan.R;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.databinding.ItemCartBinding;
+import com.example.android_doan.utils.FormatUtil;
 
 import java.util.List;
 
@@ -76,7 +77,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
             binding.tvProductName.setText(itemCart.getProduct().getName());
             binding.tvQuantity.setText(String.valueOf(itemCart.getQuantity()));
-            binding.tvPrice.setText(String.valueOf(itemCart.getQuantity() * itemCart.getProduct().getPrice()));
+            String price = FormatUtil.formatCurrency(itemCart.getQuantity() * itemCart.getProduct().getPrice());
+            binding.tvPrice.setText(price);
 
             binding.ivIncrease.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,7 +89,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                         // cap nhat ui
                         binding.tvQuantity.setText(String.valueOf(cartQuantity + 1));
                         int curQuantity = Integer.parseInt(binding.tvQuantity.getText().toString());
-                        binding.tvPrice.setText(String.valueOf(curQuantity * itemCart.getProduct().getPrice()));
+                        String price = FormatUtil.formatCurrency(curQuantity * itemCart.getProduct().getPrice());
+                        binding.tvPrice.setText(price);
 
                         if (listener != null){
                             AddToCartRequest request = new AddToCartRequest(binding.tvQuantity.getText().toString(), itemCart.getProduct().getId());
@@ -105,7 +108,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                         // cap nhat ui
                         binding.tvQuantity.setText(String.valueOf(cartQuantity - 1));
                         int curQuantity = Integer.parseInt(binding.tvQuantity.getText().toString());
-                        binding.tvPrice.setText(String.valueOf(curQuantity * itemCart.getProduct().getPrice()));
+                        String price = FormatUtil.formatCurrency(curQuantity * itemCart.getProduct().getPrice());
+                        binding.tvPrice.setText(price);
 
                         if (listener != null){
                             AddToCartRequest request = new AddToCartRequest(binding.tvQuantity.getText().toString(), itemCart.getProduct().getId());

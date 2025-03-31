@@ -85,7 +85,7 @@ public class OrderRequest {
 
     public static class OrderDetail{
         @SerializedName("price")
-        private long price;
+        private double price;
 
         @SerializedName("quantity")
         private int quantity;
@@ -93,7 +93,7 @@ public class OrderRequest {
         @SerializedName("productId")
         private String productId;
 
-        public OrderDetail(long price, int quantity, String productId) {
+        public OrderDetail(double price, int quantity, String productId) {
             this.price = price;
             this.quantity = quantity;
             this.productId = productId;
