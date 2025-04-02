@@ -14,7 +14,7 @@ public class HomeRepository {
     }
     public Single<ProductResponse> getProduct(int page, int size, String sort, String filter){
         if (filter == null || filter.isEmpty()){
-            return UserService.getInstance().getAllProduct(page, size, sort, null);
+            return UserService.getInstance().getAllProduct(page, size, sort, "");
         }
         return UserService.getInstance().getAllProduct(page, size, sort, filter);
     }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,6 +34,7 @@ import com.example.android_doan.R;
 import com.example.android_doan.adapter.ProductAdapter;
 import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.model.ProductModel;
+import com.example.android_doan.data.model.SortOption;
 import com.example.android_doan.data.model.response.BrandResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.HomeRepository;
@@ -92,6 +94,7 @@ public class HomeFragment extends Fragment {
         loadProduct();
         filterProduct();
         observer();
+        setupListener();
 
         productAdapter.setListener(new ProductAdapter.IOnClickProduct() {
             @Override
@@ -239,6 +242,14 @@ public class HomeFragment extends Fragment {
                     filter.append(String.join(" or ", brandsCondition));
                     filter.append(")");
                 }
+
+                String query = binding.searchView.getQuery().toString();
+                if (query != null) {
+                    if (filter.length() > 0) {
+                        filter.append(" and ");
+                    }
+                    filter.append("(name~'").append(query).append("')");
+                }
                 homeViewModel.getFilterLiveData().setValue(filter.toString());
             }
         });
@@ -248,5 +259,57 @@ public class HomeFragment extends Fragment {
         homeViewModel.getFilterLiveData().observe(getViewLifecycleOwner(), str -> {
             homeViewModel.resetAndLoad();
         });
+
+        homeViewModel.getSortLiveData().observe(getViewLifecycleOwner(), str -> {
+            homeViewModel.resetAndLoad();
+        });
+    }
+
+    private void setupListener(){
+        binding.btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SortBottomSheetFragment fragment = SortBottomSheetFragment.newInstance(new SortBottomSheetFragment.IOnCLickItemSortDialog() {
+                    @Override
+                    public void onClickItemSortDialog(SortOption sortOption) {
+                        binding.tvSelectedFilter.setText(sortOption.getName());
+                        homeViewModel.getSortLiveData().setValue(sortOption.getRealData());
+                    }
+                });
+                fragment.show(requireActivity().getSupportFragmentManager(), "sort_bottom_sheet_fragment");
+            }
+        });
+
+
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                updateFilterWithSearchQuery(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private void updateFilterWithSearchQuery(String query) {
+        String currentFilter = homeViewModel.getFilterLiveData().getValue();
+        StringBuilder newFilter = new StringBuilder();
+
+        if (currentFilter != null && !currentFilter.isEmpty()) {
+            newFilter.append(currentFilter);
+        }
+
+        if (query != null) {
+            if (newFilter.length() > 0) {
+                newFilter.append(" and ");
+            }
+            newFilter.append("(name~'").append(query).append("')");
+        }
+
+        homeViewModel.getFilterLiveData().setValue(newFilter.toString());
     }
 }

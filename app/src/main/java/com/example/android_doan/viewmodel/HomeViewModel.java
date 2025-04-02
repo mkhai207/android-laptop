@@ -110,7 +110,13 @@ public class HomeViewModel extends ViewModel {
                             mListProduct.addAll(products);
                             productsLiveData.setValue(mListProduct);
                             isLoadingLiveData.setValue(false);
+                        }else {
+//                            if (page == 1) {
+//                                mListProduct.clear();
+//                            }
+//                            productsLiveData.setValue(mListProduct);
                         }
+                        isLoadingLiveData.setValue(false);
                     }
                 }, throwable -> {
                     isLoadingLiveData.setValue(false);
@@ -148,6 +154,7 @@ public class HomeViewModel extends ViewModel {
         currentPage = 0;
         pages = 1;
         mListProduct.clear();
+//        productsLiveData.setValue(new ArrayList<>(mListProduct));
         productsLiveData.setValue(mListProduct);
         loadNextPage();
     }

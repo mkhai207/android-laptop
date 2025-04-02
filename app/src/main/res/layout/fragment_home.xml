@@ -62,11 +62,21 @@
                 app:layout_constraintStart_toEndOf="@+id/cv_avatar" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
+            android:background="@drawable/bg_search_view"
+            android:layout_margin="10dp"
+            app:queryBackground="@null"
+            app:iconifiedByDefault="false"
+            android:layout_below="@id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <RelativeLayout
             android:id="@+id/layout_filter"
             android:background="@color/white"
             android:padding="10dp"
-            android:layout_below="@+id/header"
+            android:layout_below="@id/search_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -124,6 +134,7 @@
                     app:tint="@color/black" />
 
                 <TextView
+                    android:id="@+id/tv_selected_filter"
                     android:layout_marginStart="5dp"
                     android:layout_toEndOf="@id/iv_swap_vert"
                     android:textSize="16sp"
