@@ -1,5 +1,8 @@
 package com.example.android_doan.view.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,7 @@ import com.example.android_doan.R;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.ProfileRepository;
 import com.example.android_doan.databinding.FragmentProfileBinding;
+import com.example.android_doan.view.activity.LoginActivity;
 import com.example.android_doan.viewmodel.ProfileViewModel;
 import com.example.android_doan.viewmodel.ProfileViewModelFactory;
 
@@ -63,6 +67,13 @@ public class ProfileFragment extends Fragment {
                 navController.navigate(R.id.action_profileFragment_to_orderHistoryFragment);
             }
         });
+
+        binding.tvLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLogoutConfirmationDialog();
+            }
+        });
     }
 
     private void setupDaTa(){
@@ -99,5 +110,30 @@ public class ProfileFragment extends Fragment {
                     break;
             }
         });
+    }
+
+    private void showLogoutConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Xác nhận đăng xuất");
+        builder.setMessage("Bạn có chắc chắn muốn đăng xuất không?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                profileViewModel.logout();
+                Intent intent = new Intent(requireContext(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                requireActivity().finish();
+            }
+        });
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

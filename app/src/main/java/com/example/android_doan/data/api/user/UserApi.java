@@ -55,5 +55,6 @@ public interface UserApi {
     @GET("api/v1/brands")
     Single<BrandResponse> getBrands();
 
-
+    @POST("api/v1/auth/logout")
+    Single<CommonResponse> logout();
 }

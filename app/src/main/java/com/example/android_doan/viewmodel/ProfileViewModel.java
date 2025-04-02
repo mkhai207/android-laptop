@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.android_doan.data.model.UserModel;
+import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.ProfileRepository;
 import com.example.android_doan.utils.Resource;
 
@@ -16,7 +17,6 @@ public class ProfileViewModel extends ViewModel {
     private ProfileRepository repository;
 
     private CompositeDisposable disposables = new CompositeDisposable();
-
     private MutableLiveData<Resource> actionResult = new MutableLiveData<>();
 
     private MutableLiveData<UserModel> userInfo = new MutableLiveData<>();
@@ -44,6 +44,28 @@ public class ProfileViewModel extends ViewModel {
                         actionResult.setValue(Resource.success("Loading account info success"));
                     } else {
                         actionResult.setValue(Resource.error("Loading account info failure"));
+                    }
+                }, throwable -> {
+                    if (throwable.getMessage() != null){
+                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    }
+                });
+        disposables.add(disposable);
+    }
+
+    public void logout(){
+        actionResult.setValue(Resource.loading());
+        Disposable disposable = repository.logout()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 200){
+                        DataLocalManager.clearAccessToken();
+                        DataLocalManager.clearRefreshToken();
+                        DataLocalManager.clearUserId();
+                        actionResult.setValue(Resource.success("Logout success"));
+                    } else {
+                        actionResult.setValue(Resource.error("Logout failure"));
                     }
                 }, throwable -> {
                     if (throwable.getMessage() != null){

@@ -76,8 +76,8 @@
 
             <TextView
                 android:id="@+id/tv_orders"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/orders"
                 android:textStyle="bold"
                 android:textSize="18sp"
@@ -105,8 +105,8 @@
 
             <TextView
                 android:id="@+id/tv_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/address"
                 android:textStyle="bold"
                 android:textSize="18sp"
@@ -134,8 +134,8 @@
 
             <TextView
                 android:id="@+id/tv_payment_method"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/payment_method"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -163,8 +163,8 @@
 
             <TextView
                 android:id="@+id/tv_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/phone"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -192,8 +192,8 @@
 
             <TextView
                 android:id="@+id/tv_settings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/settings"
                 android:textStyle="bold"
                 android:textSize="18sp"
@@ -221,8 +221,8 @@
 
             <TextView
                 android:id="@+id/tv_logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/logout"
                 android:textSize="18sp"
                 android:textStyle="bold"

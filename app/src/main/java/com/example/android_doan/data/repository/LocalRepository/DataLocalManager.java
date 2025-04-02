@@ -52,4 +52,8 @@ public class DataLocalManager {
     public static void clearRefreshToken(){
         DataLocalManager.getInstance().mySharedPreference.clearSharedPreference(REFRESH_TOKEN);
     }
+
+    public static void clearUserId(){
+        DataLocalManager.getInstance().mySharedPreference.clearSharedPreference(USER_ID);
+    }
 }
