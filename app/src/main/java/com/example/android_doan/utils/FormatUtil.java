@@ -22,4 +22,9 @@ public class FormatUtil {
     public static String formatCurrency(double amount) {
         return NUMBER_FORMAT.format(amount) + " VNĐ";
     }
+    public static double parseCurrency(String currency) throws NumberFormatException {
+        String number = currency.replaceAll("[^0-9]", "");
+        return Double.parseDouble(number);
+    }
+
 }

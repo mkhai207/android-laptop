@@ -70,15 +70,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcv_brands"
+            <HorizontalScrollView
+                android:id="@+id/layout_filter_brands"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_brands"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="false"
+                    app:selectionRequired="false" />
+
+            </HorizontalScrollView>
 
             <RelativeLayout
                 android:id="@+id/btn_filter"
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/rcv_brands"
+                android:layout_below="@id/layout_filter_brands"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -101,7 +110,7 @@
 
             <RelativeLayout
                 android:layout_marginStart="20dp"
-                android:layout_below="@id/rcv_brands"
+                android:layout_below="@id/layout_filter_brands"
                 android:layout_toEndOf="@id/btn_filter"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
@@ -127,7 +136,7 @@
 
             <ImageView
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/rcv_brands"
+                android:layout_below="@id/layout_filter_brands"
                 android:src="@drawable/ic_list"
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"

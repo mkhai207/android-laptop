@@ -124,7 +124,7 @@ public class CheckoutFragment extends Fragment {
                         break;
                 }
 
-                int totalMoney = Integer.parseInt(binding.tvTotalData.getText().toString());
+                double totalMoney = FormatUtil.parseCurrency(binding.tvTotalData.getText().toString());
                 String amountPaid = "0";
                 OrderStatusEnum status = OrderStatusEnum.PENDING;
                 String shippingAddress = binding.tvAddressDetail.getText().toString();

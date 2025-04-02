@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.android_doan.data.api.user.UserService;
+import com.example.android_doan.data.model.response.BrandResponse;
 import com.example.android_doan.data.model.response.Meta;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.UserModel;
@@ -26,10 +27,13 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<UserModel> userLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<ProductModel>> productsLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoadingLiveData = new MutableLiveData<>(false);
+    public MutableLiveData<BrandResponse.WrapperData> brandsLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> sortLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> filterLiveData = new MutableLiveData<>();
     private final CompositeDisposable disposables = new CompositeDisposable();
     private int currentPage = 0;
     private int pages = 1;
-    private int pageSize = 10;
+    private int pageSize = 5;
     private List<ProductModel> mListProduct = new ArrayList<>();
 
     public MutableLiveData<UserModel> getUserLiveData(){
@@ -42,6 +46,18 @@ public class HomeViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> getIsLoadingLiveData(){
         return isLoadingLiveData;
+    }
+
+    public MutableLiveData<BrandResponse.WrapperData> getBrandsLiveData(){
+        return brandsLiveData;
+    }
+
+    public MutableLiveData<String> getSortLiveData(){
+        return sortLiveData;
+    }
+
+    public MutableLiveData<String> getFilterLiveData(){
+        return filterLiveData;
     }
 
     public HomeViewModel(HomeRepository repository){
@@ -76,7 +92,9 @@ public class HomeViewModel extends ViewModel {
             return;
         }
         isLoadingLiveData.setValue(true);
-        Disposable disposable = UserService.getInstance().getAllProduct(page, pageSize)
+        String sort = sortLiveData.getValue();
+        String filter = filterLiveData.getValue();
+        Disposable disposable = homeRepository.getProduct(page, pageSize, sort, filter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(productResponse -> {
@@ -108,6 +126,30 @@ public class HomeViewModel extends ViewModel {
             Log.d("lkhai4617", "load next page");
             loadProducts(currentPage + 1);
         }
+    }
+
+    public void getBrands(){
+        Disposable disposable = homeRepository.getBrands()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 200){
+                        brandsLiveData.setValue(response.getData());
+                    }
+                }, throwable -> {
+                    if (throwable.getMessage() != null){
+
+                    }
+                });
+        disposables.add(disposable);
+    }
+
+    public void resetAndLoad() {
+        currentPage = 0;
+        pages = 1;
+        mListProduct.clear();
+        productsLiveData.setValue(mListProduct);
+        loadNextPage();
     }
 
     @Override

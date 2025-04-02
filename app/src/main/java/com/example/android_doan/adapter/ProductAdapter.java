@@ -115,6 +115,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     public void updateProduct(List<ProductModel> newProducts){
+        mListProduct.clear();
         mListProduct.addAll(newProducts);
         this.notifyDataSetChanged();
     }

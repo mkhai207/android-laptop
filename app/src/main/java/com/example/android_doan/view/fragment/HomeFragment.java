@@ -31,15 +31,20 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.ProductAdapter;
+import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.model.ProductModel;
+import com.example.android_doan.data.model.response.BrandResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.HomeRepository;
 import com.example.android_doan.databinding.FragmentHomeBinding;
 import com.example.android_doan.utils.GridSpacingItemDecoration;
 import com.example.android_doan.viewmodel.HomeViewModel;
 import com.example.android_doan.viewmodel.HomeViewModelFactory;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
@@ -80,9 +85,13 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         Log.d("access_token", DataLocalManager.getAccessToken());
         loadUserInfo();
+        loadBrands();
         loadProduct();
+        filterProduct();
+        observer();
 
         productAdapter.setListener(new ProductAdapter.IOnClickProduct() {
             @Override
@@ -94,13 +103,12 @@ public class HomeFragment extends Fragment {
                 navController.navigate(R.id.action_homeFragment_to_productDetailFragment, bundle);
             }
         });
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onDestroy() {
-        binding = null;
         super.onDestroy();
+        binding = null;
     }
 
     private void loadUserInfo(){
@@ -134,8 +142,7 @@ public class HomeFragment extends Fragment {
     private void loadProduct(){
         homeViewModel.loadNextPage();
         homeViewModel.getProductsLiveData().observe(getViewLifecycleOwner(), products -> {
-            if (products != null){
-                Log.d("lkhai4617", products.get(0).getName());
+            if (!products.isEmpty()){
                 productAdapter.updateProduct(products);
             }
             Log.d("lkhai4617", "products null");
@@ -148,7 +155,6 @@ public class HomeFragment extends Fragment {
                 binding.progressBar.setVisibility(View.GONE);
             }
         });
-
 //        rcvProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
 //            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -184,13 +190,63 @@ public class HomeFragment extends Fragment {
                         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
                         if (homeViewModel.getIsLoadingLiveData().getValue() != null && !homeViewModel.getIsLoadingLiveData().getValue() &&
-                                (visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 5) {
+                                (visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3) {
                             homeViewModel.loadNextPage();
                         }
                     }
                 }
             }
         });
+    }
 
+    private void loadBrands(){
+        homeViewModel.getBrands();
+        homeViewModel.getBrandsLiveData().observe(getViewLifecycleOwner(), data ->{
+            if (data != null){
+                for (BrandModel brand : data.getResult()){
+                    Chip chip = new Chip(binding.chipGroupBrands.getContext());
+                    chip.setId(View.generateViewId());
+                    chip.setText(brand.getName());
+                    chip.setTag(Integer.parseInt(brand.getId()));
+                    chip.setCheckable(true);
+                    chip.setTextColor(getResources().getColorStateList(R.color.chip_text_color_change));
+                    chip.setChipBackgroundColorResource(R.color.chip_bg_selected_change);
+                    chip.setChipStrokeColorResource(android.R.color.black);
+                    chip.setChipStrokeWidth(1);
+                    chip.setChipCornerRadius(16);
+                    chip.setCheckedIconEnabled(false);
+                    binding.chipGroupBrands.addView(chip);
+                }
+            }
+        });
+    }
+
+    private void filterProduct(){
+        binding.chipGroupBrands.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+                StringBuilder filter = new StringBuilder();
+                if (!checkedIds.isEmpty()){
+                    filter.append("(");
+                    List<String> brandsCondition = new ArrayList<>();
+                    for (int checkedId : checkedIds){
+                        Chip chip = group.findViewById(checkedId);
+                        if (chip != null && chip.getTag() != null){
+                            Integer brandId = (Integer) chip.getTag();
+                            brandsCondition.add("brand: '" + brandId + "'");
+                        }
+                    }
+                    filter.append(String.join(" or ", brandsCondition));
+                    filter.append(")");
+                }
+                homeViewModel.getFilterLiveData().setValue(filter.toString());
+            }
+        });
+    }
+
+    private void observer(){
+        homeViewModel.getFilterLiveData().observe(getViewLifecycleOwner(), str -> {
+            homeViewModel.resetAndLoad();
+        });
     }
 }

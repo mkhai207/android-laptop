@@ -12,6 +12,7 @@ import com.example.android_doan.R;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.databinding.ItemProductDialogFragmentBinding;
+import com.example.android_doan.utils.FormatUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -72,7 +73,8 @@ public class ProductDialogFragment extends BottomSheetDialogFragment {
                 .into(binding.ivLaptop);
 
         binding.tvNameOfLaptop.setText(productModel.getName());
-        binding.tvPriceOfLaptop.setText(String.valueOf(productModel.getPrice()));
+        String price = FormatUtil.formatCurrency(productModel.getPrice());
+        binding.tvPriceOfLaptop.setText(price);
     }
 
     private void setupListener(){

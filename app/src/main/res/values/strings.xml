@@ -96,4 +96,5 @@
     <string name="ex_category">Gamming</string>
     <string name="ex_product_id">12Ne1233e1</string>
     <string name="order_detail">Chi tiết đơn hàng</string>
+    <string name="all">Tất cả</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,9 +89,8 @@ public class OrderHistoryFragment extends Fragment {
         orderViewModel.getOrderLiveData().observe(getViewLifecycleOwner(), orderData -> {
             if (orderData != null){
                 orders = orderData;
-                binding.chipGroupFilters.check(R.id.chip_pending);
-                filterOrders(OrderStatusEnum.PENDING);
-                adapter.updateData(filterOrder);
+                binding.chipGroupFilters.check(R.id.chip_all);
+                adapter.updateData(orders);
             }
         });
 
@@ -111,8 +111,9 @@ public class OrderHistoryFragment extends Fragment {
                         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
                         if (orderViewModel.getActionResult().getValue().getStatus() != Resource.Status.LOADING &&
-                                (visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 5) {
+                                (visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3) {
                             orderViewModel.loadNextPage();
+                            Log.d("lkhai4617", "onScrolled: order history");
                         }
                     }
                 }
@@ -143,6 +144,9 @@ public class OrderHistoryFragment extends Fragment {
                 break;
             case R.id.chip_canceled:
                 filterOrders(OrderStatusEnum.CANCELED);
+                break;
+            default:
+                adapter.updateData(orders);
                 break;
         }
     }

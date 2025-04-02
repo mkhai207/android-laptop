@@ -3,6 +3,7 @@ package com.example.android_doan.data.api.user;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.request.OrderRequest;
 import com.example.android_doan.data.model.response.AddToCartResponse;
+import com.example.android_doan.data.model.response.BrandResponse;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.model.response.OrderResponse;
 import com.example.android_doan.data.model.response.ProductResponse;
@@ -24,7 +25,9 @@ public interface UserApi {
 
     @GET("api/v1/products")
     Single<ProductResponse> getAllProduct(@Query("page") int page,
-                                          @Query("size") int size);
+                                          @Query("size") int size,
+                                          @Query("sort") String sort,
+                                          @Query("filter") String filter);
 
     @POST("api/v1/carts")
     Single<AddToCartResponse> addToCart(@Body AddToCartRequest request);
@@ -48,5 +51,9 @@ public interface UserApi {
     Single<OrderResponse> getOrder(@Path("userId") String userId,
                                    @Query("page") int page,
                                    @Query("size") int size);
+
+    @GET("api/v1/brands")
+    Single<BrandResponse> getBrands();
+
 
 }

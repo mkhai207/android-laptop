@@ -8,7 +8,7 @@ import java.util.List;
 
 public class OrderRequest {
     @SerializedName("totalMoney")
-    private long totalMoney;
+    private double totalMoney;
 
     @SerializedName("paymentMethod")
     private String paymentMethod;
@@ -34,7 +34,7 @@ public class OrderRequest {
     @SerializedName("orderDetails")
     private List<OrderDetail> orderDetails;
 
-    public OrderRequest(long totalMoney, String paymentMethod, String amountPaid, OrderStatusEnum status,
+    public OrderRequest(double totalMoney, String paymentMethod, String amountPaid, OrderStatusEnum status,
                         String shippingAddress, String name, String phone, UserModel user, List<OrderDetail> orderDetails) {
         this.totalMoney = totalMoney;
         this.paymentMethod = paymentMethod;
@@ -47,7 +47,7 @@ public class OrderRequest {
         this.orderDetails = orderDetails;
     }
 
-    public long getTotalMoney() {
+    public double getTotalMoney() {
         return totalMoney;
     }
 

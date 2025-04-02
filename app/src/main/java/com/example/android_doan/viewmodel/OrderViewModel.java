@@ -29,7 +29,7 @@ public class OrderViewModel extends ViewModel {
 
     private int currentPage = 0;
     private int pages = 1;
-    private int pageSize = 10;
+    private int pageSize = 5;
     private List<OrderResponse.OrderData> mListOrder = new ArrayList<>();
 
     public MutableLiveData<List<OrderResponse.OrderData>> getOrderLiveData(){

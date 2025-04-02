@@ -20,6 +20,18 @@
         android:layout_marginBottom="16dp">
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all"
+            android:textColor="@color/chip_text_color_change"
+            app:chipBackgroundColor="@color/chip_bg_selected_change"
+            app:chipStrokeColor="@color/black"
+            app:chipStrokeWidth="1dp"
+            app:checkedIconEnabled="false"
+            style="@style/Widget.MaterialComponents.Chip.Filter" />
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/chip_pending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
