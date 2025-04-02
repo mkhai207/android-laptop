@@ -8,6 +8,7 @@ import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.model.response.OrderResponse;
 import com.example.android_doan.data.model.response.ProductResponse;
 import com.example.android_doan.data.model.response.CommonResponse;
+import com.example.android_doan.data.model.response.AccountResponse;
 import com.example.android_doan.data.model.response.UserResponse;
 
 import io.reactivex.Single;
@@ -21,7 +22,7 @@ import retrofit2.http.Query;
 
 public interface UserApi {
     @GET("api/v1/auth/account")
-    Single<UserResponse> getAccount();
+    Single<AccountResponse> getAccount();
 
     @GET("api/v1/products")
     Single<ProductResponse> getAllProduct(@Query("page") int page,
@@ -57,4 +58,7 @@ public interface UserApi {
 
     @POST("api/v1/auth/logout")
     Single<CommonResponse> logout();
+
+    @GET("api/v1/users/{userId}")
+    Single<UserResponse> getUser(@Path("userId") String userId);
 }

@@ -4,11 +4,18 @@ import java.io.Serializable;
 
 public class UserModel implements Serializable {
     private int id;
-    private String email;
+    private boolean active;
     private String fullName;
-    private String avatar;
+    private String address;
+    private String email;
     private String phone;
+    private String gender;
+    private String birthday;
+    private String shoppingAddress;
+    private String avatar;
     private RoleModel role;
+    private String createdAt;
+    private String updatedAt;
 
     public UserModel(int id) {
         this.id = id;
@@ -18,59 +25,51 @@ public class UserModel implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public boolean isActive() {
+        return active;
     }
 
     public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getAddress() {
+        return address;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public String getEmail() {
+        return email;
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public String getGender() {
+        return gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public String getShoppingAddress() {
+        return shoppingAddress;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public RoleModel getRole() {
         return role;
     }
 
-    public void setRole(RoleModel role) {
-        this.role = role;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", phone='" + phone + '\'' +
-                ", role=" + role +
-                '}';
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 }

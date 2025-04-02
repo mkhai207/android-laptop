@@ -5,7 +5,7 @@
     <string name="sign_in_your_account">Sign in your account</string>
     <string name="email">Email</string>
     <string name="email_hint">ex: lkhai4617@gmail.com</string>
-    <string name="password">Password</string>
+    <string name="password">Mật khẩu</string>
     <string name="password_hint">********</string>
     <string name="sign_in">SIGN IN</string>
     <string name="or_sign_in_with">or sign in with</string>
@@ -17,7 +17,7 @@
     <string name="confirm_password">Confirm password</string>
     <string name="sign_up_with">sign up with</string>
     <string name="have_an_account">Have an account?</string>
-    <string name="gender">Gender</string>
+    <string name="gender">Giới tính</string>
     <string name="home">Trang chủ</string>
     <string name="search">Tìm kiếm</string>
     <string name="cart">Giỏ hàng</string>
@@ -70,7 +70,7 @@
     <string name="checkout">Thanh toán</string>
     <string name="success">Thành công</string>
     <string name="orders">Đơn hàng</string>
-    <string name="address">Địa chỉ nhận hàng</string>
+    <string name="shipping_address">Địa chỉ nhận hàng</string>
     <string name="payment_method">Phương thức thanh toán</string>
     <string name="settings">Cài đặt</string>
     <string name="logout">Đăng xuất</string>
@@ -97,4 +97,17 @@
     <string name="ex_product_id">12Ne1233e1</string>
     <string name="order_detail">Chi tiết đơn hàng</string>
     <string name="all">Tất cả</string>
+    <string name="full_name">Họ và tên</string>
+    <string name="input_full_name">Nhập họ và tên</string>
+    <string name="address">Địa chỉ</string>
+    <string name="input_address">Nhập địa chỉ</string>
+    <string name="birthday">Ngày sinh</string>
+    <string name="ex_birthday">VD: 12/12/2000</string>
+    <string name="input_phone">Nhập số điện thoại</string>
+    <string name="input_shipping_address">Nhập địa chỉ nhận hàng</string>
+    <string name="notification">Thông báo</string>
+    <string name="voucher">Ưu đãi</string>
+    <string name="new_product">Sản phẩm mới</string>
+    <string name="order_status_change">Thay đổi trạng thái giao hàng</string>
+    <string name="user_info">Thông tin tài khoản</string>
 </resources>

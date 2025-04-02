@@ -89,7 +89,7 @@ public class ProductDetailFragment extends Fragment {
                 dialogFragment.setListener(new ProductDialogFragment.IOnClickAddToCart() {
                     @Override
                     public void onClickAddToCart(AddToCartRequest request) {
-                        productDetailViewModel.addToCart(request, requireContext());
+                        productDetailViewModel.addToCart(request);
                         dialogFragment.dismiss();
                     }
                 });

@@ -74,6 +74,14 @@ public class ProfileFragment extends Fragment {
                 showLogoutConfirmationDialog();
             }
         });
+
+        binding.tvSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_profileFragment_to_settingFragment);
+            }
+        });
     }
 
     private void setupDaTa(){

@@ -1,6 +1,7 @@
 package com.example.android_doan.viewmodel;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
@@ -15,16 +16,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ProductDetailViewModel extends ViewModel {
     private CompositeDisposable disposables = new CompositeDisposable();
-    public void addToCart(AddToCartRequest request, Context context){
+    public void addToCart(AddToCartRequest request){
         Disposable disposable = UserService.getInstance().addToCart(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response != null && response.getStatusCode() == 200){
-                        Toast.makeText(context, "Add to cart success", Toast.LENGTH_LONG).show();
+                        Log.d("lkhai4617", "addToCart: success");
                     }
                 }, throwable -> {
-                    Toast.makeText(context, throwable.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d("lkhai4617", "addToCart: " + throwable.getMessage());
                 });
         disposables.add(disposable);
     }
