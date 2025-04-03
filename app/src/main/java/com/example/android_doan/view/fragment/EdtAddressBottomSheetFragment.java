@@ -15,10 +15,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.android_doan.data.model.Address;
 import com.example.android_doan.databinding.BottomDialogEdtAddressBinding;
 import com.example.android_doan.viewmodel.CheckoutViewModel;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class EdtAddressDialogFragment extends BottomSheetDialogFragment {
+public class EdtAddressBottomSheetFragment extends BottomSheetDialogFragment {
     public static final String ADDRESS_KEY = "com.example.android_doan.view.fragment.ADDRESS_KEY";
 
     private CheckoutViewModel checkoutViewModel;
@@ -34,11 +33,11 @@ public class EdtAddressDialogFragment extends BottomSheetDialogFragment {
 //        this.listener = listener;
 //    }
 
-    public static EdtAddressDialogFragment newInstance(Address address){
+    public static EdtAddressBottomSheetFragment newInstance(Address address){
         Bundle args = new Bundle();
         args.putSerializable(ADDRESS_KEY, address);
 
-        EdtAddressDialogFragment fragment = new EdtAddressDialogFragment();
+        EdtAddressBottomSheetFragment fragment = new EdtAddressBottomSheetFragment();
         fragment.setArguments(args);
         return fragment;
     }

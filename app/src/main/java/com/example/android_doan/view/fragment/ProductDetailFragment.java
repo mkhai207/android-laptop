@@ -85,8 +85,8 @@ public class ProductDetailFragment extends Fragment {
         binding.btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProductDialogFragment dialogFragment = ProductDialogFragment.newInstance(productModel);
-                dialogFragment.setListener(new ProductDialogFragment.IOnClickAddToCart() {
+                ProductBottomSheetFragment dialogFragment = ProductBottomSheetFragment.newInstance(productModel);
+                dialogFragment.setListener(new ProductBottomSheetFragment.IOnClickAddToCart() {
                     @Override
                     public void onClickAddToCart(AddToCartRequest request) {
                         productDetailViewModel.addToCart(request);

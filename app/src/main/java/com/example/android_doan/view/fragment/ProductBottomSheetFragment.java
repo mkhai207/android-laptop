@@ -16,7 +16,7 @@ import com.example.android_doan.utils.FormatUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class ProductDialogFragment extends BottomSheetDialogFragment {
+public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
 
     private static final String PRODUCT_MODEL = "com.example.android_doan.view.fragment.KEY";
     ItemProductDialogFragmentBinding binding;
@@ -31,12 +31,12 @@ public class ProductDialogFragment extends BottomSheetDialogFragment {
         this.listener = listener;
     }
 
-    public static ProductDialogFragment newInstance(ProductModel productModel) {
+    public static ProductBottomSheetFragment newInstance(ProductModel productModel) {
 
         Bundle args = new Bundle();
         args.putSerializable(PRODUCT_MODEL, productModel);
 
-        ProductDialogFragment fragment = new ProductDialogFragment();
+        ProductBottomSheetFragment fragment = new ProductBottomSheetFragment();
         fragment.setArguments(args);
         return fragment;
     }

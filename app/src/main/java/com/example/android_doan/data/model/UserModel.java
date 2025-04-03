@@ -72,4 +72,15 @@ public class UserModel implements Serializable {
     public String getUpdatedAt() {
         return updatedAt;
     }
+
+    public UserModel(int id, String avatar, String fullName, String address, String phone, String gender, String birthday, String shoppingAddress) {
+        this.id = id;
+        this.avatar = avatar;
+        this.fullName = fullName;
+        this.address = address;
+        this.phone = phone;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.shoppingAddress = shoppingAddress;
+    }
 }

@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.android_doan.R;
@@ -101,7 +100,7 @@ public class CheckoutFragment extends Fragment {
         binding.tvChangeAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EdtAddressDialogFragment edtAddressDialogFragment = new EdtAddressDialogFragment();
+                EdtAddressBottomSheetFragment edtAddressDialogFragment = new EdtAddressBottomSheetFragment();
                 edtAddressDialogFragment.show(requireActivity().getSupportFragmentManager(), "edt_address_dialog_fragment");
             }
         });

@@ -110,4 +110,9 @@
     <string name="new_product">Sản phẩm mới</string>
     <string name="order_status_change">Thay đổi trạng thái giao hàng</string>
     <string name="user_info">Thông tin tài khoản</string>
+    <string name="change_password">Đổi mật khẩu</string>
+    <string name="old_password">Mật khẩu cũ</string>
+    <string name="new_password">Mật khẩu mới</string>
+    <string name="confirm_new_password">Xác nhận mật khẩu mới</string>
+    <string name="save_password">LƯU MẬT KHẨU</string>
 </resources>
