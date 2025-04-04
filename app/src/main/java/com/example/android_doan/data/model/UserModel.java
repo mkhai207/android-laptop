@@ -73,8 +73,9 @@ public class UserModel implements Serializable {
         return updatedAt;
     }
 
-    public UserModel(int id, String avatar, String fullName, String address, String phone, String gender, String birthday, String shoppingAddress) {
+    public UserModel(int id, boolean active, String avatar, String fullName, String address, String phone, String gender, String birthday, String shoppingAddress) {
         this.id = id;
+        this.active = active;
         this.avatar = avatar;
         this.fullName = fullName;
         this.address = address;

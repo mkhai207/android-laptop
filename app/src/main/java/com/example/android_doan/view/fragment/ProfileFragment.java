@@ -39,7 +39,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -90,7 +90,7 @@ public class ProfileFragment extends Fragment {
         profileViewModel.getUserInfo().observe(getViewLifecycleOwner(), user -> {
             if (user != null){
                 Glide.with(requireContext())
-                        .load("http://192.168.50.2:8080/" + user.getAvatar())
+                        .load("http://192.168.50.2:8080/storage/avatar/" + user.getAvatar())
                         .error(R.drawable.ic_user)
                         .into(binding.ivAvatar);
 

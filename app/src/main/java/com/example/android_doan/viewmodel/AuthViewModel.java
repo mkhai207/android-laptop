@@ -46,22 +46,6 @@ public class AuthViewModel extends ViewModel {
         return statusRegister;
     }
 
-
-//    public void login(LoginRequest loginRequest){
-//        Disposable disposable = LoginService.getInstance().login(loginRequest)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(response -> {
-//                    if (response != null){
-//                        userLiveData.setValue(response.getData().getUser());
-//                        DataLocalManager.saveAccessToken(response.getData().getAccessToken());
-//                    }
-//                }, throwable -> {
-//                    errorLiveData.setValue(throwable.getMessage());
-//                });
-//        disposables.add(disposable);
-//    }
-
     public void login(LoginRequest loginRequest){
         Disposable disposable = authRepository.login(loginRequest)
                 .subscribe(response -> {
@@ -91,6 +75,7 @@ public class AuthViewModel extends ViewModel {
                     }
                 }, throwable -> {
                     Toast.makeText(context, throwable.getMessage(), Toast.LENGTH_LONG).show();
+                    statusRegister.setValue(false);
                 });
         disposables.add(disposable);
     }

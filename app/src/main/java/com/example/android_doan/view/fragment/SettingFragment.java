@@ -2,8 +2,10 @@ package com.example.android_doan.view.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +29,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.android_doan.R;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.ChangePasswordRequest;
@@ -40,8 +47,13 @@ import com.example.android_doan.viewmodel.SettingViewModel;
 import com.example.android_doan.viewmodel.SettingViewModelFactory;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -54,6 +66,7 @@ public class SettingFragment extends Fragment {
     private List<String> genders;
     private Uri avtUri;
     private String avatarStr = "";
+    private Calendar selectedDate;
 
     private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
         @Override
@@ -88,6 +101,7 @@ public class SettingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        selectedDate = Calendar.getInstance();
     }
 
     @Override
@@ -124,6 +138,9 @@ public class SettingFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGender.setAdapter(adapter);
 
+
+        binding.edtBirthday.setKeyListener(null);
+        binding.edtBirthday.setOnClickListener(v -> showDatePickerDialog());
     }
 
     private void loadData(){
@@ -168,15 +185,49 @@ public class SettingFragment extends Fragment {
         settingViewModel.getFileData().observe(getViewLifecycleOwner(), data ->{
             if (data != null){
                 avatarStr = data.getData().getFileName();
+
+                int userId = Integer.parseInt(DataLocalManager.getUserId());
+                String fullname = binding.edtFullName.getText().toString();
+                String address = binding.edtAddress.getText().toString();
+                String birthday = FormatUtil.formatToIsoDate(binding.edtBirthday.getText().toString());
+                String gender = binding.spinnerGender.getSelectedItem().toString();
+                String phone = binding.edtPhone.getText().toString();
+                String shoppingAddress = binding.edtShoppingAddress.getText().toString();
+
+                UserModel userModel = new UserModel(userId, true, avatarStr, fullname, address, phone, gender, birthday, shoppingAddress);
+                Log.d("lkhai4617", "onClick: " + avatarStr);
+                settingViewModel.updateUser(userModel);
             }
         });
     }
 
     private void bindData(UserModel userModel){
         if (userModel.getAvatar() != null){
+            avatarStr = userModel.getAvatar();
+            String accessToken = DataLocalManager.getAccessToken();
+
+            GlideUrl glideUrl = new GlideUrl("http://192.168.50.2:8080/storage/avatar/" + userModel.getAvatar(), ()-> {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + accessToken);
+                return headers;
+            });
+
             Glide.with(requireContext())
-                    .load("http://192.168.50.2:8080/" + userModel.getAvatar())
+                    .load(glideUrl)
                     .error(R.drawable.ic_user)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            Log.e("lkhai4617", "Glide load failed: " + (e != null ? e.getMessage() : "Unknown error"));
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            Log.d("lkhai4617", "Glide load success");
+                            return false;
+                        }
+                    })
                     .into(binding.ivAvatar);
         }
 
@@ -234,25 +285,10 @@ public class SettingFragment extends Fragment {
                     binding.edtShoppingAddress.setEnabled(false);
                     binding.ivEdit.setVisibility(View.GONE);
 
-                    String folder = "avatar";
-                    RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
-                    String realPathAvt = RealPathUtil.getRealPath(requireContext(), avtUri);
-                    File avatar = new File(realPathAvt);
-                    RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
-                    MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
-                    settingViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
-
-                    int userId = Integer.parseInt(DataLocalManager.getUserId());
-                    String fullname = binding.edtFullName.getText().toString();
-                    String address = binding.edtAddress.getText().toString();
-                    String birthday = FormatUtil.formatToIsoDate(binding.edtBirthday.getText().toString());
-                    String gender = binding.spinnerGender.getSelectedItem().toString();
-                    String phone = binding.edtPhone.getText().toString();
-                    String shoppingAddress = binding.edtShoppingAddress.getText().toString();
-
-                    if (!avatarStr.isEmpty()){
-                        UserModel userModel = new UserModel(userId, avatarStr, fullname, address, phone, gender, birthday, shoppingAddress);
-                        settingViewModel.updateUser(userModel);
+                    if (avtUri != null){
+                        callApiUploadFile();
+                    } {
+                        updateUser();
                     }
                 }
 
@@ -298,5 +334,52 @@ public class SettingFragment extends Fragment {
         intent.setAction(Intent.ACTION_PICK);
 
         activityResultLauncher.launch(intent);
+    }
+
+    private void showDatePickerDialog() {
+        int year = selectedDate.get(Calendar.YEAR);
+        int month = selectedDate.get(Calendar.MONTH);
+        int day = selectedDate.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                (view, yearSelected, monthOfYear, dayOfMonth) -> {
+                    selectedDate.set(yearSelected, monthOfYear, dayOfMonth);
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    String formattedDate = sdf.format(selectedDate.getTime());
+                    binding.edtBirthday.setText(formattedDate);
+                },
+                year,
+                month,
+                day
+        );
+
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        datePickerDialog.show();
+    }
+
+    private void callApiUploadFile(){
+        String folder = "avatar";
+        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
+        String realPathAvt = RealPathUtil.getRealPath(requireContext(), avtUri);
+        File avatar = new File(realPathAvt);
+        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+        MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
+        settingViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
+    }
+
+    private void updateUser(){
+        int userId = Integer.parseInt(DataLocalManager.getUserId());
+        String fullname = binding.edtFullName.getText().toString();
+        String address = binding.edtAddress.getText().toString();
+        String birthday = FormatUtil.formatToIsoDate(binding.edtBirthday.getText().toString());
+        String gender = binding.spinnerGender.getSelectedItem().toString();
+        String phone = binding.edtPhone.getText().toString();
+        String shoppingAddress = binding.edtShoppingAddress.getText().toString();
+
+        UserModel userModel = new UserModel(userId, true, avatarStr, fullname, address, phone, gender, birthday, shoppingAddress);
+        Log.d("lkhai4617", "onClick: " + avatarStr);
+        settingViewModel.updateUser(userModel);
     }
 }
