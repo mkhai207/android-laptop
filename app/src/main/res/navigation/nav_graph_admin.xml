@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_admin"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.android_doan.view.fragment.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_orderFragment"
+            app:destination="@id/orderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderFragment"
+        android:name="com.example.android_doan.view.fragment.OrderFragment"
+        android:label="fragment_order"
+        tools:layout="@layout/fragment_order" >
+        <action
+            android:id="@+id/action_orderFragment_to_statisticFragment"
+            app:destination="@id/statisticFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statisticFragment"
+        android:name="com.example.android_doan.view.fragment.StatisticFragment"
+        android:label="fragment_statistic"
+        tools:layout="@layout/fragment_statistic" >
+        <action
+            android:id="@+id/action_statisticFragment_to_productManagementFragment"
+            app:destination="@id/productManagementFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productManagementFragment"
+        android:name="com.example.android_doan.view.fragment.ProductManagementFragment"
+        android:label="fragment_product_management"
+        tools:layout="@layout/fragment_product_management" >
+        <action
+            android:id="@+id/action_productManagementFragment_to_categoryManagementFragment"
+            app:destination="@id/categoryManagementFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryManagementFragment"
+        android:name="com.example.android_doan.view.fragment.CategoryManagementFragment"
+        android:label="fragment_category_management"
+        tools:layout="@layout/fragment_category_management" >
+        <action
+            android:id="@+id/action_categoryManagementFragment_to_brandManagementFragment"
+            app:destination="@id/brandManagementFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/brandManagementFragment"
+        android:name="com.example.android_doan.view.fragment.BrandManagementFragment"
+        android:label="fragment_brand_management"
+        tools:layout="@layout/fragment_brand_management" >
+        <action
+            android:id="@+id/action_brandManagementFragment_to_userMManagementFragment"
+            app:destination="@id/userMManagementFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userMManagementFragment"
+        android:name="com.example.android_doan.view.fragment.UserMManagementFragment"
+        android:label="fragment_user_m_management"
+        tools:layout="@layout/fragment_user_m_management" >
+        <action
+            android:id="@+id/action_userMManagementFragment_to_settingAdminFragment"
+            app:destination="@id/settingAdminFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingAdminFragment"
+        android:name="com.example.android_doan.view.fragment.SettingAdminFragment"
+        android:label="fragment_setting_admin"
+        tools:layout="@layout/fragment_setting_admin" />
+</navigation>

@@ -54,6 +54,7 @@ public class AuthViewModel extends ViewModel {
                         DataLocalManager.saveAccessToken(response.getData().getAccessToken());
                         Log.d("lkhai4617", String.valueOf(response.getData().getUser().getId()));
                         DataLocalManager.saveUserId(String.valueOf(response.getData().getUser().getId()));
+                        DataLocalManager.saveRole(response.getData().getUser().getRole().getCode());
                     }
                 }, throwable -> {
                     errorLiveData.setValue(throwable.getMessage());

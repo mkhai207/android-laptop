@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/productManagementFragment"
+            android:title="@string/product_management"
+            android:icon="@drawable/ic_product"/>
+
+        <item android:id="@+id/categoryManagementFragment"
+            android:title="@string/category_management"
+            android:icon="@drawable/ic_categories"/>
+
+        <item android:id="@+id/brandManagementFragment"
+            android:title="@string/brand_management"
+            android:icon="@drawable/ic_factory"/>
+
+        <item android:id="@+id/userMManagementFragment"
+            android:title="@string/customer_management"
+            android:icon="@drawable/ic_user"/>
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item android:title="@string/profile">
+            <menu>
+                <item android:id="@+id/settingAdminFragment"
+                    android:title="@string/settings"
+                    android:icon="@drawable/ic_setting"/>
+
+                <item android:id="@+id/nav_logout"
+                    android:title="@string/logout"
+                    android:icon="@drawable/ic_logout"/>
+            </menu>
+        </item>
+
+    </group>
+</menu>

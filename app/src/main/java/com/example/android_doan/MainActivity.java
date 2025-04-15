@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
+import com.example.android_doan.view.activity.AdminActivity;
 import com.example.android_doan.view.activity.HomeActivity;
 import com.example.android_doan.view.activity.LoginActivity;
 import com.example.android_doan.viewmodel.AuthViewModel;
@@ -31,12 +32,22 @@ public class MainActivity extends AppCompatActivity {
 
         new Handler(Looper.getMainLooper()).postDelayed(()->{
             String accessToken = DataLocalManager.getAccessToken();
+            String role = DataLocalManager.getRole();
             if (accessToken != null && !accessToken.isEmpty()){
-                startActivity(new Intent(this, HomeActivity.class));
+                switch (role){
+                    case "CUSTOMER":
+                        startActivity(new Intent(this, HomeActivity.class));
+                        break;
+                    case "SUPER_ADMIN":
+                        startActivity(new Intent(this, AdminActivity.class));
+                        break;
+                    default:
+                         break;
+                }
             } else {
                 startActivity(new Intent(this, LoginActivity.class));
             }
-        }, 2000);
+        }, 1000);
 
     }
 }

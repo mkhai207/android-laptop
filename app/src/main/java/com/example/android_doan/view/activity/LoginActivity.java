@@ -36,15 +36,34 @@ public class LoginActivity extends AppCompatActivity {
         AuthViewModelFactory authViewModelFactory = new AuthViewModelFactory(this, authRepository);
         authViewModel = new ViewModelProvider(this, authViewModelFactory).get(AuthViewModel.class);
 
+//        authViewModel.getUserLiveData().observe(this, userModel -> {
+//            Intent intent = new Intent(this, HomeActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("user_key", userModel);
+//            intent.putExtras(bundle);
+//            if (userModel == null){
+//                Log.d("lkhai4617", "null");
+//            }
+//            startActivity(intent);
+//        });
         authViewModel.getUserLiveData().observe(this, userModel -> {
-            Intent intent = new Intent(this, HomeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("user_key", userModel);
-            intent.putExtras(bundle);
-            if (userModel == null){
-                Log.d("lkhai4617", "null");
+            if (userModel != null){
+                Intent intent = new Intent();
+                switch (userModel.getRole().getCode()){
+                    case "CUSTOMER":
+                        intent.setClass(this, HomeActivity.class);
+                        break;
+                    case "SUPER_ADMIN":
+                        intent.setClass(this, AdminActivity.class);
+                        break;
+                    default:
+                        break;
+                }
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user_key", userModel);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
-            startActivity(intent);
         });
 
         authViewModel.getErrorLiveData().observe(this, error-> {

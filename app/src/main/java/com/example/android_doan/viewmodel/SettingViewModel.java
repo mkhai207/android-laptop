@@ -112,6 +112,7 @@ public class SettingViewModel extends ViewModel {
                         DataLocalManager.clearAccessToken();
                         DataLocalManager.clearRefreshToken();
                         DataLocalManager.clearUserId();
+                        DataLocalManager.clearRole();
                         actionResult.setValue(Resource.success("Logout success"));
                     } else {
                         actionResult.setValue(Resource.error("Logout failure"));

@@ -6,6 +6,7 @@ public class DataLocalManager {
     private static final String ACCESS_TOKEN = "com.example.android_doan.data.repository.ACCESS_TOKEN";
     private static final String REFRESH_TOKEN = "com.example.android_doan.data.repository.REFRESH_TOKEN";
     private static final String USER_ID = "com.example.android_doan.data.repository.USER_ID";
+    private static final String ROLE = "com.example.android_doan.data.repository.ROLE";
     private static DataLocalManager instance;
     private MySharedPreference mySharedPreference;
 
@@ -19,6 +20,14 @@ public class DataLocalManager {
             instance = new DataLocalManager();
         }
          return instance;
+    }
+
+    public static void saveRole(String role){
+        DataLocalManager.getInstance().mySharedPreference.setStringValue(ROLE, role);
+    }
+
+    public static String getRole(){
+        return DataLocalManager.getInstance().mySharedPreference.getStringValue(ROLE);
     }
 
     public static void saveUserId(String userId){
@@ -55,5 +64,8 @@ public class DataLocalManager {
 
     public static void clearUserId(){
         DataLocalManager.getInstance().mySharedPreference.clearSharedPreference(USER_ID);
+    }
+    public static void clearRole(){
+        DataLocalManager.getInstance().mySharedPreference.clearSharedPreference(ROLE);
     }
 }
