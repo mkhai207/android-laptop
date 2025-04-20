@@ -15,6 +15,7 @@ import com.example.android_doan.data.model.request.RegisterRequest;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.AuthRepository;
+import com.example.android_doan.utils.Resource;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -26,6 +27,7 @@ public class AuthViewModel extends ViewModel {
     private AuthRepository authRepository;
     private final MutableLiveData<UserModel> userLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private MutableLiveData<Resource> actionResult = new MutableLiveData<>();
     private final MutableLiveData<Boolean> statusRegister = new MutableLiveData<>(false);
     private final CompositeDisposable disposables = new CompositeDisposable();
 
@@ -34,6 +36,9 @@ public class AuthViewModel extends ViewModel {
         this.authRepository = authRepository;
     }
 
+    public MutableLiveData<Resource> getActionResult(){
+        return actionResult;
+    }
     public LiveData<UserModel> getUserLiveData(){
         return userLiveData;
     }
@@ -77,6 +82,29 @@ public class AuthViewModel extends ViewModel {
                 }, throwable -> {
                     Toast.makeText(context, throwable.getMessage(), Toast.LENGTH_LONG).show();
                     statusRegister.setValue(false);
+                });
+        disposables.add(disposable);
+    }
+
+    public void logout(){
+        actionResult.setValue(Resource.loading());
+        Disposable disposable = authRepository.logout()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 200){
+                        DataLocalManager.clearAccessToken();
+                        DataLocalManager.clearRefreshToken();
+                        DataLocalManager.clearUserId();
+                        DataLocalManager.clearRole();
+                        actionResult.setValue(Resource.success("Logout success"));
+                    } else {
+                        actionResult.setValue(Resource.error("Logout failure"));
+                    }
+                }, throwable -> {
+                    if (throwable.getMessage() != null){
+                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    }
                 });
         disposables.add(disposable);
     }

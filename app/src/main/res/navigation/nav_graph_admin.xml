@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.example.android_doan.view.fragment.DashboardFragment"
-        android:label="fragment_dashboard"
+        android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action
             android:id="@+id/action_dashboardFragment_to_orderFragment"
@@ -16,9 +16,9 @@
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
-        android:name="com.example.android_doan.view.fragment.OrderFragment"
-        android:label="fragment_order"
-        tools:layout="@layout/fragment_order" >
+        android:name="com.example.android_doan.view.fragment.OrderManagementFragment"
+        android:label="@string/management_order"
+        tools:layout="@layout/fragment_order_management" >
         <action
             android:id="@+id/action_orderFragment_to_statisticFragment"
             app:destination="@id/statisticFragment" />
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/statisticFragment"
         android:name="com.example.android_doan.view.fragment.StatisticFragment"
-        android:label="fragment_statistic"
+        android:label="@string/statistic"
         tools:layout="@layout/fragment_statistic" >
         <action
             android:id="@+id/action_statisticFragment_to_productManagementFragment"
@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/productManagementFragment"
         android:name="com.example.android_doan.view.fragment.ProductManagementFragment"
-        android:label="fragment_product_management"
+        android:label="@string/product_management"
         tools:layout="@layout/fragment_product_management" >
         <action
             android:id="@+id/action_productManagementFragment_to_categoryManagementFragment"
@@ -44,7 +44,7 @@
     <fragment
         android:id="@+id/categoryManagementFragment"
         android:name="com.example.android_doan.view.fragment.CategoryManagementFragment"
-        android:label="fragment_category_management"
+        android:label="@string/category_management"
         tools:layout="@layout/fragment_category_management" >
         <action
             android:id="@+id/action_categoryManagementFragment_to_brandManagementFragment"
@@ -61,16 +61,34 @@
     </fragment>
     <fragment
         android:id="@+id/userMManagementFragment"
-        android:name="com.example.android_doan.view.fragment.UserMManagementFragment"
-        android:label="fragment_user_m_management"
-        tools:layout="@layout/fragment_user_m_management" >
+        android:name="com.example.android_doan.view.fragment.UserManagementFragment"
+        android:label="@string/customer_management"
+        tools:layout="@layout/fragment_user_management" >
         <action
             android:id="@+id/action_userMManagementFragment_to_settingAdminFragment"
             app:destination="@id/settingAdminFragment" />
+        <action
+            android:id="@+id/action_userMManagementFragment_to_addUserFragment"
+            app:destination="@id/addUserFragment"
+            app:popUpTo="@id/userMManagementFragment"/>
+        <action
+            android:id="@+id/action_userMManagementFragment_to_updateUserFragment"
+            app:destination="@id/updateUserFragment"
+            app:popUpTo="@id/userMManagementFragment"/>
     </fragment>
     <fragment
         android:id="@+id/settingAdminFragment"
         android:name="com.example.android_doan.view.fragment.SettingAdminFragment"
-        android:label="fragment_setting_admin"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_setting_admin" />
+    <fragment
+        android:id="@+id/addUserFragment"
+        android:name="com.example.android_doan.view.fragment.AddUserFragment"
+        android:label="fragment_add_user"
+        tools:layout="@layout/fragment_add_user" />
+    <fragment
+        android:id="@+id/updateUserFragment"
+        android:name="com.example.android_doan.view.fragment.UpdateUserFragment"
+        android:label="fragment_update_user"
+        tools:layout="@layout/fragment_update_user" />
 </navigation>

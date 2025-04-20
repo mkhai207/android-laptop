@@ -14,9 +14,6 @@ public class UserModel implements Serializable {
     private String shoppingAddress;
     private String avatar;
     private RoleModel role;
-    private String createdAt;
-    private String updatedAt;
-
     public UserModel(int id) {
         this.id = id;
     }
@@ -36,7 +33,6 @@ public class UserModel implements Serializable {
     public String getAddress() {
         return address;
     }
-
     public String getEmail() {
         return email;
     }
@@ -63,14 +59,6 @@ public class UserModel implements Serializable {
 
     public RoleModel getRole() {
         return role;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
     }
 
     public UserModel(int id, boolean active, String avatar, String fullName, String address, String phone, String gender, String birthday, String shoppingAddress) {

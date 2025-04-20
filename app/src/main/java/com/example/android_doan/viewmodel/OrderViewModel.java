@@ -5,8 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.android_doan.data.api.user.UserService;
-import com.example.android_doan.data.model.ProductModel;
+import com.example.android_doan.data.api.user.ApiService;
 import com.example.android_doan.data.model.response.Meta;
 import com.example.android_doan.data.model.response.OrderResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
@@ -69,7 +68,7 @@ public class OrderViewModel extends ViewModel {
         }
         actionResult.setValue(Resource.loading());
         String userId = DataLocalManager.getUserId();
-        Disposable disposable = UserService.getInstance().getOrder(userId, page, pageSize)
+        Disposable disposable = ApiService.getInstance().getOrder(userId, page, pageSize)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(orderResponse -> {

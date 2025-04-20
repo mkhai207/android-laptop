@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
+        <item android:id="@+id/orderFragment"
+            android:title="@string/management_order"
+            android:icon="@drawable/ic_order"/>
+
         <item android:id="@+id/productManagementFragment"
             android:title="@string/product_management"
             android:icon="@drawable/ic_product"/>
@@ -16,6 +20,10 @@
         <item android:id="@+id/userMManagementFragment"
             android:title="@string/customer_management"
             android:icon="@drawable/ic_user"/>
+
+        <item android:id="@+id/statisticFragment"
+            android:title="@string/statistic"
+            android:icon="@drawable/ic_product"/>
     </group>
 
     <group android:checkableBehavior="single">

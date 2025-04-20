@@ -123,4 +123,7 @@
     <string name="customer_management">Quản lí người dùng</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
+    <string name="management_order">Quản lí đơn hàng</string>
+    <string name="order_status">Trạng thái đơn hàng</string>
+    <string name="update">Cập nhật</string>
 </resources>

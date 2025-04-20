@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.android_doan.data.api.user.UserService;
 import com.example.android_doan.data.model.response.BrandResponse;
 import com.example.android_doan.data.model.response.Meta;
 import com.example.android_doan.data.model.ProductModel;

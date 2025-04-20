@@ -1,7 +1,9 @@
 package com.example.android_doan.data.repository.RemoteRepository;
 
 import com.example.android_doan.data.api.login.LoginService;
+import com.example.android_doan.data.api.user.ApiService;
 import com.example.android_doan.data.model.request.LoginRequest;
+import com.example.android_doan.data.model.response.CommonResponse;
 import com.example.android_doan.data.model.response.LoginResponse;
 
 import io.reactivex.Single;
@@ -14,5 +16,9 @@ public class AuthRepository {
         return LoginService.getInstance().login(loginRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<CommonResponse> logout(){
+        return ApiService.getInstance().logout();
     }
 }

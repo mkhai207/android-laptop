@@ -12,4 +12,7 @@
     <color name="gray">#CDCBCB</color>
     <color name="bg_primary">#FFA113</color>
     <color name="bg_second">#F9F9F9</color>
+    <color name="brown">#4A2C0B</color>
+    <color name="delete_color">#DC3545</color>
+    <color name="dark_80">#C3000000</color>
 </resources>

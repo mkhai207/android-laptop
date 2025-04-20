@@ -3,9 +3,12 @@ package com.example.android_doan.data.api.user;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.request.ChangePasswordRequest;
+import com.example.android_doan.data.model.request.CreateUserRequest;
 import com.example.android_doan.data.model.request.OrderRequest;
 import com.example.android_doan.data.model.response.AddToCartResponse;
 import com.example.android_doan.data.model.response.BrandResponse;
+import com.example.android_doan.data.model.response.CreateUserResponse;
+import com.example.android_doan.data.model.response.GetAllUserResponse;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.model.response.OrderResponse;
 import com.example.android_doan.data.model.response.ProductResponse;
@@ -27,7 +30,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface UserApi {
+public interface Api {
     @GET("api/v1/auth/account")
     Single<AccountResponse> getAccount();
 
@@ -79,4 +82,15 @@ public interface UserApi {
     @POST("api/v1/files")
     Single<UploadFileResponse> uploadFile(@Part("folder") RequestBody folder,
                                           @Part MultipartBody.Part file);
+
+    @GET("api/v1/users")
+    Single<GetAllUserResponse> getAllUser(@Query("page") int page,
+                                          @Query("size") int size,
+                                          @Query("sort") String sort);
+
+    @POST("api/v1/users")
+    Single<CreateUserResponse> createUser(@Body CreateUserRequest request);
+
+    @DELETE("api/v1/users/{userId}")
+    Single<CommonResponse> deleteUser(@Path("userId") int id);
 }
