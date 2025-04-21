@@ -3,11 +3,15 @@ package com.example.android_doan.data.api.user;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.request.ChangePasswordRequest;
+import com.example.android_doan.data.model.request.CreateCategoryRequest;
 import com.example.android_doan.data.model.request.CreateUserRequest;
 import com.example.android_doan.data.model.request.OrderRequest;
+import com.example.android_doan.data.model.request.UpdateCategoryRequest;
 import com.example.android_doan.data.model.response.AddToCartResponse;
 import com.example.android_doan.data.model.response.BrandResponse;
+import com.example.android_doan.data.model.response.CreateCategoryResponse;
 import com.example.android_doan.data.model.response.CreateUserResponse;
+import com.example.android_doan.data.model.response.GetAllCategoriesResponse;
 import com.example.android_doan.data.model.response.GetAllUserResponse;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.model.response.OrderResponse;
@@ -93,4 +97,18 @@ public interface Api {
 
     @DELETE("api/v1/users/{userId}")
     Single<CommonResponse> deleteUser(@Path("userId") int id);
+
+    @GET("api/v1/categories")
+    Single<GetAllCategoriesResponse> getAllCategories(@Query("page") int page,
+                                                      @Query("size") int size,
+                                                      @Query("sort") String sort);
+
+    @POST("api/v1/categories")
+    Single<CreateCategoryResponse> createCategory(@Body CreateCategoryRequest request);
+
+    @DELETE("api/v1/categories/{categoryId}")
+    Single<CommonResponse> deleteCategory(@Path("categoryId") int categoryId);
+
+    @PUT("api/v1/categories")
+    Single<CreateCategoryResponse> updateCategory(@Body UpdateCategoryRequest request);
 }

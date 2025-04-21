@@ -49,6 +49,10 @@
         <action
             android:id="@+id/action_categoryManagementFragment_to_brandManagementFragment"
             app:destination="@id/brandManagementFragment" />
+        <action
+            android:id="@+id/action_categoryManagementFragment_to_addOrUpdateCategoryFragment"
+            app:destination="@id/addOrUpdateCategoryFragment"
+            app:popUpTo="@id/categoryManagementFragment"/>
     </fragment>
     <fragment
         android:id="@+id/brandManagementFragment"
@@ -91,4 +95,9 @@
         android:name="com.example.android_doan.view.fragment.UpdateUserFragment"
         android:label="fragment_update_user"
         tools:layout="@layout/fragment_update_user" />
+    <fragment
+        android:id="@+id/addOrUpdateCategoryFragment"
+        android:name="com.example.android_doan.view.fragment.AddOrUpdateCategoryFragment"
+        android:label="fragment_add_or_update_category"
+        tools:layout="@layout/fragment_add_or_update_category" />
 </navigation>
