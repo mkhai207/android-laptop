@@ -40,6 +40,10 @@
         <action
             android:id="@+id/action_productManagementFragment_to_categoryManagementFragment"
             app:destination="@id/categoryManagementFragment" />
+        <action
+            android:id="@+id/action_productManagementFragment_to_addOrUpdateProductFragment"
+            app:destination="@id/addOrUpdateProductFragment"
+            app:popUpTo="@id/productManagementFragment"/>
     </fragment>
     <fragment
         android:id="@+id/categoryManagementFragment"
@@ -100,4 +104,9 @@
         android:name="com.example.android_doan.view.fragment.AddOrUpdateCategoryFragment"
         android:label="fragment_add_or_update_category"
         tools:layout="@layout/fragment_add_or_update_category" />
+    <fragment
+        android:id="@+id/addOrUpdateProductFragment"
+        android:name="com.example.android_doan.view.fragment.AddOrUpdateProductFragment"
+        android:label="fragment_add_or_update_product"
+        tools:layout="@layout/fragment_add_or_update_product" />
 </navigation>

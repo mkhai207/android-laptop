@@ -40,6 +40,7 @@ import com.example.android_doan.data.model.request.ChangePasswordRequest;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.SettingRepository;
 import com.example.android_doan.databinding.FragmentSettingBinding;
+import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.utils.RealPathUtil;
 import com.example.android_doan.view.activity.LoginActivity;
@@ -176,7 +177,8 @@ public class SettingFragment extends Fragment {
                         break;
                     case ERROR:
                         binding.progressBar.setVisibility(View.VISIBLE);
-                        Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
+                        CustomToast.showToast(requireContext(), actionResult.getMessage(), 2000);
                         break;
                 }
             }

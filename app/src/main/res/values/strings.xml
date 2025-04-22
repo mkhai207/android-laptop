@@ -127,4 +127,7 @@
     <string name="order_status">Trạng thái đơn hàng</string>
     <string name="update">Cập nhật</string>
     <string name="code">Code</string>
+    <string name="more_options">More options</string>
+    <string name="edit">Sửa</string>
+    <string name="delete">Xoá</string>
 </resources>

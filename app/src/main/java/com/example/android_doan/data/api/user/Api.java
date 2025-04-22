@@ -1,15 +1,19 @@
 package com.example.android_doan.data.api.user;
 
+import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.request.ChangePasswordRequest;
 import com.example.android_doan.data.model.request.CreateCategoryRequest;
+import com.example.android_doan.data.model.request.CreateProductRequest;
 import com.example.android_doan.data.model.request.CreateUserRequest;
 import com.example.android_doan.data.model.request.OrderRequest;
 import com.example.android_doan.data.model.request.UpdateCategoryRequest;
+import com.example.android_doan.data.model.request.UpdateProductRequest;
 import com.example.android_doan.data.model.response.AddToCartResponse;
 import com.example.android_doan.data.model.response.BrandResponse;
 import com.example.android_doan.data.model.response.CreateCategoryResponse;
+import com.example.android_doan.data.model.response.CreateProductResponse;
 import com.example.android_doan.data.model.response.CreateUserResponse;
 import com.example.android_doan.data.model.response.GetAllCategoriesResponse;
 import com.example.android_doan.data.model.response.GetAllUserResponse;
@@ -111,4 +115,13 @@ public interface Api {
 
     @PUT("api/v1/categories")
     Single<CreateCategoryResponse> updateCategory(@Body UpdateCategoryRequest request);
+
+    @POST("api/v1/products")
+    Single<CreateProductResponse> createProduct(@Body CreateProductRequest request);
+
+    @PUT("api/v1/products")
+    Single<CreateProductResponse> updateProduct(@Body UpdateProductRequest request);
+
+    @GET("api/v1/categories")
+    Single<GetAllCategoriesResponse> getAllCategoriesNoPage();
 }

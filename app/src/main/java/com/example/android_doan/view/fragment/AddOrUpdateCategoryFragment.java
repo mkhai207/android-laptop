@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android_doan.R;
 import com.example.android_doan.data.model.CategoryModel;
 import com.example.android_doan.data.model.request.CreateCategoryRequest;
 import com.example.android_doan.data.model.request.UpdateCategoryRequest;

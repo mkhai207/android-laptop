@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductModel implements Serializable {
     @SerializedName("id")
@@ -81,79 +82,103 @@ public class ProductModel implements Serializable {
     @SerializedName("brand")
     private BrandModel brand;
 
-    // Getter và Setter
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getModel() { return model; }
-    public void setModel(String model) { this.model = model; }
+    public String getModel() {
+        return model;
+    }
 
-    public String getCpu() { return cpu; }
-    public void setCpu(String cpu) { this.cpu = cpu; }
+    public String getCpu() {
+        return cpu;
+    }
 
-    public int getRam() { return ram; }
-    public void setRam(int ram) { this.ram = ram; }
+    public int getRam() {
+        return ram;
+    }
 
-    public String getMemory() { return memory; }
-    public void setMemory(String memory) { this.memory = memory; }
+    public String getMemory() {
+        return memory;
+    }
 
-    public String getMemoryType() { return memoryType; }
-    public void setMemoryType(String memoryType) { this.memoryType = memoryType; }
+    public String getMemoryType() {
+        return memoryType;
+    }
 
-    public String getGpu() { return gpu; }
-    public void setGpu(String gpu) { this.gpu = gpu; }
+    public String getGpu() {
+        return gpu;
+    }
 
-    public String getScreen() { return screen; }
-    public void setScreen(String screen) { this.screen = screen; }
+    public String getScreen() {
+        return screen;
+    }
 
-    public double getPrice() { return price; }
-    public void setPrice(int price) { this.price = price; }
+    public double getPrice() {
+        return price;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getThumbnail() { return thumbnail; }
-    public void setThumbnail(String thumbnail) { this.thumbnail = thumbnail; }
+    public String getThumbnail() {
+        return thumbnail;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus() {
+        return status;
+    }
 
-    public double getWeight() { return weight; }
-    public void setWeight(double weight) { this.weight = weight; }
+    public double getWeight() {
+        return weight;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public int getQuantity() {
+        return quantity;
+    }
 
-    public String getColor() { return color; }
-    public void setColor(String color) { this.color = color; }
+    public String getColor() {
+        return color;
+    }
 
-    public String getPort() { return port; }
-    public void setPort(String port) { this.port = port; }
+    public String getPort() {
+        return port;
+    }
 
-    public String getOs() { return os; }
-    public void setOs(String os) { this.os = os; }
+    public String getOs() {
+        return os;
+    }
 
-    public int getSold() { return sold; }
-    public void setSold(int sold) { this.sold = sold; }
+    public int getSold() {
+        return sold;
+    }
 
-    public String getTag() { return tag; }
-    public void setTag(String tag) { this.tag = tag; }
+    public String getTag() {
+        return tag;
+    }
 
-    public List<String> getSlider() { return slider; }
-    public void setSlider(List<String> slider) { this.slider = slider; }
+    public List<String> getSlider() {
+        return slider;
+    }
 
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
-    public String getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
 
-    public CategoryModel getCategory() { return category; }
-    public void setCategory(CategoryModel category) { this.category = category; }
+    public CategoryModel getCategory() {
+        return category;
+    }
 
-    public BrandModel getBrand() { return brand; }
-    public void setBrand(BrandModel brand) { this.brand = brand; }
+    public BrandModel getBrand() {
+        return brand;
+    }
 }
