@@ -167,7 +167,8 @@ public class SettingFragment extends Fragment {
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
+                        CustomToast.showToast(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT);
+//                        Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
                         if (DataLocalManager.getAccessToken()== null){
                             Intent intent = new Intent(requireContext(), LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -186,7 +187,7 @@ public class SettingFragment extends Fragment {
 
         settingViewModel.getFileData().observe(getViewLifecycleOwner(), data ->{
             if (data != null){
-                avatarStr = data.getData().getFileName();
+                avatarStr = data.getData().getFileLink();
 
                 int userId = Integer.parseInt(DataLocalManager.getUserId());
                 String fullname = binding.edtFullName.getText().toString();
@@ -205,17 +206,17 @@ public class SettingFragment extends Fragment {
 
     private void bindData(UserModel userModel){
         if (userModel.getAvatar() != null){
-            avatarStr = userModel.getAvatar();
-            String accessToken = DataLocalManager.getAccessToken();
+//            avatarStr = userModel.getAvatar();
+//            String accessToken = DataLocalManager.getAccessToken();
 
-            GlideUrl glideUrl = new GlideUrl("http://192.168.50.2:8080/storage/avatar/" + userModel.getAvatar(), ()-> {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + accessToken);
-                return headers;
-            });
+//            GlideUrl glideUrl = new GlideUrl("http://192.168.50.2:8080/storage/avatar/" + userModel.getAvatar(), ()-> {
+//                Map<String, String> headers = new HashMap<>();
+//                headers.put("Authorization", "Bearer " + accessToken);
+//                return headers;
+//            });
 
             Glide.with(requireContext())
-                    .load(glideUrl)
+                    .load(userModel.getAvatar())
                     .error(R.drawable.ic_user)
                     .listener(new RequestListener<Drawable>() {
                         @Override
@@ -362,11 +363,32 @@ public class SettingFragment extends Fragment {
     }
 
     private void callApiUploadFile(){
+//        String folder = "avatar";
+//        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
+//        String realPathAvt = RealPathUtil.getRealPath(requireContext(), avtUri);
+//        File avatar = new File(realPathAvt);
+//        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+//        MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
+//        settingViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
+
         String folder = "avatar";
-        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
+        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("text/plain"), folder);
+
         String realPathAvt = RealPathUtil.getRealPath(requireContext(), avtUri);
         File avatar = new File(realPathAvt);
-        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+
+        String mediaType;
+        String fileName = avatar.getName().toLowerCase();
+        if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+            mediaType = "image/jpeg";
+        } else if (fileName.endsWith(".png")) {
+            mediaType = "image/png";
+        } else {
+            Toast.makeText(requireContext(), "Unsupported file format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse(mediaType), avatar);
         MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
         settingViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
     }

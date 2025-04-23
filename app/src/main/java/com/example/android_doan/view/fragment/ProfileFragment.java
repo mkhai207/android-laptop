@@ -90,7 +90,7 @@ public class ProfileFragment extends Fragment {
         profileViewModel.getUserInfo().observe(getViewLifecycleOwner(), user -> {
             if (user != null){
                 Glide.with(requireContext())
-                        .load("http://192.168.50.2:8080/storage/avatar/" + user.getAvatar())
+                        .load(user.getAvatar())
                         .error(R.drawable.ic_user)
                         .into(binding.ivAvatar);
 

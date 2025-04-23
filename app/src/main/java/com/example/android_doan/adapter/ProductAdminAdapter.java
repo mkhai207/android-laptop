@@ -70,8 +70,9 @@ public class ProductAdminAdapter extends RecyclerView.Adapter<ProductAdminAdapte
 
         public void bind(ProductModel productModel, ProductViewHolder holder, IOnClickProduct listener){
             if (productModel.getThumbnail() != null){
+                // "http://192.168.50.2:8080/storage/product/" +
                 Glide.with(holder.itemView.getContext())
-                        .load("http://192.168.50.2:8080/storage/product/" + productModel.getThumbnail())
+                        .load(productModel.getThumbnail())
                         .error(R.drawable.ic_user)
                         .listener(new RequestListener<Drawable>() {
                             @Override

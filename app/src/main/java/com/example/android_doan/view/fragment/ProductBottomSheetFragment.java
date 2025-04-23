@@ -68,7 +68,7 @@ public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
         }
 
         Glide.with(requireActivity())
-                .load("http://192.168.50.2:8080/storage/product/" + productModel.getThumbnail())
+                .load(productModel.getThumbnail())
                 .error(R.drawable.ic_user)
                 .into(binding.ivLaptop);
 

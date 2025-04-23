@@ -71,7 +71,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 return;
             }
             Glide.with(holder.itemView.getContext())
-                    .load("http://192.168.50.2:8080/storage/product/" + itemCart.getProduct().getThumbnail())
+                    .load(itemCart.getProduct().getThumbnail())
                     .error(R.drawable.logo)
                     .into(binding.imgProduct);
 

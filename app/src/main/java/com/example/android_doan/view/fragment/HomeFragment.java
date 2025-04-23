@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
                 binding.tvFullName.setText(userModel.getFullName());
                 if (userModel.getAvatar() != null){
                     Glide.with(requireContext())
-                            .load("http://192.168.50.2:8080/storage/avatar/" + userModel.getAvatar())
+                            .load(userModel.getAvatar())
                             .error(R.drawable.ic_user)
                             .listener(new RequestListener<Drawable>() {
                                 @Override

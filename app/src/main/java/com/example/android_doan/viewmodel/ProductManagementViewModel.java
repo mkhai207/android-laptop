@@ -10,9 +10,9 @@ import com.example.android_doan.data.model.CategoryModel;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.request.CreateProductRequest;
 import com.example.android_doan.data.model.request.UpdateProductRequest;
-import com.example.android_doan.data.model.response.BrandResponse;
 import com.example.android_doan.data.model.response.Meta;
 import com.example.android_doan.data.model.response.UploadFileResponse;
+import com.example.android_doan.data.model.response.UploadMultipleFileResponse;
 import com.example.android_doan.data.repository.RemoteRepository.ProductManagementRepository;
 import com.example.android_doan.utils.Resource;
 
@@ -32,6 +32,9 @@ public class ProductManagementViewModel extends ViewModel {
     public MutableLiveData<List<BrandModel>> brandsLiveData = new MutableLiveData<>();
     public MutableLiveData<List<CategoryModel>> categoriesLiveData = new MutableLiveData<>();
     private MutableLiveData<UploadFileResponse> fileLiveData = new MutableLiveData<>();
+    private MutableLiveData<UploadMultipleFileResponse> filesLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> uploadThumbnailStatusLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> uploadSliderStatusLiveData = new MutableLiveData<>();
     private MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>(new Resource(Resource.Status.SUCCESS, ""));
     private final CompositeDisposable disposables = new CompositeDisposable();
     private int currentPage = 0;
@@ -44,6 +47,15 @@ public class ProductManagementViewModel extends ViewModel {
     }
     public MutableLiveData<UploadFileResponse> getFileLiveData(){
         return fileLiveData;
+    }
+    public MutableLiveData<UploadMultipleFileResponse> getFilesLiveData(){
+        return filesLiveData;
+    }
+    public MutableLiveData<Boolean> getUploadThumbnailStatusLiveData() {
+        return uploadThumbnailStatusLiveData;
+    }
+    public MutableLiveData<Boolean> getUploadSliderStatusLiveData() {
+        return uploadSliderStatusLiveData;
     }
 
     public MutableLiveData<List<BrandModel>> getBrandsLiveData(){
@@ -156,9 +168,31 @@ public class ProductManagementViewModel extends ViewModel {
                 .subscribe(response -> {
                     if (response != null && response.getStatusCode() == 200){
                         fileLiveData.setValue(response);
+                        uploadThumbnailStatusLiveData.setValue(true);
                         apiResultLiveData.setValue(Resource.success("uploadFile"));
                     } else {
                         apiResultLiveData.setValue(Resource.error("uploadFile"));
+                    }
+                }, throwable -> {
+                    if (throwable.getMessage() != null){
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
+                    }
+                });
+        disposables.add(disposable);
+    }
+
+    public void uploadMultipleFile(RequestBody folder, List<MultipartBody.Part> files){
+        apiResultLiveData.setValue(Resource.loading());
+        Disposable disposable = productManagementRepository.uploadMultipleFile(folder, files)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 200){
+                        filesLiveData.setValue(response);
+                        uploadSliderStatusLiveData.setValue(true);
+                        apiResultLiveData.setValue(Resource.success("uploadMultipleFile"));
+                    } else {
+                        apiResultLiveData.setValue(Resource.error("uploadMultipleFile"));
                     }
                 }, throwable -> {
                     if (throwable.getMessage() != null){
@@ -187,6 +221,25 @@ public class ProductManagementViewModel extends ViewModel {
         disposables.add(disposable);
     }
 
+
+    public void createProduct(CreateProductRequest request){
+        apiResultLiveData.setValue(Resource.loading());
+        Disposable disposable = productManagementRepository.createProduct(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 201){
+                        apiResultLiveData.setValue(Resource.success("createProduct"));
+                    } else {
+                        apiResultLiveData.setValue(Resource.error("createProduct"));
+                    }
+                }, throwable -> {
+                    if (throwable.getMessage() != null){
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
+                    }
+                });
+        disposables.add(disposable);
+    }
     @Override
     protected void onCleared() {
         super.onCleared();

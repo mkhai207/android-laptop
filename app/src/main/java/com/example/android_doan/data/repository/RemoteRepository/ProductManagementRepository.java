@@ -9,6 +9,9 @@ import com.example.android_doan.data.model.response.CreateProductResponse;
 import com.example.android_doan.data.model.response.GetAllCategoriesResponse;
 import com.example.android_doan.data.model.response.ProductResponse;
 import com.example.android_doan.data.model.response.UploadFileResponse;
+import com.example.android_doan.data.model.response.UploadMultipleFileResponse;
+
+import java.util.List;
 
 import io.reactivex.Single;
 import okhttp3.MultipartBody;
@@ -37,5 +40,9 @@ public class ProductManagementRepository {
 
     public Single<UploadFileResponse> uploadFile(RequestBody folder, MultipartBody.Part file){
         return ApiService.getInstance().uploadFile(folder, file);
+    }
+
+    public Single<UploadMultipleFileResponse> uploadMultipleFile(RequestBody folder, List<MultipartBody.Part> files){
+        return ApiService.getInstance().uploadMultipleFile(folder, files);
     }
 }

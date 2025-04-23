@@ -23,7 +23,10 @@ import com.example.android_doan.data.model.response.ProductResponse;
 import com.example.android_doan.data.model.response.CommonResponse;
 import com.example.android_doan.data.model.response.AccountResponse;
 import com.example.android_doan.data.model.response.UploadFileResponse;
+import com.example.android_doan.data.model.response.UploadMultipleFileResponse;
 import com.example.android_doan.data.model.response.UserResponse;
+
+import java.util.List;
 
 import io.reactivex.Single;
 import okhttp3.MultipartBody;
@@ -124,4 +127,8 @@ public interface Api {
 
     @GET("api/v1/categories")
     Single<GetAllCategoriesResponse> getAllCategoriesNoPage();
+    @Multipart
+    @POST("api/v1/files/multiple")
+    Single<UploadMultipleFileResponse> uploadMultipleFile(@Part("folder") RequestBody folder,
+                                                          @Part List<MultipartBody.Part> files);
 }

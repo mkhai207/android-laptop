@@ -49,8 +49,9 @@ public class ProductDetailViewPager2Adapter extends RecyclerView.Adapter<Product
         }
 
         public void bind(String photoUrl, PhotoViewHolder holder){
+            // "http://192.168.50.2:8080/storage/product/"
             Glide.with(holder.itemView.getContext())
-                    .load("http://192.168.50.2:8080/storage/product/" + photoUrl)
+                    .load(photoUrl)
                     .error(R.drawable.ic_user)
                     .into(binding.imgPhoto);
         }

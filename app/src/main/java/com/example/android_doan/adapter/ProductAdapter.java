@@ -79,9 +79,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     headers.put("Authorization", "Bearer " + accessToken);
                     return headers;
                 });
-
+                // "http://192.168.50.2:8080/storage/product/" +
                 Glide.with(context)
-                        .load("http://192.168.50.2:8080/storage/product/" + productModel.getThumbnail())
+                        .load(productModel.getThumbnail())
                         .error(R.drawable.ic_user)
                         .listener(new RequestListener<Drawable>() {
                             @Override

@@ -1,5 +1,6 @@
 package com.example.android_doan.adapter;
 
+import android.net.Uri;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.android_doan.R;
 import com.example.android_doan.databinding.ItemImageBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SliderImageAdapter extends RecyclerView.Adapter<SliderImageAdapter.ImageViewHolder>{
@@ -52,7 +54,7 @@ public class SliderImageAdapter extends RecyclerView.Adapter<SliderImageAdapter.
         public void bind(String url, ImageViewHolder holder){
             if (url != null){
                 Glide.with(holder.itemView.getContext())
-                        .load("http://192.168.50.2:8080/storage/product/" + url)
+                        .load(url)
                         .error(R.drawable.laptop_logo)
                         .into(binding.ivProduct);
             }
@@ -61,6 +63,15 @@ public class SliderImageAdapter extends RecyclerView.Adapter<SliderImageAdapter.
 
     public void updateData(List<String> strings){
         mListImage.clear();
+        mListImage.addAll(strings);
+        notifyDataSetChanged();
+    }
+
+    public void updateDataUri(List<Uri> uris){
+        List<String> strings = new ArrayList<>();
+        for (Uri uri: uris){
+            strings.add(uri.toString());
+        }
         mListImage.addAll(strings);
         notifyDataSetChanged();
     }
