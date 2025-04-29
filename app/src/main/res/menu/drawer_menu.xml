@@ -29,7 +29,7 @@
     <group android:checkableBehavior="single">
         <item android:title="@string/profile">
             <menu>
-                <item android:id="@+id/settingAdminFragment"
+                <item android:id="@+id/settingFragment"
                     android:title="@string/settings"
                     android:icon="@drawable/ic_setting"/>
 

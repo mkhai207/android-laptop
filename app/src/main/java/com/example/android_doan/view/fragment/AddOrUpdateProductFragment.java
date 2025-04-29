@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,8 +73,10 @@ public class AddOrUpdateProductFragment extends Fragment {
     private List<Uri> sliderUris = new ArrayList<>();
     private ArrayAdapter<CategoryModel> categoryAdapter;
     private ArrayAdapter<BrandModel> brandAdapter;
-    private boolean thumbnailUploadResult = false;
-    private boolean sliderUploadResult = false;
+    private Boolean thumbnailUploadResult = null;
+    private Boolean sliderUploadResult = null;
+    private int status;
+    private boolean hasProcessedProduct;
 
     private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
         @Override
@@ -179,6 +182,17 @@ public class AddOrUpdateProductFragment extends Fragment {
         productManagementViewModel.getAllCategory();
         productManagementViewModel.getBrands();
         setupSliderImage();
+
+        binding.switchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                status = b ? 1 : 0;
+            }
+        });
+
+        if (mProductModel == null) {
+            binding.switchStatus.setVisibility(View.GONE);
+        }
     }
 
     private void setupData(){
@@ -200,14 +214,7 @@ public class AddOrUpdateProductFragment extends Fragment {
                         .error(R.drawable.laptop_logo)
                         .into(binding.ivThumbnail);
             }
-            switch (mProductModel.getStatus()){
-                case "0":
-                    binding.switchStatus.setChecked(false);
-                    break;
-                case "1":
-                    binding.switchStatus.setChecked(true);
-                    break;
-            }
+            binding.switchStatus.setChecked(mProductModel.getStatus());
             binding.etWeight.setText(String.valueOf(mProductModel.getWeight()));
             binding.etQuantity.setText(String.valueOf(mProductModel.getQuantity()));
             binding.etColor.setText(mProductModel.getColor());
@@ -414,7 +421,6 @@ public class AddOrUpdateProductFragment extends Fragment {
         String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");;
 
         String description = binding.etDescription.getText().toString().trim();
-        int status = binding.switchStatus.isChecked() ? 1 : 0;
 
         String weight = binding.etWeight.getText().toString().trim();
 
@@ -605,50 +611,62 @@ public class AddOrUpdateProductFragment extends Fragment {
     }
 
     private void proceedUpload() {
+        hasProcessedProduct = false;
         if (thumbnailUri != null){
             callApiUploadFile();
         }
         if (!sliderUris.isEmpty()) {
             callApiUploadMultipleFile(sliderUris);
         }
-    }
 
-    private void checkUploadStatus(){
-        if (mProductModel != null){
-            if (thumbnailUri != null && sliderUris.isEmpty()){
-                if (thumbnailUploadResult){
-                    Log.d("lkhai4617", "checkUploadStatus: thumbnailUri != null && sliderUris.isEmpty()");
-                    updateProduct();
-                }
-            } else if (thumbnailUri == null && !sliderUris.isEmpty()){
-                if (sliderUploadResult){
-                    Log.d("lkhai4617", "checkUploadStatus: thumbnailUri == null && !sliderUris.isEmpty()");
-                    updateProduct();
-                }
-            } else{
-                if (thumbnailUploadResult && sliderUploadResult){
-                    Log.d("lkhai4617", "checkUploadStatus: thumbnailUploadResult && sliderUploadResult");
-                    updateProduct();
-                }
-            }
-        } else {
-            if (thumbnailUri != null && sliderUris.isEmpty()){
-                if (thumbnailUploadResult){
-                    Log.d("lkhai4617", "create checkUploadStatus: thumbnailUri != null && sliderUris.isEmpty()");
-                    createProduct();
-                }
-            } else if (thumbnailUri == null && !sliderUris.isEmpty()){
-                if (sliderUploadResult){
-                    Log.d("lkhai4617", "create checkUploadStatus: thumbnailUri == null && !sliderUris.isEmpty()");
-                    createProduct();
-                }
-            } else{
-                if (thumbnailUploadResult && sliderUploadResult){
-                    Log.d("lkhai4617", "create checkUploadStatus: thumbnailUploadResult && sliderUploadResult");
-                    createProduct();
-                }
-            }
+        if (thumbnailUri == null && sliderUris.isEmpty()) {
+            checkUploadStatus();
         }
     }
 
+    private void checkUploadStatus() {
+        if (hasProcessedProduct) {
+            return;
+        }
+
+        boolean canProceed = true;
+
+        if (thumbnailUri != null) {
+            if (thumbnailUploadResult == null) {
+                canProceed = false;
+            } else if (!thumbnailUploadResult) {
+                canProceed = false;
+                CustomToast.showToast(requireContext(), "Lỗi upload ảnh", Toast.LENGTH_SHORT);
+            }
+        }
+
+        if (!sliderUris.isEmpty()) {
+            if (sliderUploadResult == null) {
+                canProceed = false;
+            } else if (!sliderUploadResult) {
+                canProceed = false;
+                Toast.makeText(requireContext(), "Lỗi upload ảnh", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (canProceed) {
+            hasProcessedProduct = true;
+
+            if (thumbnailUri != null && sliderUris.isEmpty()) {
+                Log.d("lkhai4617", "checkUploadStatus: Only thumbnail uploaded");
+            } else if (thumbnailUri == null && !sliderUris.isEmpty()) {
+                Log.d("lkhai4617", "checkUploadStatus: Only slider uploaded");
+            } else if (thumbnailUri != null && !sliderUris.isEmpty()) {
+                Log.d("lkhai4617", "checkUploadStatus: Both thumbnail and slider uploaded");
+            } else {
+                Log.d("lkhai4617", "checkUploadStatus: No upload required");
+            }
+
+            if (mProductModel != null) {
+                updateProduct();
+            } else {
+                createProduct();
+            }
+        }
+    }
 }

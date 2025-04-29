@@ -44,7 +44,7 @@ public class ProductModel implements Serializable {
     private String thumbnail;
 
     @SerializedName("status")
-    private String status; // Có thể là null
+    private boolean status; // Có thể là null
 
     @SerializedName("weight")
     private double weight;
@@ -130,7 +130,7 @@ public class ProductModel implements Serializable {
         return thumbnail;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 

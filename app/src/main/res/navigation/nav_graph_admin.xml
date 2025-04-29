@@ -61,20 +61,21 @@
     <fragment
         android:id="@+id/brandManagementFragment"
         android:name="com.example.android_doan.view.fragment.BrandManagementFragment"
-        android:label="fragment_brand_management"
+        android:label="@string/brand_management"
         tools:layout="@layout/fragment_brand_management" >
         <action
             android:id="@+id/action_brandManagementFragment_to_userMManagementFragment"
             app:destination="@id/userMManagementFragment" />
+        <action
+            android:id="@+id/action_brandManagementFragment_to_addOrUpdateBrandFragment"
+            app:destination="@id/addOrUpdateBrandFragment"
+            app:popUpTo="@id/brandManagementFragment"/>
     </fragment>
     <fragment
         android:id="@+id/userMManagementFragment"
         android:name="com.example.android_doan.view.fragment.UserManagementFragment"
         android:label="@string/customer_management"
         tools:layout="@layout/fragment_user_management" >
-        <action
-            android:id="@+id/action_userMManagementFragment_to_settingAdminFragment"
-            app:destination="@id/settingAdminFragment" />
         <action
             android:id="@+id/action_userMManagementFragment_to_addUserFragment"
             app:destination="@id/addUserFragment"
@@ -83,12 +84,11 @@
             android:id="@+id/action_userMManagementFragment_to_updateUserFragment"
             app:destination="@id/updateUserFragment"
             app:popUpTo="@id/userMManagementFragment"/>
+        <action
+            android:id="@+id/action_userMManagementFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
+            app:popUpTo="@id/userMManagementFragment"/>
     </fragment>
-    <fragment
-        android:id="@+id/settingAdminFragment"
-        android:name="com.example.android_doan.view.fragment.SettingAdminFragment"
-        android:label="@string/settings"
-        tools:layout="@layout/fragment_setting_admin" />
     <fragment
         android:id="@+id/addUserFragment"
         android:name="com.example.android_doan.view.fragment.AddUserFragment"
@@ -109,4 +109,13 @@
         android:name="com.example.android_doan.view.fragment.AddOrUpdateProductFragment"
         android:label="fragment_add_or_update_product"
         tools:layout="@layout/fragment_add_or_update_product" />
+    <fragment
+        android:id="@+id/addOrUpdateBrandFragment"
+        android:name="com.example.android_doan.view.fragment.AddOrUpdateBrandFragment"
+        android:label="fragment_add_or_update_brand"
+        tools:layout="@layout/fragment_add_or_update_brand" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.android_doan.view.fragment.SettingFragment"
+        android:label="@string/settings" />
 </navigation>

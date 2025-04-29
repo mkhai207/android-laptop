@@ -210,7 +210,7 @@ public class HomeFragment extends Fragment {
                     Chip chip = new Chip(binding.chipGroupBrands.getContext());
                     chip.setId(View.generateViewId());
                     chip.setText(brand.getName());
-                    chip.setTag(Integer.parseInt(brand.getId()));
+                    chip.setTag(brand.getId());
                     chip.setCheckable(true);
                     chip.setTextColor(getResources().getColorStateList(R.color.chip_text_color_change));
                     chip.setChipBackgroundColorResource(R.color.chip_bg_selected_change);

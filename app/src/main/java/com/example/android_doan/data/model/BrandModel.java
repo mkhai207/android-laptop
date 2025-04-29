@@ -7,19 +7,23 @@ import java.util.Objects;
 
 public class BrandModel implements Serializable {
     @SerializedName("id")
-    private String id;
+    private int id;
 
     @SerializedName("name")
     private String name;
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public int getId() { return id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public BrandModel(String id) {
+    public BrandModel(int id) {
         this.id = id;
+    }
+
+    public BrandModel(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     @Override

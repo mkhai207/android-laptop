@@ -1,9 +1,11 @@
 package com.example.android_doan.data.api.user;
 
+import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.request.ChangePasswordRequest;
+import com.example.android_doan.data.model.request.CreateBrandRequest;
 import com.example.android_doan.data.model.request.CreateCategoryRequest;
 import com.example.android_doan.data.model.request.CreateProductRequest;
 import com.example.android_doan.data.model.request.CreateUserRequest;
@@ -12,6 +14,7 @@ import com.example.android_doan.data.model.request.UpdateCategoryRequest;
 import com.example.android_doan.data.model.request.UpdateProductRequest;
 import com.example.android_doan.data.model.response.AddToCartResponse;
 import com.example.android_doan.data.model.response.BrandResponse;
+import com.example.android_doan.data.model.response.CreateBrandResponse;
 import com.example.android_doan.data.model.response.CreateCategoryResponse;
 import com.example.android_doan.data.model.response.CreateProductResponse;
 import com.example.android_doan.data.model.response.CreateUserResponse;
@@ -131,4 +134,13 @@ public interface Api {
     @POST("api/v1/files/multiple")
     Single<UploadMultipleFileResponse> uploadMultipleFile(@Part("folder") RequestBody folder,
                                                           @Part List<MultipartBody.Part> files);
+
+    @POST("api/v1/brands")
+    Single<CreateBrandResponse> createBrand(@Body CreateBrandRequest request);
+
+    @PUT("api/v1/brands")
+    Single<CreateBrandResponse> updateBrand(@Body BrandModel brandModel);
+
+    @DELETE("api/v1/brands/{brandId}")
+    Single<CommonResponse> deleteBrand(@Path("brandId") int id);
 }
