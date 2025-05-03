@@ -66,4 +66,7 @@ dependencies {
 
     //Circle Indicator
     implementation("me.relex:circleindicator:2.1.6")
+
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:24.2.0")
 }

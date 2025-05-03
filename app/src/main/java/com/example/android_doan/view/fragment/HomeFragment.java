@@ -225,16 +225,45 @@ public class HomeFragment extends Fragment {
     }
 
     private void filterProduct(){
+//        binding.chipGroupBrands.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+//            @Override
+//            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+//                StringBuilder filter = new StringBuilder();
+//                if (!checkedIds.isEmpty()){
+//                    filter.append("(");
+//                    List<String> brandsCondition = new ArrayList<>();
+//                    for (int checkedId : checkedIds){
+//                        Chip chip = group.findViewById(checkedId);
+//                        if (chip != null && chip.getTag() != null){
+//                            Integer brandId = (Integer) chip.getTag();
+//                            brandsCondition.add("brand: '" + brandId + "'");
+//                        }
+//                    }
+//                    filter.append(String.join(" or ", brandsCondition));
+//                    filter.append(")");
+//                }
+//
+//                String query = binding.searchView.getQuery().toString();
+//                if (query != null) {
+//                    if (filter.length() > 0) {
+//                        filter.append(" and ");
+//                    }
+//                    filter.append("(name~'").append(query).append("')");
+//                }
+//                homeViewModel.getFilterLiveData().setValue(filter.toString());
+//            }
+//        });
+
         binding.chipGroupBrands.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
             @Override
             public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
                 StringBuilder filter = new StringBuilder();
-                if (!checkedIds.isEmpty()){
+                if (!checkedIds.isEmpty()) {
                     filter.append("(");
                     List<String> brandsCondition = new ArrayList<>();
-                    for (int checkedId : checkedIds){
+                    for (int checkedId : checkedIds) {
                         Chip chip = group.findViewById(checkedId);
-                        if (chip != null && chip.getTag() != null){
+                        if (chip != null && chip.getTag() != null) {
                             Integer brandId = (Integer) chip.getTag();
                             brandsCondition.add("brand: '" + brandId + "'");
                         }
@@ -244,23 +273,36 @@ public class HomeFragment extends Fragment {
                 }
 
                 String query = binding.searchView.getQuery().toString();
-                if (query != null) {
+                if (query != null && !query.isEmpty()) {
                     if (filter.length() > 0) {
                         filter.append(" and ");
                     }
                     filter.append("(name~'").append(query).append("')");
                 }
-                homeViewModel.getFilterLiveData().setValue(filter.toString());
+
+                String newFilterString = filter.toString();
+                String currentFilter = homeViewModel.getFilterLiveData().getValue();
+                if (!newFilterString.equals(currentFilter)) {
+                    if (newFilterString.isEmpty() && (currentFilter != null && !currentFilter.isEmpty())) {
+                        homeViewModel.getFilterLiveData().setValue(null);
+                    }
+                    homeViewModel.getFilterLiveData().setValue(newFilterString);
+                }
+                Log.d("lkhai4617", "filterProduct: New filter = " + newFilterString);
             }
         });
     }
 
     private void observer(){
         homeViewModel.getFilterLiveData().observe(getViewLifecycleOwner(), str -> {
+            String filterValue = (str != null) ? str : "";
+            Log.d("lkhai4617", "observer: Filter changed to '" + filterValue + "', resetting and loading products");
             homeViewModel.resetAndLoad();
         });
 
         homeViewModel.getSortLiveData().observe(getViewLifecycleOwner(), str -> {
+            String sortValue = (str != null) ? str : "";
+            Log.d("lkhai4617", "observer: Sort changed to '" + sortValue + "', resetting and loading products");
             homeViewModel.resetAndLoad();
         });
     }
@@ -296,20 +338,53 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateFilterWithSearchQuery(String query) {
-        String currentFilter = homeViewModel.getFilterLiveData().getValue();
-        StringBuilder newFilter = new StringBuilder();
+//        String currentFilter = homeViewModel.getFilterLiveData().getValue();
+//        StringBuilder newFilter = new StringBuilder();
+//
+//        if (currentFilter != null && !currentFilter.isEmpty()) {
+//            newFilter.append(currentFilter);
+//        }
+//
+//        if (query != null) {
+//            if (newFilter.length() > 0) {
+//                newFilter.append(" and ");
+//            }
+//            newFilter.append("(name~'").append(query).append("')");
+//        }
+//
+//        homeViewModel.getFilterLiveData().setValue(newFilter.toString());
 
-        if (currentFilter != null && !currentFilter.isEmpty()) {
-            newFilter.append(currentFilter);
-        }
-
-        if (query != null) {
-            if (newFilter.length() > 0) {
-                newFilter.append(" and ");
+        StringBuilder filter = new StringBuilder();
+        List<Integer> checkedBrandIds = binding.chipGroupBrands.getCheckedChipIds();
+        if (!checkedBrandIds.isEmpty()) {
+            filter.append("(");
+            List<String> brandsCondition = new ArrayList<>();
+            for (int checkedId : checkedBrandIds) {
+                Chip chip = binding.chipGroupBrands.findViewById(checkedId);
+                if (chip != null && chip.getTag() != null) {
+                    Integer brandId = (Integer) chip.getTag();
+                    brandsCondition.add("brand: '" + brandId + "'");
+                }
             }
-            newFilter.append("(name~'").append(query).append("')");
+            filter.append(String.join(" or ", brandsCondition));
+            filter.append(")");
         }
 
-        homeViewModel.getFilterLiveData().setValue(newFilter.toString());
+        if (query != null && !query.isEmpty()) {
+            if (filter.length() > 0) {
+                filter.append(" and ");
+            }
+            filter.append("(name~'").append(query).append("')");
+        }
+
+        String newFilterString = filter.toString();
+        String currentFilter = homeViewModel.getFilterLiveData().getValue();
+        if (!newFilterString.equals(currentFilter)) {
+            if (newFilterString.isEmpty() && (currentFilter != null && !currentFilter.isEmpty())) {
+                homeViewModel.getFilterLiveData().setValue(null);
+            }
+            homeViewModel.getFilterLiveData().setValue(newFilterString);
+        }
+        Log.d("lkhai4617", "updateFilterWithSearchQuery: New filter = " + newFilterString);
     }
 }

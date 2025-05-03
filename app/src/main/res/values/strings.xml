@@ -1,7 +1,21 @@
 <resources>
     <string name="app_name">Android_DoAn</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+
+    <!--    common-->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="success">Thành công</string>
+    <string name="edit">Sửa</string>
+    <string name="save">Lưu</string>
+    <string name="update">Cập nhật</string>
+    <string name="delete">Xoá</string>
+    <string name="more_options">More options</string>
+    <string name="all">Tất cả</string>
+    <string name="view_all">Xem tất cả</string>
+    <string name="see_more">Xem thêm</string>
+    <string name="collapse">Thu gọn</string>
+    <string name="filter">Lọc</string>
     <string name="sign_in_your_account">Sign in your account</string>
     <string name="email">Email</string>
     <string name="email_hint">ex: lkhai4617@gmail.com</string>
@@ -24,7 +38,6 @@
     <string name="profile">Tài khoản</string>
     <string name="hello">Xin chào,</string>
     <string name="product">Sản phẩm</string>
-    <string name="view_all">Xem tất cả</string>
     <string name="asus_vivobook">Asus Vivobook</string>
     <string name="ex_price">17000000</string>
     <string name="unit_money">VNĐ</string>
@@ -34,7 +47,6 @@
     <string name="ex_quantity_review">(20 Đánh giá)</string>
     <string name="description">Mô tả sản phẩm</string>
     <string name="specification">Thông số kỹ thuật</string>
-    <string name="see_more">Xem thêm</string>
     <string name="cpu">Công nghệ CPU:</string>
     <string name="color">Màu sắc:</string>
     <string name="gpu">Card đồ họa:</string>
@@ -42,7 +54,6 @@
     <string name="ram">Bộ nhớ ngoài:</string>
     <string name="other">Khác:</string>
     <string name="buy_now">Mua ngay</string>
-    <string name="collapse">Thu gọn</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="product_detail">Chi tiết sản phẩm</string>
     <string name="payment">THANH TOÁN</string>
@@ -57,7 +68,6 @@
     <string name="cash">Thanh toán khi nhận hàng</string>
     <string name="place_order">Đặt hàng</string>
     <string name="cancel">Hủy</string>
-    <string name="save">Lưu</string>
     <string name="receiver_name">Tên người nhận</string>
     <string name="receiver_input">Nhập tên người nhận</string>
     <string name="phone">Số điện thoại</string>
@@ -68,7 +78,6 @@
     <string name="order_success_description">Đơn hàng của  bạn sẽ được giao đến sớm.\n Cảm ơn bạn đã chọn ứng dụng của chúng tôi."</string>
     <string name="continue_shopping">Tiếp tục mua sắm</string>
     <string name="checkout">Thanh toán</string>
-    <string name="success">Thành công</string>
     <string name="orders">Đơn hàng</string>
     <string name="shipping_address">Địa chỉ nhận hàng</string>
     <string name="payment_method">Phương thức thanh toán</string>
@@ -83,7 +92,6 @@
     <string name="order_id">Mã đơn hàng:</string>
     <string name="quantity">Số lượng:</string>
     <string name="detail">Chi tiết</string>
-    <string name="filter">Lọc</string>
     <string name="low_to_high">Giá: Thấp đến cao</string>
     <string name="order_history">Lịch sử đơn hàng</string>
     <string name="ex_shipping_method">FedEx, 3 ngày, 15$</string>
@@ -96,7 +104,6 @@
     <string name="ex_category">Gamming</string>
     <string name="ex_product_id">12Ne1233e1</string>
     <string name="order_detail">Chi tiết đơn hàng</string>
-    <string name="all">Tất cả</string>
     <string name="full_name">Họ và tên</string>
     <string name="input_full_name">Nhập họ và tên</string>
     <string name="address">Địa chỉ</string>
@@ -121,13 +128,8 @@
     <string name="category_management">Quản lí phân loại</string>
     <string name="brand_management">Quản lí hãng</string>
     <string name="customer_management">Quản lí người dùng</string>
-    <string name="navigation_drawer_open">Open</string>
-    <string name="navigation_drawer_close">Close</string>
     <string name="management_order">Quản lí đơn hàng</string>
     <string name="order_status">Trạng thái đơn hàng</string>
-    <string name="update">Cập nhật</string>
     <string name="code">Code</string>
-    <string name="more_options">More options</string>
-    <string name="edit">Sửa</string>
-    <string name="delete">Xoá</string>
+
 </resources>
