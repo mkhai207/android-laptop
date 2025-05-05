@@ -5,6 +5,7 @@ import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.request.ChangePasswordRequest;
+import com.example.android_doan.data.model.request.CreateAddressRequest;
 import com.example.android_doan.data.model.request.CreateBrandRequest;
 import com.example.android_doan.data.model.request.CreateCategoryRequest;
 import com.example.android_doan.data.model.request.CreateProductRequest;
@@ -13,11 +14,14 @@ import com.example.android_doan.data.model.request.OrderRequest;
 import com.example.android_doan.data.model.request.UpdateCategoryRequest;
 import com.example.android_doan.data.model.request.UpdateProductRequest;
 import com.example.android_doan.data.model.response.AddToCartResponse;
+import com.example.android_doan.data.model.response.AddressResponse;
 import com.example.android_doan.data.model.response.BrandResponse;
+import com.example.android_doan.data.model.response.CreateAddressResponse;
 import com.example.android_doan.data.model.response.CreateBrandResponse;
 import com.example.android_doan.data.model.response.CreateCategoryResponse;
 import com.example.android_doan.data.model.response.CreateProductResponse;
 import com.example.android_doan.data.model.response.CreateUserResponse;
+import com.example.android_doan.data.model.response.GetAddressResponse;
 import com.example.android_doan.data.model.response.GetAllCategoriesResponse;
 import com.example.android_doan.data.model.response.GetAllUserResponse;
 import com.example.android_doan.data.model.response.GetCartResponse;
@@ -28,6 +32,7 @@ import com.example.android_doan.data.model.response.AccountResponse;
 import com.example.android_doan.data.model.response.UploadFileResponse;
 import com.example.android_doan.data.model.response.UploadMultipleFileResponse;
 import com.example.android_doan.data.model.response.UserResponse;
+import com.google.android.gms.common.internal.service.Common;
 
 import java.util.List;
 
@@ -143,4 +148,16 @@ public interface Api {
 
     @DELETE("api/v1/brands/{brandId}")
     Single<CommonResponse> deleteBrand(@Path("brandId") int id);
+
+    @POST("api/v1/addresses")
+    Single<CreateAddressResponse> createAddress(@Body CreateAddressRequest request);
+
+    @GET("api/v1/addresses")
+    Single<GetAddressResponse> getAddresses(@Query("filter") String filter);
+
+    @PUT("api/v1/addresses")
+    Single<CreateAddressResponse> updateAddress(@Body AddressResponse address);
+
+    @DELETE("api/v1/addresses/{addressId}")
+    Single<CommonResponse> deleteAddress(@Path("addressId") int addressId);
 }

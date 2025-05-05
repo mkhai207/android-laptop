@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.android_doan.data.model.Address;
+import com.example.android_doan.data.model.AddressModel;
 import com.example.android_doan.databinding.BottomDialogEdtAddressBinding;
 import com.example.android_doan.viewmodel.CheckoutViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -22,7 +22,7 @@ public class EdtAddressBottomSheetFragment extends BottomSheetDialogFragment {
 
     private CheckoutViewModel checkoutViewModel;
     private BottomDialogEdtAddressBinding binding;
-    private Address mAddress;
+    private AddressModel mAddress;
 
 //    private IOnClickSave listener;
 //    public interface IOnClickSave{
@@ -33,7 +33,7 @@ public class EdtAddressBottomSheetFragment extends BottomSheetDialogFragment {
 //        this.listener = listener;
 //    }
 
-    public static EdtAddressBottomSheetFragment newInstance(Address address){
+    public static EdtAddressBottomSheetFragment newInstance(AddressModel address){
         Bundle args = new Bundle();
         args.putSerializable(ADDRESS_KEY, address);
 
@@ -96,7 +96,7 @@ public class EdtAddressBottomSheetFragment extends BottomSheetDialogFragment {
                 String name = binding.edtReceiverName.getText().toString();
                 String phone = binding.edtPhone.getText().toString();
                 String address = binding.edtAddressDetail.getText().toString();
-                Address newAddress = new Address(name, phone, address);
+                AddressModel newAddress = new AddressModel(name, phone, address);
                 checkoutViewModel.setAddress(newAddress);
                 Log.d("lkhai4617", "btn clicked");
                 dismiss();

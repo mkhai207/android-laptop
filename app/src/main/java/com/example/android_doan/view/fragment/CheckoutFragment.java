@@ -1,5 +1,8 @@
 package com.example.android_doan.view.fragment;
 
+import static com.example.android_doan.view.fragment.AddOrUpdateAddressFragment.ADDRESS_KEY;
+import static com.example.android_doan.view.fragment.AddressFragment.REQUEST_KEY_ADDRESS;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +23,7 @@ import com.example.android_doan.R;
 import com.example.android_doan.data.enums.OrderStatusEnum;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.OrderRequest;
+import com.example.android_doan.data.model.response.AddressResponse;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.CheckoutRepository;
@@ -31,7 +36,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckoutFragment extends Fragment {
+public class CheckoutFragment extends Fragment{
     private FragmentCheckoutBinding binding;
     private List<GetCartResponse.Data> mCarts;
     private double mTotal;
@@ -62,6 +67,9 @@ public class CheckoutFragment extends Fragment {
         }
         repository = new CheckoutRepository();
         checkoutViewModel = new ViewModelProvider(requireActivity(), new CheckoutViewModelFactory(repository)).get(CheckoutViewModel.class);
+
+        String userId = DataLocalManager.getUserId();
+        checkoutViewModel.getAddressDefault("user:'" + userId + "' and isDefault: " + true);
     }
 
     @Override
@@ -76,6 +84,7 @@ public class CheckoutFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupData();
         setupListener();
+        setupFragmentResultListener();
     }
 
     @Override
@@ -86,22 +95,32 @@ public class CheckoutFragment extends Fragment {
 
     private void setupData(){
         binding.tvTotalData.setText(FormatUtil.formatCurrency(mTotal));
-        checkoutViewModel.getAddress().observe(getViewLifecycleOwner(), address -> {
-            if (address != null) {
-                Log.d("lkhai4617", "setupData: CheckoutFragment");
-                binding.tvReceiverName.setText(address.getName());
-                binding.tvReceiverPhone.setText(address.getPhone());
-                binding.tvAddressDetail.setText(address.getAddress());
+        checkoutViewModel.getAddressLiveData().observe(getViewLifecycleOwner(), addressResponses -> {
+            if (addressResponses != null){
+                AddressResponse addressResponse = addressResponses.get(0);
+                binding.tvFullName.setText(addressResponse.getRecipientName());
+                binding.tvNumPhone.setText(addressResponse.getPhoneNumber());
+                String address = addressResponse.getStreet() + ", " + addressResponse.getWard() + ", " + addressResponse.getDistrict() + ", " + addressResponse.getCity();
+                binding.tvAddress.setText(address);
             }
         });
+//        checkoutViewModel.getAddress().observe(getViewLifecycleOwner(), address -> {
+//            if (address != null) {
+//                Log.d("lkhai4617", "setupData: CheckoutFragment");
+//                binding.tvReceiverName.setText(address.getName());
+//                binding.tvReceiverPhone.setText(address.getPhone());
+//                binding.tvAddressDetail.setText(address.getAddress());
+//            }
+//        });
     }
 
     private void setupListener(){
         binding.tvChangeAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EdtAddressBottomSheetFragment edtAddressDialogFragment = new EdtAddressBottomSheetFragment();
-                edtAddressDialogFragment.show(requireActivity().getSupportFragmentManager(), "edt_address_dialog_fragment");
+//                EdtAddressBottomSheetFragment edtAddressDialogFragment = new EdtAddressBottomSheetFragment();
+//                edtAddressDialogFragment.show(requireActivity().getSupportFragmentManager(), "edt_address_dialog_fragment");
+                openAddressFragment();
             }
         });
 
@@ -123,20 +142,22 @@ public class CheckoutFragment extends Fragment {
                         break;
                 }
 
-                double totalMoney = FormatUtil.parseCurrency(binding.tvTotalData.getText().toString());
-                String amountPaid = "0";
+//                double totalMoney = FormatUtil.parseCurrency(binding.tvTotalData.getText().toString());
+//                String amountPaid = "0";
                 OrderStatusEnum status = OrderStatusEnum.PENDING;
-                String shippingAddress = binding.tvAddressDetail.getText().toString();
-                String name = binding.tvReceiverName.getText().toString();
-                String phone = binding.tvReceiverPhone.getText().toString();
+//                String shippingAddress = binding.tvAddress.getText().toString();
+//                String name = binding.tvFullName.getText().toString();
+//                String phone = binding.tvNumPhone.getText().toString();
                 UserModel user = new UserModel(Integer.parseInt(DataLocalManager.getUserId()));
 
                 List<OrderRequest.OrderDetail> orderDetails = new ArrayList<>();
                 for (GetCartResponse.Data item : mCarts){
                     double price = (long) item.getQuantity() * item.getProduct().getPrice();
-                    orderDetails.add(new OrderRequest.OrderDetail(price, item.getQuantity(), item.getProduct().getId()));
+                    orderDetails.add(new OrderRequest.OrderDetail(item.getQuantity(), item.getProduct().getId()));
                 }
-                OrderRequest request = new OrderRequest(totalMoney, paymentMethod, amountPaid, status, shippingAddress, name, phone, user, orderDetails);
+
+                AddressResponse address = checkoutViewModel.getAddressLiveData().getValue().get(0);
+                OrderRequest request = new OrderRequest(status, paymentMethod, user, orderDetails, address);
                 checkoutViewModel.placeOrder(request, isSuccess -> {
                     if (isSuccess){
                         checkoutViewModel.clearCart(isSuccess1 -> {
@@ -149,6 +170,31 @@ public class CheckoutFragment extends Fragment {
                         navController.navigate(R.id.action_checkoutFragment_to_orderSuccessFragment);
                     }
                 });
+            }
+        });
+    }
+
+    private void openAddressFragment(){
+        NavHostFragment navHostFragment =
+                (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.frag_container);
+        if (navHostFragment != null) {
+            NavController navController = navHostFragment.getNavController();
+            navController.navigate(R.id.action_checkoutFragment_to_addressFragment);
+        }
+    }
+
+    private void setupFragmentResultListener() {
+        getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_ADDRESS, getViewLifecycleOwner(), (requestKey, result) -> {
+            AddressResponse addressResponse = (AddressResponse) result.getSerializable(ADDRESS_KEY);
+            if (addressResponse != null) {
+//                binding.tvFullName.setText(addressResponse.getRecipientName());
+//                binding.tvNumPhone.setText(addressResponse.getPhoneNumber());
+//                String address = addressResponse.getStreet() + ", " + addressResponse.getWard() + ", " +
+//                        addressResponse.getDistrict() + ", " + addressResponse.getCity();
+//                binding.tvAddress.setText(address);
+                List<AddressResponse> address = new ArrayList<>();
+                address.add(addressResponse);
+                checkoutViewModel.getAddressLiveData().setValue(address);
             }
         });
     }

@@ -82,6 +82,14 @@ public class ProfileFragment extends Fragment {
                 navController.navigate(R.id.action_profileFragment_to_settingFragment);
             }
         });
+
+        binding.layoutAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_profileFragment_to_addressFragment);
+            }
+        });
     }
 
     private void setupDaTa(){

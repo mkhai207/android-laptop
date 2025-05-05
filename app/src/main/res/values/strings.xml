@@ -131,5 +131,15 @@
     <string name="management_order">Quản lí đơn hàng</string>
     <string name="order_status">Trạng thái đơn hàng</string>
     <string name="code">Code</string>
+    <string name="add_new_address">Thêm địa chỉ</string>
+    <string name="hint_name">Le Minh Khai</string>
+    <string name="hint_phone">01234409239</string>
+    <string name="hint_address">28 Hoang Dieu 2</string>
+    <string name="address_default">Mặc định</string>
+    <string name="hint_recipient_name">Tên người nhận</string>
+    <string name="hint_street">Đường</string>
+    <string name="hint_ward">Phường</string>
+    <string name="hint_district">Quận</string>
+    <string name="hint_city">Thành phố</string>
 
 </resources>

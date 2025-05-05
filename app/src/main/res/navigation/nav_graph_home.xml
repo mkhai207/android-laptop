@@ -53,6 +53,10 @@
             android:id="@+id/action_profileFragment_to_settingFragment"
             app:destination="@id/settingFragment"
             app:popUpTo="@id/profileFragment"/>
+        <action
+            android:id="@+id/action_profileFragment_to_addressFragment"
+            app:destination="@id/addressFragment"
+            app:popUpTo="@id/profileFragment"/>
     </fragment>
     <fragment
         android:id="@+id/productDetailFragment"
@@ -68,6 +72,10 @@
             android:id="@+id/action_checkoutFragment_to_orderSuccessFragment"
             app:destination="@id/orderSuccessFragment"
             app:popUpTo="@id/cartFragment"/>
+        <action
+            android:id="@+id/action_checkoutFragment_to_addressFragment"
+            app:destination="@id/addressFragment"
+            app:popUpTo="@id/checkoutFragment"/>
     </fragment>
     <fragment
         android:id="@+id/orderSuccessFragment"
@@ -93,4 +101,19 @@
         android:id="@+id/settingFragment"
         android:name="com.example.android_doan.view.fragment.SettingFragment"
         android:label="@string/settings" />
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.android_doan.view.fragment.AddressFragment"
+        android:label="fragment_address"
+        tools:layout="@layout/fragment_address" >
+        <action
+            android:id="@+id/action_addressFragment_to_addOrUpdateAddressFragment"
+            app:destination="@id/addOrUpdateAddressFragment"
+            app:popUpTo="@id/addressFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/addOrUpdateAddressFragment"
+        android:name="com.example.android_doan.view.fragment.AddOrUpdateAddressFragment"
+        android:label="fragment_add_or_update_address"
+        tools:layout="@layout/fragment_add_or_update_address" />
 </navigation>
