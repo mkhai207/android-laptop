@@ -141,5 +141,6 @@
     <string name="hint_ward">Phường</string>
     <string name="hint_district">Quận</string>
     <string name="hint_city">Thành phố</string>
+    <string name="update_order_status">Cập nhật trạng thái</string>
 
 </resources>
