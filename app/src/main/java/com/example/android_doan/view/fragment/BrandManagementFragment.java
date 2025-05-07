@@ -3,6 +3,8 @@ package com.example.android_doan.view.fragment;
 import static com.example.android_doan.view.fragment.AddOrUpdateBrandFragment.BRAND_MODEL_KEY;
 import static com.example.android_doan.view.fragment.AddOrUpdateCategoryFragment.CATEGORY_MODEL_KEY;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import com.example.android_doan.R;
 import com.example.android_doan.adapter.BrandAdapter;
 import com.example.android_doan.adapter.CategoryAdapter;
 import com.example.android_doan.data.model.BrandModel;
+import com.example.android_doan.data.model.response.AddressResponse;
 import com.example.android_doan.data.repository.RemoteRepository.BrandManagementRepository;
 import com.example.android_doan.data.repository.RemoteRepository.CategoryManagementRepository;
 import com.example.android_doan.databinding.FragmentBrandManagementBinding;
@@ -88,6 +91,8 @@ public class BrandManagementFragment extends Fragment {
         LinearLayoutManager linearLayoutManager =
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         rcvBrand.setLayoutManager(linearLayoutManager);
+
+        brandAdapter.attachSwipeToDelete(rcvBrand);
     }
 
     private void handleStatus(){
@@ -145,7 +150,7 @@ public class BrandManagementFragment extends Fragment {
 
             @Override
             public void onCLickDelete(BrandModel brandModel) {
-                deleteBrand(brandModel);
+                showLogoutConfirmationDialog(brandModel);
             }
         });
     }
@@ -171,5 +176,27 @@ public class BrandManagementFragment extends Fragment {
         if (brandModel != null){
             brandManagementViewModel.deleteBrand(brandModel.getId());
         }
+    }
+
+    private void showLogoutConfirmationDialog(BrandModel brandModel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Xác nhận xoá");
+        builder.setMessage("Bạn có chắc chắn muốn xoá hãng này không?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                brandManagementViewModel.deleteBrand(brandModel.getId());
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -54,6 +54,7 @@
                 <RelativeLayout
                     android:padding="10dp"
                     android:background="@drawable/bg_gray_corner_15"
+                    android:elevation="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -106,6 +107,7 @@
                     android:background="@drawable/bg_gray_corner_15"
                     android:layout_marginTop="10dp"
                     android:padding="10dp"
+                    android:elevation="4dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

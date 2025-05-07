@@ -71,6 +71,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 listener.onClickDelete(mListAddress.get(position));
+                recyclerView.getAdapter().notifyItemChanged(position);
             }
 
             @Override

@@ -17,53 +17,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_address"
-        android:textSize="18dp"
-        android:padding="10dp"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/address"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_address"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bg_second"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_address" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/layout_add_address"
-        android:layout_marginTop="2dp"
-        android:background="@color/white"
-        android:layout_width="match_parent"
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layout_add_address"-->
+<!--        android:layout_marginTop="2dp"-->
+<!--        android:background="@color/white"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:padding="5dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/rcv_address">-->
+
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@drawable/ic_add"-->
+<!--            app:tint="@color/bg_primary" />-->
+
+<!--        <TextView-->
+<!--            android:textSize="18sp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:text="@string/add_new_address"-->
+<!--            android:textColor="@color/bg_primary" />-->
+
+<!--    </LinearLayout>-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_address"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="5dp"
-        android:orientation="horizontal"
+        android:src="@drawable/ic_plus"
+        app:tint="@color/white"
+        android:backgroundTint="@color/bg_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rcv_address">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_add"
-            app:tint="@color/bg_primary" />
-
-        <TextView
-            android:textSize="18sp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/add_new_address"
-            android:textColor="@color/bg_primary" />
-
-    </LinearLayout>
+        android:layout_margin="16dp"
+        android:contentDescription="Add Product"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

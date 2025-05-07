@@ -3,6 +3,7 @@
     android:layout_width="200dp"
     android:layout_height="250dp"
     android:padding="10dp"
+    android:elevation="4dp"
     android:background="@drawable/bg_gray_corner_15">
 
     <ImageView
@@ -19,7 +20,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:text="@string/asus_vivobook"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"/>
 
     <TextView

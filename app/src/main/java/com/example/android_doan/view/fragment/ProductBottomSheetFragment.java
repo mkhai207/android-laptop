@@ -1,5 +1,8 @@
 package com.example.android_doan.view.fragment;
 
+import static com.example.android_doan.view.fragment.ProductDetailFragment.ADD_TO_CART_ACTION;
+import static com.example.android_doan.view.fragment.ProductDetailFragment.BUY_NOW_ACTION;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
@@ -54,7 +57,7 @@ public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
         Bundle bundle = getArguments();
         if (bundle != null){
             productModel = (ProductModel) bundle.getSerializable(PRODUCT_MODEL);
-            mAction = (String) bundle.getString(ACTION_KEY);
+            mAction = bundle.getString(ACTION_KEY);
         }
     }
 
@@ -64,6 +67,10 @@ public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
         BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
         binding = ItemProductDialogFragmentBinding.inflate(getLayoutInflater());
         bottomSheetDialog.setContentView(binding.getRoot());
+
+        if (Objects.equals(mAction, BUY_NOW_ACTION)){
+            binding.btnAddToCart.setText(getResources().getString(R.string.buy_now));
+        }
 
         setData();
         setupListener();
@@ -111,7 +118,7 @@ public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 int quantity = Integer.parseInt(binding.tvQuantity.getText().toString());
                 String id = productModel.getId();
-                if (Objects.equals(mAction, "ADD_TO_CART")){
+                if (Objects.equals(mAction, ADD_TO_CART_ACTION)){
                     AddToCartRequest request = new AddToCartRequest(String.valueOf(quantity), id);
                     listener.onClickAddToCart(request);
                 } else {

@@ -2,6 +2,8 @@ package com.example.android_doan.view.fragment;
 
 import static com.example.android_doan.view.fragment.AddOrUpdateCategoryFragment.CATEGORY_MODEL_KEY;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.CategoryAdapter;
 import com.example.android_doan.adapter.UserAdapter;
+import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.model.CategoryModel;
 import com.example.android_doan.data.repository.RemoteRepository.CategoryManagementRepository;
 import com.example.android_doan.databinding.FragmentCategoryManagementBinding;
@@ -84,6 +87,8 @@ public class CategoryManagementFragment extends Fragment {
         LinearLayoutManager linearLayoutManager =
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         rcvCategories.setLayoutManager(linearLayoutManager);
+
+        categoryAdapter.attachSwipeToDelete(rcvCategories);
     }
 
     private void getAllCategory(){
@@ -154,18 +159,13 @@ public class CategoryManagementFragment extends Fragment {
 
         categoryAdapter.setListener(new CategoryAdapter.IOnClickCategory() {
             @Override
-            public void onClickItemCategory() {
-
-            }
-
-            @Override
             public void onClickEdit(CategoryModel categoryModel) {
                 openAddOrUpdateCategoryFragment(categoryModel);
             }
 
             @Override
             public void onCLickDelete(CategoryModel categoryModel) {
-                categoryManagementViewModel.deleteCategory(Integer.parseInt(categoryModel.getId()));
+                showLogoutConfirmationDialog(categoryModel);
             }
         });
     }
@@ -185,5 +185,27 @@ public class CategoryManagementFragment extends Fragment {
                 navController.navigate(R.id.action_categoryManagementFragment_to_addOrUpdateCategoryFragment);
             }
         }
+    }
+
+    private void showLogoutConfirmationDialog(CategoryModel categoryModel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Xác nhận xoá");
+        builder.setMessage("Bạn có chắc chắn muốn xoá phân loại này không?");
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                categoryManagementViewModel.deleteCategory(Integer.parseInt(categoryModel.getId()));
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

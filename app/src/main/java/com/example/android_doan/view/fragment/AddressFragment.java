@@ -102,7 +102,7 @@ public class AddressFragment extends Fragment {
     }
 
     private void setupListener(){
-        binding.layoutAddAddress.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("lkhai4617", "onClickCreatetAddress: ");

@@ -130,6 +130,13 @@ public class CheckoutFragment extends Fragment{
             }
         });
 
+        binding.layoutAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAddressFragment();
+            }
+        });
+
         binding.btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

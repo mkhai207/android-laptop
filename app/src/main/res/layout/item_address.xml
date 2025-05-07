@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@drawable/bg_white_corner_15"
+    android:elevation="5dp"
+    android:layout_margin="10dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -48,10 +50,11 @@
 
     <TextView
         android:id="@+id/tv_is_default"
+        android:layout_gravity="end"
         android:textSize="18sp"
         android:textColor="@color/text_color"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:padding="5dp"
         android:background="@drawable/bg_border_red"
         android:layout_marginStart="10dp"
