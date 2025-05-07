@@ -121,7 +121,8 @@ public class ProductManagementViewModel extends ViewModel {
         currentPage = 0;
         mListProduct.clear();
         productsLiveData.setValue(mListProduct);
-        loadNextPage();
+//        loadNextPage();
+        getAllProduct(1);
     }
 
     public void getBrands(){

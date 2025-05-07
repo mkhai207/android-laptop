@@ -74,11 +74,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 if (accessToken == null){
                     return;
                 }
-                GlideUrl glideUrl = new GlideUrl("http://192.168.50.2:8080/" + productModel.getThumbnail(), ()-> {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Authorization", "Bearer " + accessToken);
-                    return headers;
-                });
+//                GlideUrl glideUrl = new GlideUrl("http://192.168.50.2:8080/" + productModel.getThumbnail(), ()-> {
+//                    Map<String, String> headers = new HashMap<>();
+//                    headers.put("Authorization", "Bearer " + accessToken);
+//                    return headers;
+//                });
                 // "http://192.168.50.2:8080/storage/product/" +
                 Glide.with(context)
                         .load(productModel.getThumbnail())

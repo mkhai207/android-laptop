@@ -16,6 +16,11 @@ public class GetCartResponse implements Serializable {
         private int quantity;
         private ProductModel product;
 
+        public Data(int quantity, ProductModel product) {
+            this.quantity = quantity;
+            this.product = product;
+        }
+
         public int getQuantity() {
             return quantity;
         }

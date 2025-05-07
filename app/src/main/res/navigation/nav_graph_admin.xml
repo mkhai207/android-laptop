@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_admin"
-    app:startDestination="@id/dashboardFragment">
+    app:startDestination="@id/orderFragment">
 
     <fragment
         android:id="@+id/dashboardFragment"
@@ -92,27 +92,27 @@
     <fragment
         android:id="@+id/addUserFragment"
         android:name="com.example.android_doan.view.fragment.AddUserFragment"
-        android:label="fragment_add_user"
+        android:label="@string/customer_management"
         tools:layout="@layout/fragment_add_user" />
     <fragment
         android:id="@+id/updateUserFragment"
         android:name="com.example.android_doan.view.fragment.UpdateUserFragment"
-        android:label="fragment_update_user"
+        android:label="@string/customer_management"
         tools:layout="@layout/fragment_update_user" />
     <fragment
         android:id="@+id/addOrUpdateCategoryFragment"
         android:name="com.example.android_doan.view.fragment.AddOrUpdateCategoryFragment"
-        android:label="fragment_add_or_update_category"
+        android:label="@string/category_management"
         tools:layout="@layout/fragment_add_or_update_category" />
     <fragment
         android:id="@+id/addOrUpdateProductFragment"
         android:name="com.example.android_doan.view.fragment.AddOrUpdateProductFragment"
-        android:label="fragment_add_or_update_product"
+        android:label="@string/product_management"
         tools:layout="@layout/fragment_add_or_update_product" />
     <fragment
         android:id="@+id/addOrUpdateBrandFragment"
         android:name="com.example.android_doan.view.fragment.AddOrUpdateBrandFragment"
-        android:label="fragment_add_or_update_brand"
+        android:label="@string/brand_management"
         tools:layout="@layout/fragment_add_or_update_brand" />
     <fragment
         android:id="@+id/settingFragment"

@@ -2,6 +2,8 @@ package com.example.android_doan.view.fragment;
 
 import static com.example.android_doan.view.fragment.AddOrUpdateAddressFragment.ADDRESS_KEY;
 import static com.example.android_doan.view.fragment.AddressFragment.REQUEST_KEY_ADDRESS;
+import static com.example.android_doan.view.fragment.ProductBottomSheetFragment.ACTION_KEY;
+import static com.example.android_doan.view.fragment.ProductDetailFragment.ADD_TO_CART_ACTION;
 
 import android.os.Bundle;
 
@@ -35,11 +37,13 @@ import com.example.android_doan.viewmodel.CheckoutViewModelFactory;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CheckoutFragment extends Fragment{
     private FragmentCheckoutBinding binding;
     private List<GetCartResponse.Data> mCarts;
     private double mTotal;
+    private String mAction;
     public static final String CHECKOUT_FRAGMENT_ITEM = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_ITEM";
     public static final String CHECKOUT_FRAGMENT_TOTAL = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_TOTAL";
     private CheckoutViewModel checkoutViewModel;
@@ -51,6 +55,7 @@ public class CheckoutFragment extends Fragment{
         Bundle args = getArguments();
         if (args != null){
             mTotal = args.getDouble(CHECKOUT_FRAGMENT_TOTAL);
+            mAction = args.getString(ACTION_KEY);
             Serializable serializable = args.getSerializable(CHECKOUT_FRAGMENT_ITEM);
             if (serializable instanceof List) {
                 try {
@@ -65,6 +70,7 @@ public class CheckoutFragment extends Fragment{
                 Toast.makeText(requireContext(), "Dữ liệu giỏ hàng không hợp lệ", Toast.LENGTH_SHORT).show();
             }
         }
+
         repository = new CheckoutRepository();
         checkoutViewModel = new ViewModelProvider(requireActivity(), new CheckoutViewModelFactory(repository)).get(CheckoutViewModel.class);
 
@@ -159,16 +165,15 @@ public class CheckoutFragment extends Fragment{
                 AddressResponse address = checkoutViewModel.getAddressLiveData().getValue().get(0);
                 OrderRequest request = new OrderRequest(status, paymentMethod, user, orderDetails, address);
                 checkoutViewModel.placeOrder(request, isSuccess -> {
-                    if (isSuccess){
+                    if (isSuccess && Objects.equals(mAction, ADD_TO_CART_ACTION)){
                         checkoutViewModel.clearCart(isSuccess1 -> {
                             if (!isSuccess1){
                                 Toast.makeText(requireContext(), "Clear cart failure", Toast.LENGTH_SHORT).show();
                             }
                         });
-
-                        NavController navController = Navigation.findNavController(view);
-                        navController.navigate(R.id.action_checkoutFragment_to_orderSuccessFragment);
                     }
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.action_checkoutFragment_to_orderSuccessFragment);
                 });
             }
         });

@@ -11,7 +11,7 @@ public class UserModel implements Serializable {
     private String phone;
     private String gender;
     private String birthday;
-    private String shoppingAddress;
+//    private String shoppingAddress;
     private String avatar;
     private RoleModel role;
     public UserModel(int id) {
@@ -49,9 +49,9 @@ public class UserModel implements Serializable {
         return birthday;
     }
 
-    public String getShoppingAddress() {
-        return shoppingAddress;
-    }
+//    public String getShoppingAddress() {
+//        return shoppingAddress;
+//    }
 
     public String getAvatar() {
         return avatar;
@@ -61,7 +61,7 @@ public class UserModel implements Serializable {
         return role;
     }
 
-    public UserModel(int id, boolean active, String avatar, String fullName, String address, String phone, String gender, String birthday, String shoppingAddress) {
+    public UserModel(int id, boolean active, String avatar, String fullName, String address, String phone, String gender, String birthday) {
         this.id = id;
         this.active = active;
         this.avatar = avatar;
@@ -70,6 +70,6 @@ public class UserModel implements Serializable {
         this.phone = phone;
         this.gender = gender;
         this.birthday = birthday;
-        this.shoppingAddress = shoppingAddress;
+//        this.shoppingAddress = shoppingAddress;
     }
 }

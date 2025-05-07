@@ -197,7 +197,7 @@ public class SettingFragment extends Fragment {
                 String phone = binding.edtPhone.getText().toString();
                 String shoppingAddress = binding.edtShoppingAddress.getText().toString();
 
-                UserModel userModel = new UserModel(userId, true, avatarStr, fullname, address, phone, gender, birthday, shoppingAddress);
+                UserModel userModel = new UserModel(userId, true, avatarStr, fullname, address, phone, gender, birthday);
                 Log.d("lkhai4617", "onClick: " + avatarStr);
                 settingViewModel.updateUser(userModel);
             }
@@ -214,7 +214,7 @@ public class SettingFragment extends Fragment {
 //                headers.put("Authorization", "Bearer " + accessToken);
 //                return headers;
 //            });
-
+            Log.d("lkhai4617", "bindData: " + userModel.getAvatar());
             Glide.with(requireContext())
                     .load(userModel.getAvatar())
                     .error(R.drawable.ic_user)
@@ -257,9 +257,9 @@ public class SettingFragment extends Fragment {
             binding.edtPhone.setText(userModel.getPhone());
         }
 
-        if (userModel.getShoppingAddress() != null){
-            binding.edtShoppingAddress.setText(userModel.getShoppingAddress());
-        }
+//        if (userModel.getShoppingAddress() != null){
+//            binding.edtShoppingAddress.setText(userModel.getShoppingAddress());
+//        }
     }
 
     private void setupListener(){
@@ -400,9 +400,9 @@ public class SettingFragment extends Fragment {
         String birthday = FormatUtil.formatToIsoDate(binding.edtBirthday.getText().toString());
         String gender = binding.spinnerGender.getSelectedItem().toString();
         String phone = binding.edtPhone.getText().toString();
-        String shoppingAddress = binding.edtShoppingAddress.getText().toString();
+//        String shoppingAddress = binding.edtShoppingAddress.getText().toString();
 
-        UserModel userModel = new UserModel(userId, true, avatarStr, fullname, address, phone, gender, birthday, shoppingAddress);
+        UserModel userModel = new UserModel(userId, true, avatarStr, fullname, address, phone, gender, birthday);
         Log.d("lkhai4617", "onClick: " + avatarStr);
         settingViewModel.updateUser(userModel);
     }

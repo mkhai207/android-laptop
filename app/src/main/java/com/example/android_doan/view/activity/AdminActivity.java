@@ -172,7 +172,7 @@ public class AdminActivity extends AppCompatActivity {
         adminHomeViewModel.getUserLiveData().observe(this, userModel -> {
             if (userModel != null){
                 Glide.with(this)
-                        .load("http://192.168.50.2:8080/storage/avatar/" + userModel.getAvatar())
+                        .load(userModel.getAvatar())
                         .error(R.drawable.ic_user)
                         .into(headerBinding.imgAvatar);
                 headerBinding.tvFullName.setText(userModel.getFullName());

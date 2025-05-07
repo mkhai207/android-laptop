@@ -11,19 +11,25 @@ import com.bumptech.glide.Glide;
 import com.example.android_doan.R;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.ProductModel;
+import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.databinding.ItemProductDialogFragmentBinding;
 import com.example.android_doan.utils.FormatUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.Objects;
+
 public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
 
-    private static final String PRODUCT_MODEL = "com.example.android_doan.view.fragment.KEY";
-    ItemProductDialogFragmentBinding binding;
-    ProductModel productModel;
+    private static final String PRODUCT_MODEL = "com.example.android_doan.view.fragment.PRODUCT_MODEL";
+    public static final String ACTION_KEY = "com.example.android_doan.view.fragment.ACTION_KEY";
+    private ItemProductDialogFragmentBinding binding;
+    private ProductModel productModel;
+    private String mAction;
 
     public interface IOnClickAddToCart{
         void onClickAddToCart(AddToCartRequest request);
+        void onClickBuyNow(GetCartResponse.Data product);
     }
 
     IOnClickAddToCart listener;
@@ -31,10 +37,11 @@ public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
         this.listener = listener;
     }
 
-    public static ProductBottomSheetFragment newInstance(ProductModel productModel) {
+    public static ProductBottomSheetFragment newInstance(ProductModel productModel, String action) {
 
         Bundle args = new Bundle();
         args.putSerializable(PRODUCT_MODEL, productModel);
+        args.putString(ACTION_KEY, action);
 
         ProductBottomSheetFragment fragment = new ProductBottomSheetFragment();
         fragment.setArguments(args);
@@ -47,6 +54,7 @@ public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
         Bundle bundle = getArguments();
         if (bundle != null){
             productModel = (ProductModel) bundle.getSerializable(PRODUCT_MODEL);
+            mAction = (String) bundle.getString(ACTION_KEY);
         }
     }
 
@@ -103,8 +111,13 @@ public class ProductBottomSheetFragment extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 int quantity = Integer.parseInt(binding.tvQuantity.getText().toString());
                 String id = productModel.getId();
-                AddToCartRequest request = new AddToCartRequest(String.valueOf(quantity), id);
-                listener.onClickAddToCart(request);
+                if (Objects.equals(mAction, "ADD_TO_CART")){
+                    AddToCartRequest request = new AddToCartRequest(String.valueOf(quantity), id);
+                    listener.onClickAddToCart(request);
+                } else {
+                    GetCartResponse.Data data = new GetCartResponse.Data(quantity, new ProductModel(id));
+                    listener.onClickBuyNow(data);
+                }
             }
         });
     }

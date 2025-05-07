@@ -275,10 +275,10 @@ public class AddUserFragment extends Fragment {
         String email = binding.etEmail.getText().toString();
         String phone = binding.etPhone.getText().toString();
         String birthDay = FormatUtil.formatToIsoDate(binding.tvBirthday.getText().toString());
-        String shoppingAddress = binding.etShoppingAddress.getText().toString();
+//        String shoppingAddress = binding.etShoppingAddress.getText().toString();
         String gender = binding.spinnerGender.getSelectedItem().toString();
         String password = binding.etPassword.getText().toString();
-        CreateUserRequest request = new CreateUserRequest(email, password, fullName, address, avatarStr, birthDay, gender, phone, shoppingAddress, selectedRole);
+        CreateUserRequest request = new CreateUserRequest(email, password, fullName, address, avatarStr, birthDay, gender, phone, selectedRole);
         userManagementViewModel.createUser(request);
     }
     private void handleStatus(){

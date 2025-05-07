@@ -6,6 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginService {
     private static final String BASE_URL = "http://192.168.50.2:8080/";
+//    private static final String BASE_URL = "http://192.168.1.4:8080/";
     private static LoginApi instance;
 
     public static LoginApi getInstance(){

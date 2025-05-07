@@ -82,6 +82,10 @@ public class ProductModel implements Serializable {
     @SerializedName("brand")
     private BrandModel brand;
 
+    public ProductModel(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

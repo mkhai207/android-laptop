@@ -11,11 +11,11 @@ public class CreateUserRequest {
     private String birthday;
     private String gender;
     private String phone;
-    private String shoppingAddress;
+//    private String shoppingAddress;
     private RoleModel role;
 
     public CreateUserRequest(String email, String password, String fullName, String address, String avatar,
-                       String birthday, String gender, String phone, String shoppingAddress, RoleModel role) {
+                       String birthday, String gender, String phone, RoleModel role) {
         this.email = email;
         this.password = password;
         this.fullName = fullName;
@@ -24,7 +24,6 @@ public class CreateUserRequest {
         this.birthday = birthday;
         this.gender = gender;
         this.phone = phone;
-        this.shoppingAddress = shoppingAddress;
         this.role = role;
     }
 }

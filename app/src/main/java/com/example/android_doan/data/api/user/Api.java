@@ -27,6 +27,7 @@ import com.example.android_doan.data.model.response.GetAllCategoriesResponse;
 import com.example.android_doan.data.model.response.GetAllOrderResponse;
 import com.example.android_doan.data.model.response.GetAllUserResponse;
 import com.example.android_doan.data.model.response.GetCartResponse;
+import com.example.android_doan.data.model.response.GetProductResponse;
 import com.example.android_doan.data.model.response.OrderAdminResponse;
 import com.example.android_doan.data.model.response.OrderResponse;
 import com.example.android_doan.data.model.response.ProductResponse;
@@ -92,6 +93,9 @@ public interface Api {
 
     @PUT("api/v1/products")
     Single<CreateProductResponse> updateProduct(@Body UpdateProductRequest request);
+
+    @GET("api/v1/products/{productId}")
+    Single<GetProductResponse> getProduct(@Path("productId") String productId);
 
     // api cart
     @POST("api/v1/carts")

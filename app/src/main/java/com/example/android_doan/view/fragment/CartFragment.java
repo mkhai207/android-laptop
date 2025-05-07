@@ -1,5 +1,8 @@
 package com.example.android_doan.view.fragment;
 
+import static com.example.android_doan.view.fragment.ProductBottomSheetFragment.ACTION_KEY;
+import static com.example.android_doan.view.fragment.ProductDetailFragment.ADD_TO_CART_ACTION;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -141,6 +144,7 @@ public class CartFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putSerializable(CheckoutFragment.CHECKOUT_FRAGMENT_ITEM, carts);
                 args.putDouble(CheckoutFragment.CHECKOUT_FRAGMENT_TOTAL, mTotal);
+                args.putString(ACTION_KEY, ADD_TO_CART_ACTION);
 //                CheckoutFragment checkoutFragment = CheckoutFragment.newInstance(carts);
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(R.id.action_cartFragment_to_checkoutFragment, args);

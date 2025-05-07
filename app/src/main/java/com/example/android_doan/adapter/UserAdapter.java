@@ -63,8 +63,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
         public void bind(UserModel userModel, IOnClickUser listener, UserViewHolder holder){
             if (userModel != null){
-                Glide.with(holder.itemView.getContext())
-                        .load("http://192.168.50.2:8080/storage/avatar/" + userModel.getAvatar())
+//                "http://192.168.50.2:8080/storage/avatar/"
+                        Glide.with(holder.itemView.getContext())
+                        .load(userModel.getAvatar())
                         .error(R.drawable.ic_user)
                         .into(binding.ivAvatar);
                 binding.tvFullName.setText(userModel.getFullName());

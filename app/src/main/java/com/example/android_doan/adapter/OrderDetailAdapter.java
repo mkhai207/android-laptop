@@ -53,7 +53,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         public void bind(OrderResponse.OrderDetail orderDetail, OrderDetailViewHolder holder){
             if (orderDetail != null){
                 Glide.with(holder.itemView.getContext())
-                        .load("http://192.168.50.2:8080/storage/product/" + orderDetail.getProductThumbnail())
+                        .load(orderDetail.getProductThumbnail())
                         .error(R.drawable.logo)
                         .into(binding.ivProductImage);
 

@@ -190,7 +190,7 @@ public class UpdateUserFragment extends Fragment {
         Log.d("lkhai4617", "initUI: " + mUserModel);
         if (mUserModel != null) {
             Glide.with(requireContext())
-                    .load("http://192.168.50.2:8080/storage/avatar/" + mUserModel.getAvatar())
+                    .load(mUserModel.getAvatar())
                     .error(R.drawable.ic_user)
                     .into(binding.imgAvatar);
             binding.etFullName.setText(mUserModel.getFullName());
@@ -208,7 +208,7 @@ public class UpdateUserFragment extends Fragment {
             binding.spinnerGender.setSelection(positionGender);
             binding.etPhone.setText(mUserModel.getPhone());
 
-            binding.etShoppingAddress.setText(mUserModel.getShoppingAddress());
+//            binding.etShoppingAddress.setText(mUserModel.getShoppingAddress());
 
             int positionRole = adapterRole.getPosition(mUserModel.getRole());
             binding.spinnerRole.setSelection(positionRole);
@@ -258,7 +258,7 @@ public class UpdateUserFragment extends Fragment {
     private void observer(){
         userManagementViewModel.getFileLiveData().observe(getViewLifecycleOwner(), fileData -> {
             if (fileData != null){
-                avatarStr = fileData.getData().getFileName();
+                avatarStr = fileData.getData().getFileLink();
                 updateUser();
             }
         });
@@ -278,7 +278,7 @@ public class UpdateUserFragment extends Fragment {
                         }
                         break;
                     case ERROR:
-                        binding.progressBar.setVisibility(View.VISIBLE);
+                        binding.progressBar.setVisibility(View.GONE);
                         Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
                         break;
                 }
@@ -287,11 +287,32 @@ public class UpdateUserFragment extends Fragment {
     }
 
     private void callApiUploadFile(){
+//        String folder = "avatar";
+//        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
+//        String realPathAvt = RealPathUtil.getRealPath(requireContext(), avatarUri);
+//        File avatar = new File(realPathAvt);
+//        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+//        MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
+//        userManagementViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
+
         String folder = "avatar";
-        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
+        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("text/plain"), folder);
+
         String realPathAvt = RealPathUtil.getRealPath(requireContext(), avatarUri);
         File avatar = new File(realPathAvt);
-        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+
+        String mediaType;
+        String fileName = avatar.getName().toLowerCase();
+        if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+            mediaType = "image/jpeg";
+        } else if (fileName.endsWith(".png")) {
+            mediaType = "image/png";
+        } else {
+            Toast.makeText(requireContext(), "Unsupported file format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse(mediaType), avatar);
         MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
         userManagementViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
     }
@@ -303,9 +324,9 @@ public class UpdateUserFragment extends Fragment {
         String birthday = FormatUtil.formatToIsoDate(binding.tvBirthday.getText().toString());
         String gender = binding.spinnerGender.getSelectedItem().toString();
         String phone = binding.etPhone.getText().toString();
-        String shoppingAddress = binding.etShoppingAddress.getText().toString();
+//        String shoppingAddress = binding.etShoppingAddress.getText().toString();
 
-        UserModel userModel = new UserModel(userId, isActive, avatarStr, fullName, address, phone, gender, birthday, shoppingAddress);
+        UserModel userModel = new UserModel(userId, isActive, avatarStr, fullName, address, phone, gender, birthday);
         userManagementViewModel.updateUser(userModel);
     }
 

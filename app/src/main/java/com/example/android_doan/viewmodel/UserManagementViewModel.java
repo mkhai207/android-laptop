@@ -182,7 +182,8 @@ public class UserManagementViewModel extends ViewModel {
         currentPage = 0;
         mListUser.clear();
         usersLiveData.setValue(mListUser);
-        loadNextPage();
+//        loadNextPage();
+        getAllUser(1);
     }
 
     @Override
