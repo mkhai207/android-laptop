@@ -9,6 +9,13 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -20,18 +27,9 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.android_doan.R;
@@ -51,10 +49,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -66,28 +62,14 @@ public class SettingFragment extends Fragment {
     private SettingViewModel settingViewModel;
     private List<String> genders;
     private Uri avtUri;
-    private String avatarStr = "";
-    private Calendar selectedDate;
-
-    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-        @Override
-        public void onActivityResult(Boolean isGranted) {
-            if(isGranted){
-                openFile();
-            } else{
-                Toast.makeText(requireContext(), "Bạn không có quyền truy cập ảnh!", Toast.LENGTH_LONG).show();
-            }
-        }
-    });
-
-    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
-            if (o.getResultCode() == Activity.RESULT_OK){
+            if (o.getResultCode() == Activity.RESULT_OK) {
                 Intent intent = o.getData();
                 if (intent != null) {
                     avtUri = intent.getData();
-                    if (avtUri != null){
+                    if (avtUri != null) {
                         Glide.with(requireContext())
                                 .load(avtUri)
                                 .error(R.drawable.ic_user)
@@ -98,6 +80,18 @@ public class SettingFragment extends Fragment {
             }
         }
     });
+    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+        @Override
+        public void onActivityResult(Boolean isGranted) {
+            if (isGranted) {
+                openFile();
+            } else {
+                Toast.makeText(requireContext(), "Bạn không có quyền truy cập ảnh!", Toast.LENGTH_LONG).show();
+            }
+        }
+    });
+    private String avatarStr = "";
+    private Calendar selectedDate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,7 +123,8 @@ public class SettingFragment extends Fragment {
         super.onDestroy();
         binding = null;
     }
-    private void initUI(){
+
+    private void initUI() {
         Spinner spinnerGender = binding.spinnerGender;
         genders = new ArrayList<>();
         genders.add("MALE");
@@ -144,24 +139,24 @@ public class SettingFragment extends Fragment {
         binding.edtBirthday.setOnClickListener(v -> showDatePickerDialog());
     }
 
-    private void loadData(){
+    private void loadData() {
         String userId = DataLocalManager.getUserId();
-        if (userId == null || userId.isEmpty()){
+        if (userId == null || userId.isEmpty()) {
             return;
         }
         settingViewModel.getUser(userId);
     }
 
-    private void observer(){
+    private void observer() {
         settingViewModel.getUserInfo().observe(getViewLifecycleOwner(), userResponse -> {
             if (userResponse != null && userResponse.getData() != null) {
                 bindData(userResponse.getData());
             }
         });
 
-        settingViewModel.getActionResult().observe(getViewLifecycleOwner(), actionResult ->{
-            if (actionResult!= null){
-                switch (actionResult.getStatus()){
+        settingViewModel.getActionResult().observe(getViewLifecycleOwner(), actionResult -> {
+            if (actionResult != null) {
+                switch (actionResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
@@ -169,7 +164,7 @@ public class SettingFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         CustomToast.showToast(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT);
 //                        Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
-                        if (DataLocalManager.getAccessToken()== null){
+                        if (DataLocalManager.getAccessToken() == null) {
                             Intent intent = new Intent(requireContext(), LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -185,8 +180,8 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        settingViewModel.getFileData().observe(getViewLifecycleOwner(), data ->{
-            if (data != null){
+        settingViewModel.getFileData().observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
                 avatarStr = data.getData().getFileLink();
 
                 int userId = Integer.parseInt(DataLocalManager.getUserId());
@@ -204,8 +199,8 @@ public class SettingFragment extends Fragment {
         });
     }
 
-    private void bindData(UserModel userModel){
-        if (userModel.getAvatar() != null){
+    private void bindData(UserModel userModel) {
+        if (userModel.getAvatar() != null) {
 //            avatarStr = userModel.getAvatar();
 //            String accessToken = DataLocalManager.getAccessToken();
 
@@ -238,22 +233,22 @@ public class SettingFragment extends Fragment {
             binding.edtFullName.setText(userModel.getFullName());
         }
 
-        if (userModel.getAddress() != null){
+        if (userModel.getAddress() != null) {
             binding.edtAddress.setText(userModel.getAddress());
         }
 
-        if (userModel.getBirthday() != null){
+        if (userModel.getBirthday() != null) {
             binding.edtBirthday.setText(FormatUtil.formatIsoDate(userModel.getBirthday()));
         }
 
-        if (userModel.getGender() != null){
+        if (userModel.getGender() != null) {
             int position = genders.indexOf(userModel.getGender());
-            if (position != -1){
+            if (position != -1) {
                 binding.spinnerGender.setSelection(position);
             }
         }
 
-        if (userModel.getPhone() != null){
+        if (userModel.getPhone() != null) {
             binding.edtPhone.setText(userModel.getPhone());
         }
 
@@ -262,12 +257,12 @@ public class SettingFragment extends Fragment {
 //        }
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.tvChangeAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String str = binding.tvChangeAccount.getText().toString();
-                if (str.equals(requireContext().getResources().getString(R.string.change))){
+                if (str.equals(requireContext().getResources().getString(R.string.change))) {
                     binding.tvChangeAccount.setText(requireContext().getResources().getString(R.string.save));
 
                     binding.edtFullName.setEnabled(true);
@@ -288,9 +283,10 @@ public class SettingFragment extends Fragment {
                     binding.edtShoppingAddress.setEnabled(false);
                     binding.ivEdit.setVisibility(View.GONE);
 
-                    if (avtUri != null){
+                    if (avtUri != null) {
                         callApiUploadFile();
-                    } {
+                    }
+                    {
                         updateUser();
                     }
                 }
@@ -322,8 +318,8 @@ public class SettingFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    private void uploadAvt(){
-        if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED){
+    private void uploadAvt() {
+        if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
             String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
@@ -331,7 +327,7 @@ public class SettingFragment extends Fragment {
         }
     }
 
-    private void openFile(){
+    private void openFile() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
@@ -362,7 +358,7 @@ public class SettingFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    private void callApiUploadFile(){
+    private void callApiUploadFile() {
 //        String folder = "avatar";
 //        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
 //        String realPathAvt = RealPathUtil.getRealPath(requireContext(), avtUri);
@@ -393,7 +389,7 @@ public class SettingFragment extends Fragment {
         settingViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
     }
 
-    private void updateUser(){
+    private void updateUser() {
         int userId = Integer.parseInt(DataLocalManager.getUserId());
         String fullname = binding.edtFullName.getText().toString();
         String address = binding.edtAddress.getText().toString();
