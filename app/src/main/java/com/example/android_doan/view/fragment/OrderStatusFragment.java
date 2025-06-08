@@ -120,7 +120,6 @@ public class OrderStatusFragment extends Fragment {
                 fragment.setListener(new UpdateOrderStatusDialogFragment.IOnStatusUpdatedListener() {
                     @Override
                     public void onStatusUpdated(OrderStatusEnum newStatus) {
-                        Log.d("lkhai4617", "onStatusUpdated: " + orderAdminResponse.getAddress().getId());
                         orderManagementViewModel.updateOrder(new UpdateOrderRequest(orderAdminResponse.getId(), newStatus.toString(), orderAdminResponse.getAddress()));
                     }
                 });

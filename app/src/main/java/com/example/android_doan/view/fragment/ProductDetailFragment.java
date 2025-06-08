@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -178,6 +179,27 @@ public class ProductDetailFragment extends Fragment {
         productDetailViewModel.getProductLiveData().observe(getViewLifecycleOwner(), productModel1 -> {
             if (productModel != null) {
 
+            }
+        });
+
+        productDetailViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), resource -> {
+            if (resource != null) {
+                switch (resource.getStatus()) {
+                    case SUCCESS:
+                        // Handle success case
+                        binding.progressBar.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(), "Thành công", Toast.LENGTH_SHORT).show();
+                        break;
+                    case ERROR:
+                        binding.progressBar.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(), resource.getMessage(), Toast.LENGTH_SHORT).show();
+                        // Handle error case
+                        break;
+                    case LOADING:
+                        binding.progressBar.setVisibility(View.VISIBLE);
+                        // Handle loading state if needed
+                        break;
+                }
             }
         });
     }

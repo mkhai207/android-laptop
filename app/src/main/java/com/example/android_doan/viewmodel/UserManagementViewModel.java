@@ -12,8 +12,11 @@ import com.example.android_doan.data.model.response.Meta;
 import com.example.android_doan.data.repository.RemoteRepository.UserManagementRepository;
 import com.example.android_doan.utils.Resource;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -21,6 +24,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.HttpException;
 
 public class UserManagementViewModel extends ViewModel {
     private UserManagementRepository userManagementRepository;
@@ -87,8 +92,23 @@ public class UserManagementViewModel extends ViewModel {
                     }
                 }, throwable -> {
                     isLoadingLiveData.setValue(false);
-                    if (throwable.getMessage() != null) {
-                        Log.d("lkhai4617", throwable.getMessage());
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
@@ -112,8 +132,23 @@ public class UserManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.success("createUser"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        Log.d("lkhai4617", throwable.getMessage());
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
@@ -132,7 +167,22 @@ public class UserManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("uploadFile"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
@@ -152,7 +202,22 @@ public class UserManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("deleteUser"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
@@ -171,7 +236,22 @@ public class UserManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("updateUser"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });

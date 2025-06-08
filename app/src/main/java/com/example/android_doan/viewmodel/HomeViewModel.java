@@ -11,14 +11,19 @@ import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.response.Meta;
 import com.example.android_doan.data.repository.RemoteRepository.HomeRepository;
+import com.example.android_doan.utils.Resource;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 
 public class HomeViewModel extends ViewModel {
@@ -27,6 +32,7 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isLoadingLiveData = new MutableLiveData<>(false);
     private final CompositeDisposable disposables = new CompositeDisposable();
     public MutableLiveData<BasePagingResponse<BrandModel>> brandsLiveData = new MutableLiveData<>();
+    public MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>();
     public MutableLiveData<String> sortLiveData = new MutableLiveData<>();
     public MutableLiveData<String> filterLiveData = new MutableLiveData<>();
     private HomeRepository homeRepository;
@@ -55,6 +61,10 @@ public class HomeViewModel extends ViewModel {
         return brandsLiveData;
     }
 
+    public MutableLiveData<Resource> getApiResultLiveData() {
+        return apiResultLiveData;
+    }
+
     public MutableLiveData<String> getSortLiveData() {
         return sortLiveData;
     }
@@ -79,8 +89,23 @@ public class HomeViewModel extends ViewModel {
                         userLiveData.setValue(response.getData().getUserModel());
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        Log.d("lkhai4617", throwable.getMessage());
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
@@ -119,8 +144,23 @@ public class HomeViewModel extends ViewModel {
                     }
                 }, throwable -> {
                     isLoadingLiveData.setValue(false);
-                    if (throwable.getMessage() != null) {
-                        Log.d("lkhai4617", throwable.getMessage());
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
@@ -142,8 +182,23 @@ public class HomeViewModel extends ViewModel {
                         brandsLiveData.setValue(response.getData());
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);

@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/bg_second"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_second"
     tools:context=".view.fragment.ProductDetailFragment">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="5dp"
+        android:visibility="gone" />
+
     <ScrollView
-        android:background="@color/bg_second"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bg_second">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -27,272 +35,272 @@
 
                 <me.relex.circleindicator.CircleIndicator3
                     android:id="@+id/circle_indicator_3"
-                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_marginBottom="10dp" />
 
-<!--                <ImageButton-->
-<!--                    android:id="@+id/btn_back"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:layout_alignParentStart="true"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    android:src="@drawable/ic_back"-->
-<!--                    android:scaleType="centerInside"-->
-<!--                    android:background="@drawable/bg_gray_corner_25"-->
-<!--                    android:layout_width="50dp"-->
-<!--                    android:layout_height="50dp"/>-->
+                <!--                <ImageButton-->
+                <!--                    android:id="@+id/btn_back"-->
+                <!--                    android:layout_marginStart="10dp"-->
+                <!--                    android:layout_alignParentStart="true"-->
+                <!--                    android:layout_marginTop="30dp"-->
+                <!--                    android:src="@drawable/ic_back"-->
+                <!--                    android:scaleType="centerInside"-->
+                <!--                    android:background="@drawable/bg_gray_corner_25"-->
+                <!--                    android:layout_width="50dp"-->
+                <!--                    android:layout_height="50dp"/>-->
             </RelativeLayout>
 
             <LinearLayout
-                android:padding="10dp"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <RelativeLayout
-                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/bg_gray_corner_15"
                     android:elevation="4dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/tv_name_of_laptop"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:text="@string/asus_vivobook"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/asus_vivobook"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/img_star"
-                        android:src="@drawable/ic_star"
-                        android:layout_toStartOf="@id/tv_rating"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/tv_rating"
+                        android:src="@drawable/ic_star" />
 
                     <TextView
                         android:id="@+id/tv_rating"
-                        android:layout_toStartOf="@id/tv_quantity_review"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text="@string/ex_rating"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/tv_quantity_review"
+                        android:text="@string/ex_rating"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_quantity_review"
-                        android:layout_alignParentEnd="true"
-                        android:textSize="18sp"
-                        android:text="@string/ex_quantity_review"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/ex_quantity_review"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/tv_price_of_laptop"
-                        android:layout_marginTop="10dp"
-                        android:layout_below="@+id/tv_name_of_laptop"
-                        android:textSize="18sp"
-                        android:textColor="@color/bg_primary"
-                        android:text="@string/ex_price"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_name_of_laptop"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/ex_price"
+                        android:textColor="@color/bg_primary"
+                        android:textSize="18sp" />
 
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:background="@drawable/bg_gray_corner_15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:padding="10dp"
+                    android:background="@drawable/bg_gray_corner_15"
                     android:elevation="4dp"
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/tv_description"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:text="@string/description"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/description"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_description_content"
-                        android:textSize="18sp"
-                        android:padding="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:maxLines="3"
-                        android:ellipsize="end"/>
+                        android:padding="10dp"
+                        android:textSize="18sp" />
 
                     <RelativeLayout
                         android:id="@+id/hidden_layout"
-                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_gray_corner_15"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/tv_specification"
-                            android:textSize="20sp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:text="@string/specification"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:text="@string/specification"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tv_color"
-                            android:textSize="17sp"
-                            android:layout_below="@id/tv_specification"
-                            android:textColor="@color/bg_primary"
-                            android:text="@string/color"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_specification"
+                            android:text="@string/color"
+                            android:textColor="@color/bg_primary"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_color_info"
-                            android:textSize="17sp"
-                            android:layout_toEndOf="@id/tv_specification"
-                            android:layout_below="@id/tv_specification"
-                            android:text="@string/cpu"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_specification"
+                            android:layout_toEndOf="@id/tv_specification"
+                            android:text="@string/cpu"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_cpu"
-                            android:textSize="17sp"
-                            android:textColor="@color/bg_primary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_below="@id/tv_color"
                             android:text="@string/cpu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textColor="@color/bg_primary"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_cpu_info"
-                            android:textSize="17sp"
-                            android:layout_toEndOf="@id/tv_specification"
-                            android:layout_below="@id/tv_color_info"
-                            android:text="@string/cpu"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_color_info"
+                            android:layout_toEndOf="@id/tv_specification"
+                            android:text="@string/cpu"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_gpu"
-                            android:textColor="@color/bg_primary"
-                            android:textSize="17sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_below="@id/tv_cpu"
                             android:text="@string/gpu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textColor="@color/bg_primary"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_gpu_info"
-                            android:textSize="17sp"
-                            android:layout_toEndOf="@id/tv_specification"
-                            android:layout_below="@id/tv_cpu"
-                            android:text="@string/cpu"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_cpu"
+                            android:layout_toEndOf="@id/tv_specification"
+                            android:text="@string/cpu"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_rom"
-                            android:textColor="@color/bg_primary"
-                            android:textSize="17sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_below="@id/tv_gpu"
                             android:text="@string/rom"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textColor="@color/bg_primary"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_rom_info"
-                            android:textSize="17sp"
-                            android:layout_toEndOf="@id/tv_specification"
-                            android:layout_below="@id/tv_gpu"
-                            android:text="@string/cpu"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_gpu"
+                            android:layout_toEndOf="@id/tv_specification"
+                            android:text="@string/cpu"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_ram"
-                            android:textColor="@color/bg_primary"
-                            android:textSize="17sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_below="@id/tv_rom"
                             android:text="@string/ram"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textColor="@color/bg_primary"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_ram_info"
-                            android:textSize="17sp"
-                            android:layout_toEndOf="@id/tv_specification"
-                            android:layout_below="@id/tv_rom"
-                            android:text="@string/cpu"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_rom"
+                            android:layout_toEndOf="@id/tv_specification"
+                            android:text="@string/cpu"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_other"
-                            android:textColor="@color/bg_primary"
-                            android:textSize="17sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_below="@id/tv_ram"
                             android:text="@string/other"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textColor="@color/bg_primary"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_other_info"
-                            android:textSize="17sp"
-                            android:layout_toEndOf="@id/tv_specification"
-                            android:layout_below="@id/tv_ram"
-                            android:text="@string/cpu"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_ram"
+                            android:layout_toEndOf="@id/tv_specification"
+                            android:text="@string/cpu"
+                            android:textSize="17sp" />
 
                     </RelativeLayout>
 
                     <TextView
                         android:id="@+id/btn_see_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/bg_gray_corner_15"
                         android:gravity="center_horizontal"
                         android:padding="5dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/bg_primary"
                         android:text="@string/see_more"
+                        android:textColor="@color/bg_primary"
                         android:textSize="20sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_margin="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <Button
                     android:id="@+id/btn_buy_now"
-                    android:text="@string/buy_now"
-                    android:layout_weight="2"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:backgroundTint="@color/bg_primary"
-                    android:layout_height="wrap_content"/>
+                    android:text="@string/buy_now" />
 
                 <ImageButton
                     android:id="@+id/btn_add_to_cart"
-                    android:src="@drawable/ic_add_to_cart"
-                    android:scaleType="centerInside"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_add_to_cart" />
 
             </LinearLayout>
 

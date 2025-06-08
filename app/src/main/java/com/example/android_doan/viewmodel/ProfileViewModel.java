@@ -8,16 +8,22 @@ import com.example.android_doan.data.repository.LocalRepository.DataLocalManager
 import com.example.android_doan.data.repository.RemoteRepository.ProfileRepository;
 import com.example.android_doan.utils.Resource;
 
+import org.json.JSONObject;
+
+import java.util.Objects;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
+import retrofit2.HttpException;
 
 public class ProfileViewModel extends ViewModel {
     private ProfileRepository repository;
 
     private CompositeDisposable disposables = new CompositeDisposable();
-    private MutableLiveData<Resource> actionResult = new MutableLiveData<>();
+    private MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>();
 
     private MutableLiveData<UserModel> userInfo = new MutableLiveData<>();
 
@@ -30,31 +36,46 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public MutableLiveData<Resource> getActionResult() {
-        return actionResult;
+        return apiResultLiveData;
     }
 
     public void getAccount(String userId) {
-        actionResult.setValue(Resource.loading());
+        apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = repository.getAccount()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response != null && response.getData().getUserModel() != null) {
                         userInfo.setValue(response.getData().getUserModel());
-                        actionResult.setValue(Resource.success("Loading account info success"));
+                        apiResultLiveData.setValue(Resource.success("Loading account info success"));
                     } else {
-                        actionResult.setValue(Resource.error("Loading account info failure"));
+                        apiResultLiveData.setValue(Resource.error("Loading account info failure"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
     public void logout() {
-        actionResult.setValue(Resource.loading());
+        apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = repository.logout()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -64,13 +85,28 @@ public class ProfileViewModel extends ViewModel {
                         DataLocalManager.clearRefreshToken();
                         DataLocalManager.clearUserId();
                         DataLocalManager.clearRole();
-                        actionResult.setValue(Resource.success("Logout success"));
+                        apiResultLiveData.setValue(Resource.success("Logout success"));
                     } else {
-                        actionResult.setValue(Resource.error("Logout failure"));
+                        apiResultLiveData.setValue(Resource.error("Logout failure"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);

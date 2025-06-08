@@ -12,13 +12,18 @@ import com.example.android_doan.data.model.response.Meta;
 import com.example.android_doan.data.repository.RemoteRepository.CategoryManagementRepository;
 import com.example.android_doan.utils.Resource;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
+import retrofit2.HttpException;
 
 public class CategoryManagementViewModel extends ViewModel {
     private CategoryManagementRepository categoryManagementRepository;
@@ -32,24 +37,24 @@ public class CategoryManagementViewModel extends ViewModel {
     private int pageSize = 10;
     private List<CategoryModel> mListCategory = new ArrayList<>();
 
-    public MutableLiveData<Resource> getApiResultLiveData(){
-        return apiResultLiveData;
-    }
-
-    public MutableLiveData<CategoryModel> getCategoryLiveData(){
-        return categoryLiveData;
-    }
-
-    public MutableLiveData<List<CategoryModel>> getCategoriesLiveData(){
-        return categoriesLiveData;
-    }
-
     public CategoryManagementViewModel(CategoryManagementRepository categoryManagementRepository) {
         this.categoryManagementRepository = categoryManagementRepository;
     }
 
-    public void getAllCategories(int page){
-        if (apiResultLiveData.getValue().getStatus() == Resource.Status.LOADING || page > pages){
+    public MutableLiveData<Resource> getApiResultLiveData() {
+        return apiResultLiveData;
+    }
+
+    public MutableLiveData<CategoryModel> getCategoryLiveData() {
+        return categoryLiveData;
+    }
+
+    public MutableLiveData<List<CategoryModel>> getCategoriesLiveData() {
+        return categoriesLiveData;
+    }
+
+    public void getAllCategories(int page) {
+        if (apiResultLiveData.getValue().getStatus() == Resource.Status.LOADING || page > pages) {
             return;
         }
         apiResultLiveData.setValue(Resource.loading());
@@ -58,15 +63,15 @@ public class CategoryManagementViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    if (response != null && response.getStatusCode() == 200){
+                    if (response != null && response.getStatusCode() == 200) {
                         Meta meta = response.getData().getMeta();
-                        if (meta != null){
+                        if (meta != null) {
                             currentPage = meta.getPage();
                             pageSize = meta.getPageSize();
                             pages = meta.getPages();
                         }
                         List<CategoryModel> categories = response.getData().getResult();
-                        if (categories != null){
+                        if (categories != null) {
                             mListCategory.addAll(categories);
                             categoriesLiveData.setValue(mListCategory);
                             apiResultLiveData.setValue(Resource.success("getAllCategories"));
@@ -74,73 +79,132 @@ public class CategoryManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("getAllCategories"));
                     }
                 }, throwable -> {
-                    apiResultLiveData.setValue(Resource.error("getAllCategories"));
-                    if (throwable.getMessage() != null){
-                        Log.d("lkhai4617", throwable.getMessage());
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
-    public void loadNextPage(){
-        if (currentPage < pages){
+    public void loadNextPage() {
+        if (currentPage < pages) {
             Log.d("lkhai4617", "load next page");
             getAllCategories(currentPage + 1);
         }
     }
 
-    public void createCategory(CreateCategoryRequest request){
+    public void createCategory(CreateCategoryRequest request) {
         apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = categoryManagementRepository.createCategory(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response ->{
-                    if (response != null && response.getStatusCode() == 201){
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 201) {
                         categoryLiveData.setValue(response.getData());
                         apiResultLiveData.setValue(Resource.success("createCategory"));
                     } else {
                         apiResultLiveData.setValue(Resource.error("createCategory"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage()!=null){
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
-    public void deleteCategory(int categoryId){
+    public void deleteCategory(int categoryId) {
         apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = categoryManagementRepository.deleteCategory(categoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response ->{
-                    if (response != null && response.getStatusCode() == 200){
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 200) {
                         apiResultLiveData.setValue(Resource.success("deleteCategory"));
                     } else {
                         apiResultLiveData.setValue(Resource.error("deleteCategory"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage()!=null){
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
-    public void updateCategory(UpdateCategoryRequest request){
+    public void updateCategory(UpdateCategoryRequest request) {
         apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = categoryManagementRepository.updateCategory(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response ->{
-                    if (response != null && response.getStatusCode() == 200){
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 200) {
                         apiResultLiveData.setValue(Resource.success("updateCategory"));
                     } else {
                         apiResultLiveData.setValue(Resource.error("updateCategory"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage()!=null){
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });

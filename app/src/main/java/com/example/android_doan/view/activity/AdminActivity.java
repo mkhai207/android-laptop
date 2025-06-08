@@ -55,15 +55,6 @@ public class AdminActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         setSupportActionBar(adminActivityBinding.toolbar);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this,
-//                adminActivityBinding.drawerLayout,
-//                adminActivityBinding.toolbar,
-//                R.string.navigation_drawer_open,
-//                R.string.navigation_drawer_close
-//        );
-//        adminActivityBinding.drawerLayout.addDrawerListener(toggle);
-//        toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 

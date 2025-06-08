@@ -10,18 +10,24 @@ import com.example.android_doan.data.repository.LocalRepository.DataLocalManager
 import com.example.android_doan.data.repository.RemoteRepository.SettingRepository;
 import com.example.android_doan.utils.Resource;
 
+import org.json.JSONObject;
+
+import java.util.Objects;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.HttpException;
 
 public class SettingViewModel extends ViewModel {
     private SettingRepository settingRepository;
 
     private MutableLiveData<UserModel> userInfo = new MutableLiveData<>();
-    private MutableLiveData<Resource> actionResult = new MutableLiveData<>();
+    private MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>();
     private MutableLiveData<FileData> fileData = new MutableLiveData<>();
 
     private CompositeDisposable disposables = new CompositeDisposable();
@@ -35,7 +41,7 @@ public class SettingViewModel extends ViewModel {
     }
 
     public MutableLiveData<Resource> getActionResult() {
-        return actionResult;
+        return apiResultLiveData;
     }
 
     public MutableLiveData<FileData> getFileData() {
@@ -43,66 +49,111 @@ public class SettingViewModel extends ViewModel {
     }
 
     public void getUser(String userId) {
-        actionResult.setValue(Resource.loading());
+        apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = settingRepository.getUser(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response != null && response.getStatusCode() == 200) {
                         userInfo.setValue(response.getData());
-                        actionResult.setValue(Resource.success("getUser"));
+                        apiResultLiveData.setValue(Resource.success("getUser"));
                     } else {
-                        actionResult.setValue(Resource.error("getUser"));
+                        apiResultLiveData.setValue(Resource.error("getUser"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
     public void updateUser(UserModel userModel) {
-        actionResult.setValue(Resource.loading());
+        apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = settingRepository.updateUser(userModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response != null && response.getStatusCode() == 200) {
-                        actionResult.setValue(Resource.success("updateUser"));
+                        apiResultLiveData.setValue(Resource.success("updateUser"));
                     } else {
-                        actionResult.setValue(Resource.error("updateUser"));
+                        apiResultLiveData.setValue(Resource.error("updateUser"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
     public void changePassword(ChangePasswordRequest request) {
-        actionResult.setValue(Resource.loading());
+        apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = settingRepository.changePassword(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response != null && response.getStatusCode() == 200) {
                         logout();
-                        actionResult.setValue(Resource.success("changePassword"));
+                        apiResultLiveData.setValue(Resource.success("changePassword"));
                     } else {
-                        actionResult.setValue(Resource.error("changePassword"));
+                        apiResultLiveData.setValue(Resource.error("changePassword"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
     public void logout() {
-        actionResult.setValue(Resource.loading());
+        apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = settingRepository.logout()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -112,33 +163,63 @@ public class SettingViewModel extends ViewModel {
                         DataLocalManager.clearRefreshToken();
                         DataLocalManager.clearUserId();
                         DataLocalManager.clearRole();
-                        actionResult.setValue(Resource.success("logout"));
+                        apiResultLiveData.setValue(Resource.success("logout"));
                     } else {
-                        actionResult.setValue(Resource.error("logout"));
+                        apiResultLiveData.setValue(Resource.error("logout"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
     public void uploadFile(RequestBody folder, MultipartBody.Part file) {
-        actionResult.setValue(Resource.loading());
+        apiResultLiveData.setValue(Resource.loading());
         Disposable disposable = settingRepository.uploadFile(folder, file)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response != null && response.getStatusCode() == 200) {
                         fileData.setValue(response.getData());
-                        actionResult.setValue(Resource.success("uploadFile"));
+                        apiResultLiveData.setValue(Resource.success("uploadFile"));
                     } else {
-                        actionResult.setValue(Resource.error("uploadFile"));
+                        apiResultLiveData.setValue(Resource.error("uploadFile"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
-                        actionResult.setValue(Resource.error(throwable.getMessage()));
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);

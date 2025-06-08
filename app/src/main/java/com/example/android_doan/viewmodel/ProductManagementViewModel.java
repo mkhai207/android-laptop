@@ -15,8 +15,11 @@ import com.example.android_doan.data.model.response.Meta;
 import com.example.android_doan.data.repository.RemoteRepository.ProductManagementRepository;
 import com.example.android_doan.utils.Resource;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -24,6 +27,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.HttpException;
 
 public class ProductManagementViewModel extends ViewModel {
     private final MutableLiveData<Boolean> uploadThumbnailStatusLiveData = new MutableLiveData<>();
@@ -105,7 +110,22 @@ public class ProductManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("getAllProduct"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
@@ -138,7 +158,22 @@ public class ProductManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.success("getBrands"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
@@ -156,7 +191,22 @@ public class ProductManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.success("getAllCategory"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
@@ -177,7 +227,22 @@ public class ProductManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("uploadFile"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
@@ -198,7 +263,22 @@ public class ProductManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("uploadMultipleFile"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
@@ -217,7 +297,22 @@ public class ProductManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("updateProduct"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
@@ -237,7 +332,22 @@ public class ProductManagementViewModel extends ViewModel {
                         apiResultLiveData.setValue(Resource.error("createProduct"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null) {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
                         apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
                     }
                 });

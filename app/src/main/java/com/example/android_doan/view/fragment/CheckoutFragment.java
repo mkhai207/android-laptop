@@ -6,6 +6,7 @@ import static com.example.android_doan.view.fragment.ProductBottomSheetFragment.
 import static com.example.android_doan.view.fragment.ProductDetailFragment.ADD_TO_CART_ACTION;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CheckoutFragment extends Fragment {
+    public static final String TAG = "CheckoutFragment";
     public static final String CHECKOUT_FRAGMENT_ITEM = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_ITEM";
     public static final String CHECKOUT_FRAGMENT_TOTAL = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_TOTAL";
     private FragmentCheckoutBinding binding;
@@ -61,11 +63,11 @@ public class CheckoutFragment extends Fragment {
                 } catch (ClassCastException e) {
                     e.printStackTrace();
                     mCarts = new ArrayList<>();
-                    Toast.makeText(requireContext(), "Lỗi khi lấy dữ liệu giỏ hàng", Toast.LENGTH_SHORT).show();
+                    Log.d("lkhai4617", "Lỗi khi lấy dữ liệu giỏ hàng");
                 }
             } else {
                 mCarts = new ArrayList<>();
-                Toast.makeText(requireContext(), "Dữ liệu giỏ hàng không hợp lệ", Toast.LENGTH_SHORT).show();
+                Log.d("lkhai4617", "Dữ liệu giỏ hàng không hợp lệ");
             }
         }
 
@@ -110,22 +112,12 @@ public class CheckoutFragment extends Fragment {
                 binding.tvAddress.setText(address);
             }
         });
-//        checkoutViewModel.getAddress().observe(getViewLifecycleOwner(), address -> {
-//            if (address != null) {
-//                Log.d("lkhai4617", "setupData: CheckoutFragment");
-//                binding.tvReceiverName.setText(address.getName());
-//                binding.tvReceiverPhone.setText(address.getPhone());
-//                binding.tvAddressDetail.setText(address.getAddress());
-//            }
-//        });
     }
 
     private void setupListener() {
         binding.tvChangeAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                EdtAddressBottomSheetFragment edtAddressDialogFragment = new EdtAddressBottomSheetFragment();
-//                edtAddressDialogFragment.show(requireActivity().getSupportFragmentManager(), "edt_address_dialog_fragment");
                 openAddressFragment();
             }
         });

@@ -13,12 +13,9 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface LoginApi {
-    //login
     @POST("api/v1/auth/login")
     Single<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    //    @POST("api/v1/auth/register")
-//    Single<RegisterResponse> register(@Body RegisterRequest registerRequest);
     @POST("api/v1/auth/register")
     Single<BaseResponse<UserModel>> register(@Body RegisterRequest registerRequest);
 

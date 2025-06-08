@@ -1,22 +1,27 @@
 package com.example.android_doan.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.repository.RemoteRepository.AdminHomeRepository;
+import com.example.android_doan.utils.Resource;
+
+import org.json.JSONObject;
+
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 
 public class AdminHomeViewModel extends ViewModel {
     private final MutableLiveData<UserModel> userLiveData = new MutableLiveData<>();
     private final CompositeDisposable disposables = new CompositeDisposable();
+    private final MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>();
     private AdminHomeRepository adminHomeRepository;
 
     public AdminHomeViewModel(AdminHomeRepository adminHomeRepository) {
@@ -44,7 +49,24 @@ public class AdminHomeViewModel extends ViewModel {
                     }
                 }, throwable -> {
                     if (throwable.getMessage() != null) {
-                        Log.d("lkhai4617", throwable.getMessage());
+                        if (throwable instanceof HttpException) {
+                            HttpException httpException = (HttpException) throwable;
+                            ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                            if (errorBody != null) {
+                                try {
+                                    String errorJson = errorBody.string();
+                                    JSONObject jsonObject = new JSONObject(errorJson);
+                                    String errorMessage = jsonObject.optString("message", "Call api failed");
+                                    apiResultLiveData.setValue(Resource.error(errorMessage));
+                                } catch (Exception e) {
+                                    apiResultLiveData.setValue(Resource.error("Unknown error"));
+                                }
+                            } else {
+                                apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
+                        }
                     }
                 });
         disposables.add(disposable);
