@@ -4,6 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,19 +16,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.example.android_doan.R;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.ProfileRepository;
 import com.example.android_doan.databinding.FragmentProfileBinding;
 import com.example.android_doan.view.activity.LoginActivity;
 import com.example.android_doan.viewmodel.ProfileViewModel;
-import com.example.android_doan.viewmodel.ProfileViewModelFactory;
 
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
@@ -34,8 +33,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        repository = new ProfileRepository();
-        profileViewModel = new ViewModelProvider(this, new ProfileViewModelFactory(repository)).get(ProfileViewModel.class);
+
+        profileViewModel = new ViewModelProvider(
+                this,
+                new BaseViewModelFactory<ProfileRepository>(new ProfileRepository(), ProfileViewModel.class)
+        ).get(ProfileViewModel.class);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class ProfileFragment extends Fragment {
         binding = null;
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.layoutOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,11 +94,11 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void setupDaTa(){
+    private void setupDaTa() {
         String userId = DataLocalManager.getUserId();
         profileViewModel.getAccount(userId);
         profileViewModel.getUserInfo().observe(getViewLifecycleOwner(), user -> {
-            if (user != null){
+            if (user != null) {
                 Glide.with(requireContext())
                         .load(user.getAvatar())
                         .error(R.drawable.ic_user)
@@ -108,9 +110,9 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void handleStatus(){
+    private void handleStatus() {
         profileViewModel.getActionResult().observe(getViewLifecycleOwner(), resource -> {
-            switch (resource.getStatus()){
+            switch (resource.getStatus()) {
                 case LOADING:
                     binding.progressBar.setVisibility(View.VISIBLE);
                     break;
@@ -119,7 +121,7 @@ public class ProfileFragment extends Fragment {
                     break;
                 case ERROR:
                     binding.progressBar.setVisibility(View.VISIBLE);
-                    Toast.makeText(requireContext(), resource.getMessage(),  Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), resource.getMessage(), Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     binding.progressBar.setVisibility(View.VISIBLE);

@@ -15,35 +15,35 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
 
 public class AdminHomeViewModel extends ViewModel {
-    private AdminHomeRepository adminHomeRepository;
     private final MutableLiveData<UserModel> userLiveData = new MutableLiveData<>();
     private final CompositeDisposable disposables = new CompositeDisposable();
-
-    public MutableLiveData<UserModel> getUserLiveData(){
-        return userLiveData;
-    }
+    private AdminHomeRepository adminHomeRepository;
 
     public AdminHomeViewModel(AdminHomeRepository adminHomeRepository) {
         this.adminHomeRepository = adminHomeRepository;
     }
 
-    public void getUser(){
+    public MutableLiveData<UserModel> getUserLiveData() {
+        return userLiveData;
+    }
+
+    public void getUser() {
         Disposable disposable = adminHomeRepository.getAccount()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(throwable -> {
-                    if (throwable instanceof HttpException && ((HttpException) throwable).code() == 401){
+                    if (throwable instanceof HttpException && ((HttpException) throwable).code() == 401) {
                         Thread.sleep(500);
                         return true;
                     }
                     return false;
                 })
                 .subscribe(response -> {
-                    if (response != null && response.getUser() != null && response.getUser().getUserModel() != null){
-                        userLiveData.setValue(response.getUser().getUserModel());
+                    if (response != null && response.getData() != null && response.getData().getUserModel() != null) {
+                        userLiveData.setValue(response.getData().getUserModel());
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null){
+                    if (throwable.getMessage() != null) {
                         Log.d("lkhai4617", throwable.getMessage());
                     }
                 });

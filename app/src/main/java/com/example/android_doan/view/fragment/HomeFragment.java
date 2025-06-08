@@ -1,8 +1,11 @@
 package com.example.android_doan.view.fragment;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,16 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -32,16 +26,15 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.ProductAdapter;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.SortOption;
-import com.example.android_doan.data.model.response.BrandResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.HomeRepository;
 import com.example.android_doan.databinding.FragmentHomeBinding;
 import com.example.android_doan.utils.GridSpacingItemDecoration;
 import com.example.android_doan.viewmodel.HomeViewModel;
-import com.example.android_doan.viewmodel.HomeViewModelFactory;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -57,9 +50,10 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        homeRepository = new HomeRepository();
-        HomeViewModelFactory homeViewModelFactory = new HomeViewModelFactory(homeRepository);
-        homeViewModel = new ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(
+                this,
+                new BaseViewModelFactory<HomeRepository>(new HomeRepository(), HomeViewModel.class)
+        ).get(HomeViewModel.class);
 
         super.onCreate(savedInstanceState);
     }
@@ -70,16 +64,16 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         rcvProduct = binding.rcvProduct;
-        productAdapter = new ProductAdapter(requireContext(),new ArrayList<>());
+        productAdapter = new ProductAdapter(requireContext(), new ArrayList<>());
         rcvProduct.setAdapter(productAdapter);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
         rcvProduct.setLayoutManager(gridLayoutManager);
 
-        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(20, 2,false);
+        GridSpacingItemDecoration gridSpacingItemDecoration = new GridSpacingItemDecoration(20, 2, false);
         rcvProduct.addItemDecoration(gridSpacingItemDecoration);
 
-        AppCompatActivity activity = ((AppCompatActivity)requireActivity());
+        AppCompatActivity activity = ((AppCompatActivity) requireActivity());
         activity.getSupportActionBar().setTitle(getResources().getString(R.string.home));
 
         return binding.getRoot();
@@ -114,12 +108,12 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
-    private void loadUserInfo(){
+    private void loadUserInfo() {
         homeViewModel.getUser();
         homeViewModel.getUserLiveData().observe(getViewLifecycleOwner(), userModel -> {
-            if (userModel != null){
+            if (userModel != null) {
                 binding.tvFullName.setText(userModel.getFullName());
-                if (userModel.getAvatar() != null){
+                if (userModel.getAvatar() != null) {
                     Glide.with(requireContext())
                             .load(userModel.getAvatar())
                             .error(R.drawable.ic_user)
@@ -142,19 +136,19 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void loadProduct(){
+    private void loadProduct() {
         homeViewModel.loadNextPage();
         homeViewModel.getProductsLiveData().observe(getViewLifecycleOwner(), products -> {
-            if (!products.isEmpty()){
+            if (!products.isEmpty()) {
                 productAdapter.updateProduct(products);
             }
             Log.d("lkhai4617", "products null");
         });
 
-        homeViewModel.getIsLoadingLiveData().observe(getViewLifecycleOwner(), isLoading ->{
-            if (isLoading){
+        homeViewModel.getIsLoadingLiveData().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 binding.progressBar.setVisibility(View.GONE);
             }
         });
@@ -202,11 +196,11 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void loadBrands(){
+    private void loadBrands() {
         homeViewModel.getBrands();
-        homeViewModel.getBrandsLiveData().observe(getViewLifecycleOwner(), data ->{
-            if (data != null){
-                for (BrandModel brand : data.getResult()){
+        homeViewModel.getBrandsLiveData().observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
+                for (BrandModel brand : data.getResult()) {
                     Chip chip = new Chip(binding.chipGroupBrands.getContext());
                     chip.setId(View.generateViewId());
                     chip.setText(brand.getName());
@@ -224,7 +218,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void filterProduct(){
+    private void filterProduct() {
 //        binding.chipGroupBrands.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
 //            @Override
 //            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
@@ -293,7 +287,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void observer(){
+    private void observer() {
         homeViewModel.getFilterLiveData().observe(getViewLifecycleOwner(), str -> {
             String filterValue = (str != null) ? str : "";
             Log.d("lkhai4617", "observer: Filter changed to '" + filterValue + "', resetting and loading products");
@@ -307,7 +301,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

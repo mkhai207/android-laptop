@@ -8,6 +8,15 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -19,32 +28,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.SliderImageAdapter;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.model.CategoryModel;
+import com.example.android_doan.data.model.FileData;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.request.CreateProductRequest;
 import com.example.android_doan.data.model.request.UpdateProductRequest;
-import com.example.android_doan.data.model.response.UploadMultipleFileResponse;
 import com.example.android_doan.data.repository.RemoteRepository.ProductManagementRepository;
 import com.example.android_doan.databinding.FragmentAddOrUpdateProductBinding;
 import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.utils.RealPathUtil;
 import com.example.android_doan.viewmodel.ProductManagementViewModel;
-import com.example.android_doan.viewmodel.ProductManagementViewModelFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,9 +55,9 @@ import okhttp3.RequestBody;
 
 
 public class AddOrUpdateProductFragment extends Fragment {
+    public static final String PRODUCT_MODEL_KEY = "com.example.android_doan.view.fragment.PRODUCT_MODEL_KEY";
     private static final int REQUEST_CODE = 1000;
     private static final int REQUEST_CODE_SLIDER = 1001;
-    public static final String PRODUCT_MODEL_KEY = "com.example.android_doan.view.fragment.PRODUCT_MODEL_KEY";
     private FragmentAddOrUpdateProductBinding binding;
     private ProductManagementViewModel productManagementViewModel;
     private ProductModel mProductModel;
@@ -77,40 +76,37 @@ public class AddOrUpdateProductFragment extends Fragment {
     private Boolean sliderUploadResult = null;
     private int status;
     private boolean hasProcessedProduct;
-
-    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-        @Override
-        public void onActivityResult(Boolean isGranted) {
-            if(isGranted){
-                openFile();
-            } else{
-                Toast.makeText(requireContext(), "Bạn không có quyền truy cập ảnh!", Toast.LENGTH_LONG).show();
-            }
-        }
-    });
-
     private ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
                     new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult o) {
+                            if (o.getResultCode() == Activity.RESULT_OK) {
+                                Intent intent = o.getData();
+                                if (intent != null) {
+                                    thumbnailUri = intent.getData();
+                                    if (thumbnailUri != null) {
+                                        Glide.with(requireContext())
+                                                .load(thumbnailUri)
+                                                .error(R.drawable.laptop_logo)
+                                                .into(binding.ivThumbnail);
+                                        Log.d("lkhai4617", "onActivityResult: " + thumbnailUri.toString());
+                                    }
+                                }
+                            }
+                        }
+                    });
+    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
         @Override
-        public void onActivityResult(ActivityResult o) {
-            if (o.getResultCode() == Activity.RESULT_OK){
-                Intent intent = o.getData();
-                if (intent != null) {
-                    thumbnailUri = intent.getData();
-                    if (thumbnailUri != null){
-                        Glide.with(requireContext())
-                                .load(thumbnailUri)
-                                .error(R.drawable.laptop_logo)
-                                .into(binding.ivThumbnail);
-                        Log.d("lkhai4617", "onActivityResult: " + thumbnailUri.toString());
-                    }
-                }
+        public void onActivityResult(Boolean isGranted) {
+            if (isGranted) {
+                openFile();
+            } else {
+                Toast.makeText(requireContext(), "Bạn không có quyền truy cập ảnh!", Toast.LENGTH_LONG).show();
             }
         }
     });
-
     private ActivityResultLauncher<Intent> activityResultLauncherSlider = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -143,14 +139,13 @@ public class AddOrUpdateProductFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
-        if (args != null){
+        if (args != null) {
             mProductModel = (ProductModel) args.getSerializable(PRODUCT_MODEL_KEY);
         }
 
-        ProductManagementRepository productManagementRepository = new ProductManagementRepository();
         productManagementViewModel = new ViewModelProvider(
                 this,
-                new ProductManagementViewModelFactory(productManagementRepository)
+                new BaseViewModelFactory<ProductManagementRepository>(new ProductManagementRepository(), ProductManagementViewModel.class)
         ).get(ProductManagementViewModel.class);
 
     }
@@ -178,7 +173,7 @@ public class AddOrUpdateProductFragment extends Fragment {
         binding = null;
     }
 
-    private void initUI(){
+    private void initUI() {
         productManagementViewModel.getAllCategory();
         productManagementViewModel.getBrands();
         setupSliderImage();
@@ -195,8 +190,8 @@ public class AddOrUpdateProductFragment extends Fragment {
         }
     }
 
-    private void setupData(){
-        if (mProductModel != null){
+    private void setupData() {
+        if (mProductModel != null) {
             binding.etName.setText(mProductModel.getName());
             binding.etModel.setText(mProductModel.getModel());
             binding.etCpu.setText(mProductModel.getCpu());
@@ -207,7 +202,7 @@ public class AddOrUpdateProductFragment extends Fragment {
             binding.etScreen.setText(mProductModel.getScreen());
             binding.etPrice.setText(FormatUtil.formatCurrencyVer2(mProductModel.getPrice()));
             binding.etDescription.setText(mProductModel.getDescription());
-            if (mProductModel.getThumbnail() != null){
+            if (mProductModel.getThumbnail() != null) {
                 thumbnailUrl = mProductModel.getThumbnail();
                 Glide.with(requireContext())
                         .load(mProductModel.getThumbnail())
@@ -223,20 +218,20 @@ public class AddOrUpdateProductFragment extends Fragment {
             binding.etTag.setText(mProductModel.getTag());
 
             //setup slider anh
-            if (mProductModel.getSlider() != null){
+            if (mProductModel.getSlider() != null) {
                 sliderUrls = mProductModel.getSlider();
                 sliderImageAdapter.updateData(sliderUrls);
             }
         }
     }
 
-    private void observer(){
+    private void observer() {
         productManagementViewModel.getBrandsLiveData().observe(getViewLifecycleOwner(), brands -> {
-            if (brands != null){
+            if (brands != null) {
                 mListBrand = brands;
                 setupSpinnerBrand();
 
-                if (mProductModel!= null && mProductModel.getBrand() != null){
+                if (mProductModel != null && mProductModel.getBrand() != null) {
                     int position = brandAdapter.getPosition(mProductModel.getBrand());
                     binding.spinnerBrand.setSelection(position);
                 }
@@ -244,11 +239,11 @@ public class AddOrUpdateProductFragment extends Fragment {
         });
 
         productManagementViewModel.getCategoriesLiveData().observe(getViewLifecycleOwner(), categories -> {
-            if (categories != null){
+            if (categories != null) {
                 mListCategory = categories;
                 setupSpinnerCategory();
 
-                if (mProductModel != null && mProductModel.getCategory() != null){
+                if (mProductModel != null && mProductModel.getCategory() != null) {
                     int position = categoryAdapter.getPosition(mProductModel.getCategory());
                     binding.spinnerCategory.setSelection(position);
                 }
@@ -256,16 +251,16 @@ public class AddOrUpdateProductFragment extends Fragment {
         });
 
         productManagementViewModel.getFileLiveData().observe(getViewLifecycleOwner(), fileData -> {
-            if (fileData != null){
-                thumbnailUrl = fileData.getData().getFileLink();
+            if (fileData != null) {
+                thumbnailUrl = fileData.getFileLink();
                 thumbnailUploadResult = true;
                 checkUploadStatus();
             }
         });
 
         productManagementViewModel.getFilesLiveData().observe(getViewLifecycleOwner(), filesData -> {
-            if (filesData != null){
-                for (UploadMultipleFileResponse.FileData fileData : filesData.getData()){
+            if (filesData != null) {
+                for (FileData fileData : filesData) {
                     sliderUrls.add(fileData.getFileLink());
                 }
                 sliderUploadResult = true;
@@ -275,7 +270,7 @@ public class AddOrUpdateProductFragment extends Fragment {
 
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnUploadThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -302,16 +297,16 @@ public class AddOrUpdateProductFragment extends Fragment {
 
     }
 
-    private void handleStatus(){
+    private void handleStatus() {
         productManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
-            if (apiResult != null){
-                switch(apiResult.getStatus()){
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        switch (apiResult.getMessage()){
+                        switch (apiResult.getMessage()) {
                             case "updateProduct":
                                 requireActivity().getSupportFragmentManager().popBackStack();
                                 break;
@@ -329,9 +324,9 @@ public class AddOrUpdateProductFragment extends Fragment {
         });
     }
 
-    private void setupSpinnerCategory(){
+    private void setupSpinnerCategory() {
         categoryAdapter = new ArrayAdapter<CategoryModel>(
-                requireContext(), android.R.layout.simple_spinner_item, mListCategory){
+                requireContext(), android.R.layout.simple_spinner_item, mListCategory) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -364,7 +359,7 @@ public class AddOrUpdateProductFragment extends Fragment {
         });
     }
 
-    private void setupSpinnerBrand(){
+    private void setupSpinnerBrand() {
         brandAdapter = new ArrayAdapter<BrandModel>(
                 requireContext(), android.R.layout.simple_spinner_item, mListBrand) {
             @NonNull
@@ -399,7 +394,7 @@ public class AddOrUpdateProductFragment extends Fragment {
         });
     }
 
-    private void setupSliderImage(){
+    private void setupSliderImage() {
         sliderUrls.clear();
         sliderImageAdapter = new SliderImageAdapter(new ArrayList<>());
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -407,7 +402,7 @@ public class AddOrUpdateProductFragment extends Fragment {
         binding.rcvSliderImages.setAdapter(sliderImageAdapter);
     }
 
-    private void updateProduct(){
+    private void updateProduct() {
         String name = binding.etName.getText().toString().trim();
         String model = binding.etModel.getText().toString().trim();
         String cpu = binding.etCpu.getText().toString().trim();
@@ -418,7 +413,8 @@ public class AddOrUpdateProductFragment extends Fragment {
         String gpu = binding.etGpu.getText().toString().trim();
         String screen = binding.etScreen.getText().toString().trim();
 
-        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");;
+        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");
+        ;
 
         String description = binding.etDescription.getText().toString().trim();
 
@@ -464,7 +460,7 @@ public class AddOrUpdateProductFragment extends Fragment {
         productManagementViewModel.updateProduct(productRequest);
     }
 
-    private void createProduct(){
+    private void createProduct() {
         String name = binding.etName.getText().toString().trim();
         String model = binding.etModel.getText().toString().trim();
         String cpu = binding.etCpu.getText().toString().trim();
@@ -475,7 +471,8 @@ public class AddOrUpdateProductFragment extends Fragment {
         String gpu = binding.etGpu.getText().toString().trim();
         String screen = binding.etScreen.getText().toString().trim();
 
-        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");;
+        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");
+        ;
 
         String description = binding.etDescription.getText().toString().trim();
         String weight = binding.etWeight.getText().toString().trim();
@@ -518,8 +515,8 @@ public class AddOrUpdateProductFragment extends Fragment {
         productManagementViewModel.createProduct(createProductRequest);
     }
 
-    private void uploadFile(){
-        if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED){
+    private void uploadFile() {
+        if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
             String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
@@ -527,7 +524,7 @@ public class AddOrUpdateProductFragment extends Fragment {
         }
     }
 
-    private void openFile(){
+    private void openFile() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
@@ -552,6 +549,7 @@ public class AddOrUpdateProductFragment extends Fragment {
 
         activityResultLauncherSlider.launch(intent);
     }
+
     private void callApiUploadFile() {
         String folder = "product";
         RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("text/plain"), folder);
@@ -612,7 +610,7 @@ public class AddOrUpdateProductFragment extends Fragment {
 
     private void proceedUpload() {
         hasProcessedProduct = false;
-        if (thumbnailUri != null){
+        if (thumbnailUri != null) {
             callApiUploadFile();
         }
         if (!sliderUris.isEmpty()) {

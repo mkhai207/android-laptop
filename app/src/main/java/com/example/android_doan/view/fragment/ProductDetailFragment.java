@@ -3,6 +3,10 @@ package com.example.android_doan.view.fragment;
 import static com.example.android_doan.view.fragment.ProductBottomSheetFragment.ACTION_KEY;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,21 +15,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.ProductDetailViewPager2Adapter;
-import com.example.android_doan.data.model.request.AddToCartRequest;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.ProductModel;
+import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.repository.RemoteRepository.ProductDetailRepository;
 import com.example.android_doan.databinding.FragmentProductDetailBinding;
 import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.viewmodel.ProductDetailViewModel;
-import com.example.android_doan.viewmodel.ProductDetailViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +45,15 @@ public class ProductDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
-        if (bundle != null){
+        if (bundle != null) {
             productModel = (ProductModel) bundle.getSerializable("product");
         }
-        ProductDetailRepository productDetailRepository = new ProductDetailRepository();
+
         productDetailViewModel =
                 new ViewModelProvider(
                         this,
-                        new ProductDetailViewModelFactory(productDetailRepository)).get(ProductDetailViewModel.class);
+                        new BaseViewModelFactory<ProductDetailRepository>(new ProductDetailRepository(), ProductDetailViewModel.class)
+                ).get(ProductDetailViewModel.class);
     }
 
     @Override
@@ -73,16 +73,17 @@ public class ProductDetailFragment extends Fragment {
         setupListener();
         observer();
     }
-    private void setupViewPager2(){
+
+    private void setupViewPager2() {
         List<String> slider = productModel.getSlider();
-        if (slider != null){
+        if (slider != null) {
             viewPager2Adapter = new ProductDetailViewPager2Adapter(slider);
             binding.viewPager2.setAdapter(viewPager2Adapter);
             binding.circleIndicator3.setViewPager(binding.viewPager2);
         }
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,7 +136,7 @@ public class ProductDetailFragment extends Fragment {
                         GetCartResponse.Data data = new GetCartResponse.Data(product.getQuantity(), productModel);
                         ArrayList<GetCartResponse.Data> carts = new ArrayList<>();
                         carts.add(data);
-                        if (carts.isEmpty()){
+                        if (carts.isEmpty()) {
                             return;
                         }
                         double total = product.getQuantity() * productModel.getPrice();
@@ -155,8 +156,8 @@ public class ProductDetailFragment extends Fragment {
         });
     }
 
-    private void setupUI(){
-        if (productModel == null){
+    private void setupUI() {
+        if (productModel == null) {
             return;
         }
         binding.tvDescriptionContent.setText(productModel.getDescription());
@@ -173,16 +174,16 @@ public class ProductDetailFragment extends Fragment {
         binding.tvOtherInfo.setText(other);
     }
 
-    private void observer(){
+    private void observer() {
         productDetailViewModel.getProductLiveData().observe(getViewLifecycleOwner(), productModel1 -> {
-            if (productModel != null){
+            if (productModel != null) {
 
             }
         });
     }
 
-    private void showMoreDescription(){
-        if (isExpanded){
+    private void showMoreDescription() {
+        if (isExpanded) {
             binding.tvDescriptionContent.setMaxLines(3);
             hiddenLayout.setVisibility(View.GONE);
             binding.btnSeeMore.setText(R.string.see_more);

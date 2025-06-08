@@ -8,16 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,17 +18,25 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.bumptech.glide.Glide;
 import com.example.android_doan.R;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.RoleModel;
-import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.CreateUserRequest;
 import com.example.android_doan.data.repository.RemoteRepository.UserManagementRepository;
 import com.example.android_doan.databinding.FragmentAddUserBinding;
 import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.utils.RealPathUtil;
 import com.example.android_doan.viewmodel.UserManagementViewModel;
-import com.example.android_doan.viewmodel.UserManagementViewModelFactory;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -60,25 +58,14 @@ public class AddUserFragment extends Fragment {
     private Uri avatarUri;
     private RoleModel selectedRole;
     private Calendar selectedDate;
-
-    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-        @Override
-        public void onActivityResult(Boolean isGranted) {
-            if(isGranted){
-                openFile();
-            } else{
-                Toast.makeText(requireContext(), "Bạn không có quyền truy cập ảnh!", Toast.LENGTH_LONG).show();
-            }
-        }
-    });
     private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
-            if (o.getResultCode() == Activity.RESULT_OK){
+            if (o.getResultCode() == Activity.RESULT_OK) {
                 Intent intent = o.getData();
                 if (intent != null) {
                     avatarUri = intent.getData();
-                    if (avatarUri != null){
+                    if (avatarUri != null) {
                         Glide.with(requireContext())
                                 .load(avatarUri)
                                 .error(R.drawable.ic_user)
@@ -89,15 +76,25 @@ public class AddUserFragment extends Fragment {
             }
         }
     });
+    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+        @Override
+        public void onActivityResult(Boolean isGranted) {
+            if (isGranted) {
+                openFile();
+            } else {
+                Toast.makeText(requireContext(), "Bạn không có quyền truy cập ảnh!", Toast.LENGTH_LONG).show();
+            }
+        }
+    });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         selectedDate = Calendar.getInstance();
 
-        UserManagementRepository userManagementRepository = new UserManagementRepository();
         userManagementViewModel = new ViewModelProvider(
-                this, new UserManagementViewModelFactory(userManagementRepository)
+                this,
+                new BaseViewModelFactory<UserManagementRepository>(new UserManagementRepository(), UserManagementViewModel.class)
         ).get(UserManagementViewModel.class);
     }
 
@@ -123,19 +120,20 @@ public class AddUserFragment extends Fragment {
         binding = null;
     }
 
-    private void observer(){
+    private void observer() {
         userManagementViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user -> {
             requireActivity().getSupportFragmentManager().popBackStack();
         });
 
         userManagementViewModel.getFileLiveData().observe(getViewLifecycleOwner(), fileData -> {
-            if (fileData != null){
-                avatarStr = fileData.getData().getFileName();
+            if (fileData != null) {
+                avatarStr = fileData.getFileName();
                 createUser();
             }
         });
     }
-    private void setupSpinner(){
+
+    private void setupSpinner() {
         // setup spinner role
         List<RoleModel> roles = new ArrayList<>();
         roles.add(new RoleModel(1, "Admin"));
@@ -185,11 +183,11 @@ public class AddUserFragment extends Fragment {
         binding.spinnerGender.setAdapter(adapterGender);
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (avatarUri != null){
+                if (avatarUri != null) {
                     callApiUploadFile();
                 } else {
                     createUser();
@@ -214,8 +212,8 @@ public class AddUserFragment extends Fragment {
         });
     }
 
-    private void uploadAvt(){
-        if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED){
+    private void uploadAvt() {
+        if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
             String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
@@ -223,14 +221,15 @@ public class AddUserFragment extends Fragment {
         }
     }
 
-    private void openFile(){
+    private void openFile() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
 
         activityResultLauncher.launch(intent);
     }
-    private void callApiUploadFile(){
+
+    private void callApiUploadFile() {
         String folder = "avatar";
         RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
         String realPathAvt = RealPathUtil.getRealPath(requireContext(), avatarUri);
@@ -263,7 +262,7 @@ public class AddUserFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    private void createUser(){
+    private void createUser() {
         binding.switchActive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -281,7 +280,8 @@ public class AddUserFragment extends Fragment {
         CreateUserRequest request = new CreateUserRequest(email, password, fullName, address, avatarStr, birthDay, gender, phone, selectedRole);
         userManagementViewModel.createUser(request);
     }
-    private void handleStatus(){
+
+    private void handleStatus() {
 
     }
 }

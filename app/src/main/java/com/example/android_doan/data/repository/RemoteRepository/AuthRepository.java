@@ -1,24 +1,26 @@
 package com.example.android_doan.data.repository.RemoteRepository;
 
+import com.example.android_doan.base.BaseResponse;
 import com.example.android_doan.data.api.login.LoginService;
 import com.example.android_doan.data.api.user.ApiService;
+import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.LoginRequest;
-import com.example.android_doan.data.model.response.CommonResponse;
+import com.example.android_doan.data.model.request.RegisterRequest;
 import com.example.android_doan.data.model.response.LoginResponse;
 
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class AuthRepository {
-    public Single<LoginResponse> login(LoginRequest loginRequest){
-        return LoginService.getInstance().login(loginRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public Single<LoginResponse> login(LoginRequest loginRequest) {
+        return LoginService.getInstance().login(loginRequest);
     }
 
-    public Single<CommonResponse> logout(){
+    public Single<BaseResponse<UserModel>> register(RegisterRequest registerRequest) {
+        return LoginService.getInstance().register(registerRequest);
+    }
+
+    public Single<BaseResponse<String>> logout() {
         return ApiService.getInstance().logout();
     }
 }

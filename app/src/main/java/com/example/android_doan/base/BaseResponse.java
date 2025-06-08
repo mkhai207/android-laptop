@@ -1,12 +1,11 @@
-package com.example.android_doan.data.model.response;
+package com.example.android_doan.base;
 
-import com.example.android_doan.data.model.UserModel;
-
-public class CreateUserResponse {
+public class BaseResponse<T> {
     private int statusCode;
     private String error;
     private String message;
-    private UserModel data;
+
+    private T data;
 
     public int getStatusCode() {
         return statusCode;
@@ -20,7 +19,7 @@ public class CreateUserResponse {
         return message;
     }
 
-    public UserModel getData() {
+    public T getData() {
         return data;
     }
 }

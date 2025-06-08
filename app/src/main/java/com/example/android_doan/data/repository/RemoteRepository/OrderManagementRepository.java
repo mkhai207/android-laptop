@@ -1,19 +1,19 @@
 package com.example.android_doan.data.repository.RemoteRepository;
 
+import com.example.android_doan.base.BasePagingResponse;
+import com.example.android_doan.base.BaseResponse;
 import com.example.android_doan.data.api.user.ApiService;
 import com.example.android_doan.data.model.request.UpdateOrderRequest;
-import com.example.android_doan.data.model.response.CommonResponse;
-import com.example.android_doan.data.model.response.GetAllOrderResponse;
-import com.example.android_doan.data.model.response.UpdateOrderResponse;
+import com.example.android_doan.data.model.response.OrderAdminResponse;
 
 import io.reactivex.Single;
 
 public class OrderManagementRepository {
-    public Single<GetAllOrderResponse> getAllOrder(String filter){
+    public Single<BaseResponse<BasePagingResponse<OrderAdminResponse>>> getAllOrder(String filter) {
         return ApiService.getInstance().getAllOrder(filter);
     }
 
-    public Single<UpdateOrderResponse> updateOrder(UpdateOrderRequest request){
+    public Single<BaseResponse<OrderAdminResponse>> updateOrder(UpdateOrderRequest request) {
         return ApiService.getInstance().updateOrder(request);
     }
 }

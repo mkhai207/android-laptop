@@ -5,11 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
@@ -19,25 +17,24 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.example.android_doan.R;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.repository.RemoteRepository.AdminHomeRepository;
 import com.example.android_doan.data.repository.RemoteRepository.AuthRepository;
 import com.example.android_doan.databinding.ActivityAdminBinding;
 import com.example.android_doan.databinding.DrawerHeaderBinding;
 import com.example.android_doan.viewmodel.AdminHomeViewModel;
-import com.example.android_doan.viewmodel.AdminHomeViewModelFactory;
 import com.example.android_doan.viewmodel.AuthViewModel;
-import com.example.android_doan.viewmodel.AuthViewModelFactory;
 import com.google.android.material.navigation.NavigationView;
 
 public class AdminActivity extends AppCompatActivity {
     private ActivityAdminBinding adminActivityBinding;
     private AuthViewModel authViewModel;
     private AdminHomeViewModel adminHomeViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +53,7 @@ public class AdminActivity extends AppCompatActivity {
         handleActionBack();
     }
 
-    private void setupToolbar(){
+    private void setupToolbar() {
         setSupportActionBar(adminActivityBinding.toolbar);
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
 //                this,
@@ -78,7 +75,7 @@ public class AdminActivity extends AppCompatActivity {
         });
     }
 
-    private void setupDrawerListener(){
+    private void setupDrawerListener() {
         //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
@@ -111,19 +108,20 @@ public class AdminActivity extends AppCompatActivity {
         }
     }
 
-    private void init(){
+    private void init() {
         AuthRepository authRepository = new AuthRepository();
         authViewModel = new ViewModelProvider(
                 this,
-                new AuthViewModelFactory(this, authRepository)).get(AuthViewModel.class);
+                new BaseViewModelFactory<AuthRepository>(new AuthRepository(), AuthViewModel.class)
+        ).get(AuthViewModel.class);
 
-        AdminHomeRepository adminHomeRepository = new AdminHomeRepository();
         adminHomeViewModel = new ViewModelProvider(
                 this,
-                new AdminHomeViewModelFactory(adminHomeRepository)).get(AdminHomeViewModel.class);
+                new BaseViewModelFactory<AdminHomeRepository>(new AdminHomeRepository(), AdminHomeViewModel.class)
+        ).get(AdminHomeViewModel.class);
     }
 
-    private void handleActionBack(){
+    private void handleActionBack() {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -165,12 +163,12 @@ public class AdminActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void setupDataDrawerHeader(){
+    private void setupDataDrawerHeader() {
         DrawerHeaderBinding headerBinding =
                 DrawerHeaderBinding.bind(adminActivityBinding.navView.getHeaderView(0));
         adminHomeViewModel.getUser();
         adminHomeViewModel.getUserLiveData().observe(this, userModel -> {
-            if (userModel != null){
+            if (userModel != null) {
                 Glide.with(this)
                         .load(userModel.getAvatar())
                         .error(R.drawable.ic_user)

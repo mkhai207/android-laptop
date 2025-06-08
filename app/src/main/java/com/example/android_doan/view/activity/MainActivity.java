@@ -2,8 +2,6 @@ package com.example.android_doan.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
@@ -15,7 +13,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.android_doan.R;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
-import com.example.android_doan.viewmodel.AuthViewModel;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -25,8 +22,8 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 public class MainActivity extends AppCompatActivity {
-    private InterstitialAd mInterstitialAd;
     private static final String TAG = "MainActivity";
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,46 +40,22 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(this, initializationStatus -> {
             loadInterstitialAd();
         });
-
-        // phan quyen login
-//        new Handler(Looper.getMainLooper()).postDelayed(()->{
-//            if (mInterstitialAd != null) {
-//                mInterstitialAd.show(MainActivity.this);
-//                mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-//                    @Override
-//                    public void onAdDismissedFullScreenContent() {
-//                        navigateToNextScreen();
-//                        mInterstitialAd = null;
-//                    }
-//
-//                    @Override
-//                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-//                        Log.e(TAG, "Ad failed to show: " + adError.getMessage());
-//                        navigateToNextScreen();
-//                        mInterstitialAd = null;
-//                    }
-//
-//                    @Override
-//                    public void onAdShowedFullScreenContent() {
-//                        Log.i(TAG, "Ad showed full screen content");
-//                    }
-//                });
-//            } else {
-//                navigateToNextScreen();
-//            }
-//        }, 1000);
     }
 
-    private void navigateToNextScreen(){
+    private void navigateToNextScreen() {
         String accessToken = DataLocalManager.getAccessToken();
         String role = DataLocalManager.getRole();
-        if (accessToken != null && !accessToken.isEmpty()){
-            switch (role){
+        if (accessToken != null && !accessToken.isEmpty()) {
+            switch (role) {
                 case "CUSTOMER":
-                    startActivity(new Intent(this, HomeActivity.class));
+                    startActivity(new Intent(this, HomeActivity.class).setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    ));
                     break;
                 case "SUPER_ADMIN":
-                    startActivity(new Intent(this, AdminActivity.class));
+                    startActivity(new Intent(this, AdminActivity.class).setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    ));
                     break;
                 default:
                     break;
@@ -92,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadInterstitialAd(){
+    private void loadInterstitialAd() {
         AdRequest adRequest = new AdRequest.Builder().build();
 
-        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest,
+        InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
@@ -103,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i(TAG, "onAdLoaded");
                         showInterstitialAd();
                     }
+
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                         Log.d(TAG, loadAdError.toString());

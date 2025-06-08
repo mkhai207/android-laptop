@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,11 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.android_doan.R;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.ChangePasswordRequest;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
@@ -43,7 +39,6 @@ import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.utils.RealPathUtil;
 import com.example.android_doan.view.activity.LoginActivity;
 import com.example.android_doan.viewmodel.SettingViewModel;
-import com.example.android_doan.viewmodel.SettingViewModelFactory;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -103,8 +98,11 @@ public class SettingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSettingBinding.inflate(inflater, container, false);
-        SettingRepository repository = new SettingRepository();
-        settingViewModel = new ViewModelProvider(requireActivity(), new SettingViewModelFactory(repository)).get(SettingViewModel.class);
+
+        settingViewModel = new ViewModelProvider(
+                requireActivity(),
+                new BaseViewModelFactory<SettingRepository>(new SettingRepository(), SettingViewModel.class)
+        ).get(SettingViewModel.class);
 
         return binding.getRoot();
     }
@@ -148,9 +146,9 @@ public class SettingFragment extends Fragment {
     }
 
     private void observer() {
-        settingViewModel.getUserInfo().observe(getViewLifecycleOwner(), userResponse -> {
-            if (userResponse != null && userResponse.getData() != null) {
-                bindData(userResponse.getData());
+        settingViewModel.getUserInfo().observe(getViewLifecycleOwner(), userModel -> {
+            if (userModel != null) {
+                bindData(userModel);
             }
         });
 
@@ -162,35 +160,41 @@ public class SettingFragment extends Fragment {
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        CustomToast.showToast(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT);
-//                        Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d("lkhai4617", actionResult.getMessage());
                         if (DataLocalManager.getAccessToken() == null) {
                             Intent intent = new Intent(requireContext(), LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             requireActivity().finish();
                         }
+
+                        switch (actionResult.getMessage()) {
+                            case "getUser":
+                                // Do nothing, data is already set in observer
+                                break;
+                            case "updateUser":
+                                Log.d("lkhai4617", actionResult.getMessage());
+                                CustomToast.showToast(requireContext(), "Thành công", Toast.LENGTH_SHORT);
+                                break;
+                        }
                         break;
                     case ERROR:
-                        binding.progressBar.setVisibility(View.VISIBLE);
-//                        Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
-                        CustomToast.showToast(requireContext(), actionResult.getMessage(), 2000);
+                        binding.progressBar.setVisibility(View.GONE);
+                        Log.d("lkhai4617", actionResult.getMessage());
                         break;
                 }
             }
         });
 
-        settingViewModel.getFileData().observe(getViewLifecycleOwner(), data -> {
-            if (data != null) {
-                avatarStr = data.getData().getFileLink();
-
+        settingViewModel.getFileData().observe(getViewLifecycleOwner(), file -> {
+            if (file != null) {
+                avatarStr = file.getFileLink();
                 int userId = Integer.parseInt(DataLocalManager.getUserId());
                 String fullname = binding.edtFullName.getText().toString();
                 String address = binding.edtAddress.getText().toString();
                 String birthday = FormatUtil.formatToIsoDate(binding.edtBirthday.getText().toString());
                 String gender = binding.spinnerGender.getSelectedItem().toString();
                 String phone = binding.edtPhone.getText().toString();
-                String shoppingAddress = binding.edtShoppingAddress.getText().toString();
 
                 UserModel userModel = new UserModel(userId, true, avatarStr, fullname, address, phone, gender, birthday);
                 Log.d("lkhai4617", "onClick: " + avatarStr);
@@ -201,31 +205,10 @@ public class SettingFragment extends Fragment {
 
     private void bindData(UserModel userModel) {
         if (userModel.getAvatar() != null) {
-//            avatarStr = userModel.getAvatar();
-//            String accessToken = DataLocalManager.getAccessToken();
-
-//            GlideUrl glideUrl = new GlideUrl("http://192.168.50.2:8080/storage/avatar/" + userModel.getAvatar(), ()-> {
-//                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer " + accessToken);
-//                return headers;
-//            });
-            Log.d("lkhai4617", "bindData: " + userModel.getAvatar());
+            avatarStr = userModel.getAvatar();
             Glide.with(requireContext())
                     .load(userModel.getAvatar())
                     .error(R.drawable.ic_user)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            Log.e("lkhai4617", "Glide load failed: " + (e != null ? e.getMessage() : "Unknown error"));
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            Log.d("lkhai4617", "Glide load success");
-                            return false;
-                        }
-                    })
                     .into(binding.ivAvatar);
         }
 
@@ -270,7 +253,6 @@ public class SettingFragment extends Fragment {
                     binding.edtBirthday.setEnabled(true);
                     binding.spinnerGender.setEnabled(true);
                     binding.edtPhone.setEnabled(true);
-                    binding.edtShoppingAddress.setEnabled(true);
                     binding.ivEdit.setVisibility(View.VISIBLE);
                 } else {
                     binding.tvChangeAccount.setText(requireContext().getResources().getString(R.string.change));
@@ -280,13 +262,11 @@ public class SettingFragment extends Fragment {
                     binding.edtBirthday.setEnabled(false);
                     binding.spinnerGender.setEnabled(false);
                     binding.edtPhone.setEnabled(false);
-                    binding.edtShoppingAddress.setEnabled(false);
                     binding.ivEdit.setVisibility(View.GONE);
 
                     if (avtUri != null) {
                         callApiUploadFile();
-                    }
-                    {
+                    } else {
                         updateUser();
                     }
                 }

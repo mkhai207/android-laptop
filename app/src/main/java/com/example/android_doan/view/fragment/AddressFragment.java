@@ -1,12 +1,14 @@
 package com.example.android_doan.view.fragment;
 
 import static com.example.android_doan.view.fragment.AddOrUpdateAddressFragment.ADDRESS_KEY;
-import static com.example.android_doan.view.fragment.AddOrUpdateBrandFragment.BRAND_MODEL_KEY;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,22 +19,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.AddressAdapter;
-import com.example.android_doan.data.model.BrandModel;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.response.AddressResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.AddressRepository;
 import com.example.android_doan.databinding.FragmentAddressBinding;
 import com.example.android_doan.utils.CustomToast;
-import com.example.android_doan.view.activity.LoginActivity;
 import com.example.android_doan.viewmodel.AddressViewModel;
-import com.example.android_doan.viewmodel.AddressViewModelFactory;
 
 import java.util.ArrayList;
 
@@ -46,9 +41,10 @@ public class AddressFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AddressRepository addressRepository = new AddressRepository();
-        addressViewModel =
-                new ViewModelProvider(this, new AddressViewModelFactory(addressRepository)).get(AddressViewModel.class);
+        addressViewModel = new ViewModelProvider(
+                this,
+                new BaseViewModelFactory<AddressRepository>(new AddressRepository(), AddressViewModel.class)
+        ).get(AddressViewModel.class);
     }
 
     @Override
@@ -80,7 +76,7 @@ public class AddressFragment extends Fragment {
         binding = null;
     }
 
-    private void setupRecyclerView(){
+    private void setupRecyclerView() {
         addressAdapter = new AddressAdapter(new ArrayList<>());
         rcvAddress = binding.rcvAddress;
         rcvAddress.setAdapter(addressAdapter);
@@ -91,17 +87,17 @@ public class AddressFragment extends Fragment {
         addressAdapter.attachSwipeToDelete(rcvAddress);
     }
 
-    private void observer(){
+    private void observer() {
         String userId = DataLocalManager.getUserId();
         addressViewModel.getAddresses("user:'" + userId + "'");
         addressViewModel.getAddressesLiveData().observe(getViewLifecycleOwner(), addresses -> {
-            if (addresses != null){
+            if (addresses != null) {
                 addressAdapter.updateData(addresses);
             }
         });
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnAddAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,16 +133,16 @@ public class AddressFragment extends Fragment {
         });
     }
 
-    private void handleStatus(){
+    private void handleStatus() {
         addressViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
-            if (apiResult != null){
-                switch (apiResult.getStatus()){
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        switch (apiResult.getMessage()){
+                        switch (apiResult.getMessage()) {
                             case "deleteAddress":
                                 String userId = DataLocalManager.getUserId();
                                 addressViewModel.refresh("user:'" + userId + "'");
@@ -162,11 +158,11 @@ public class AddressFragment extends Fragment {
         });
     }
 
-    private void openAddOrUpdateAddressFragment(AddressResponse address){
+    private void openAddOrUpdateAddressFragment(AddressResponse address) {
         NavHostFragment navHostFragment =
                 (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.frag_container);
-        if (navHostFragment != null){
-            if (address != null){
+        if (navHostFragment != null) {
+            if (address != null) {
                 Bundle args = new Bundle();
                 args.putSerializable(ADDRESS_KEY, address);
 

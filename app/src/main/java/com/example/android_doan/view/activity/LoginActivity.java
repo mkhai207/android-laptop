@@ -13,9 +13,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.android_doan.R;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.repository.RemoteRepository.AuthRepository;
 import com.example.android_doan.viewmodel.AuthViewModel;
-import com.example.android_doan.viewmodel.AuthViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
     private AuthViewModel authViewModel;
@@ -32,9 +32,10 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // init viewmodel
-        AuthRepository authRepository = new AuthRepository();
-        AuthViewModelFactory authViewModelFactory = new AuthViewModelFactory(this, authRepository);
-        authViewModel = new ViewModelProvider(this, authViewModelFactory).get(AuthViewModel.class);
+        authViewModel = new ViewModelProvider(
+                this,
+                new BaseViewModelFactory<AuthRepository>(new AuthRepository(), AuthViewModel.class)
+        ).get(AuthViewModel.class);
 
 //        authViewModel.getUserLiveData().observe(this, userModel -> {
 //            Intent intent = new Intent(this, HomeActivity.class);
@@ -47,9 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 //            startActivity(intent);
 //        });
         authViewModel.getUserLiveData().observe(this, userModel -> {
-            if (userModel != null){
+            if (userModel != null) {
                 Intent intent = new Intent();
-                switch (userModel.getRole().getCode()){
+                switch (userModel.getRole().getCode()) {
                     case "CUSTOMER":
                         intent.setClass(this, HomeActivity.class);
                         break;
@@ -66,12 +67,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        authViewModel.getErrorLiveData().observe(this, error-> {
+        authViewModel.getErrorLiveData().observe(this, error -> {
             Log.d("lkhai4617", error);
             Toast.makeText(this, error, Toast.LENGTH_LONG).show();
         });
 
-        authViewModel.getStatusRegister().observe(this, isSuccess->{
+        authViewModel.getStatusRegister().observe(this, isSuccess -> {
             getSupportFragmentManager().popBackStack();
         });
     }

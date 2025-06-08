@@ -5,6 +5,10 @@ import static com.example.android_doan.view.fragment.AddOrUpdateCategoryFragment
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,22 +19,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.CategoryAdapter;
-import com.example.android_doan.adapter.UserAdapter;
-import com.example.android_doan.data.model.BrandModel;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.CategoryModel;
 import com.example.android_doan.data.repository.RemoteRepository.CategoryManagementRepository;
 import com.example.android_doan.databinding.FragmentCategoryManagementBinding;
 import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.Resource;
 import com.example.android_doan.viewmodel.CategoryManagementViewModel;
-import com.example.android_doan.viewmodel.CategoryManagementViewModelFactory;
 
 import java.util.ArrayList;
 
@@ -39,14 +36,14 @@ public class CategoryManagementFragment extends Fragment {
     private CategoryManagementViewModel categoryManagementViewModel;
     private RecyclerView rcvCategories;
     private CategoryAdapter categoryAdapter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CategoryManagementRepository categoryManagementRepository = new CategoryManagementRepository();
         categoryManagementViewModel = new ViewModelProvider(
                 this,
-                new CategoryManagementViewModelFactory(categoryManagementRepository)
+                new BaseViewModelFactory<CategoryManagementRepository>(new CategoryManagementRepository(), CategoryManagementViewModel.class)
         ).get(CategoryManagementViewModel.class);
     }
 
@@ -79,7 +76,7 @@ public class CategoryManagementFragment extends Fragment {
         binding = null;
     }
 
-    private void setupRecyclerView(){
+    private void setupRecyclerView() {
         rcvCategories = binding.rcvCategory;
         categoryAdapter = new CategoryAdapter(new ArrayList<>());
         rcvCategories.setAdapter(categoryAdapter);
@@ -91,10 +88,10 @@ public class CategoryManagementFragment extends Fragment {
         categoryAdapter.attachSwipeToDelete(rcvCategories);
     }
 
-    private void getAllCategory(){
+    private void getAllCategory() {
         categoryManagementViewModel.loadNextPage();
         categoryManagementViewModel.getCategoriesLiveData().observe(getViewLifecycleOwner(), categories -> {
-            if (categories != null && !categories.isEmpty()){
+            if (categories != null && !categories.isEmpty()) {
                 categoryAdapter.updateData(categories);
                 Log.d("lkhai4617", "getAllUser: oke " + categories.size());
             }
@@ -108,9 +105,9 @@ public class CategoryManagementFragment extends Fragment {
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0){
+                if (dy > 0) {
                     LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    if (layoutManager != null){
+                    if (layoutManager != null) {
                         int visibleItemCount = layoutManager.getChildCount();
                         int totalItemCount = layoutManager.getItemCount();
                         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
@@ -125,16 +122,16 @@ public class CategoryManagementFragment extends Fragment {
         });
     }
 
-    private void handleStatus(){
+    private void handleStatus() {
         categoryManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
-            if (apiResult != null){
-                switch (apiResult.getStatus()){
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        switch (apiResult.getMessage()){
+                        switch (apiResult.getMessage()) {
                             case "deleteCategory":
                                 categoryManagementViewModel.refresh();
                                 CustomToast.showToast(requireContext(), "Thành công", 2000);
@@ -149,7 +146,7 @@ public class CategoryManagementFragment extends Fragment {
         });
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,11 +167,11 @@ public class CategoryManagementFragment extends Fragment {
         });
     }
 
-    private void openAddOrUpdateCategoryFragment(CategoryModel categoryModel){
+    private void openAddOrUpdateCategoryFragment(CategoryModel categoryModel) {
         NavHostFragment navHostFragment =
                 (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        if (navHostFragment != null){
-            if (categoryModel != null){
+        if (navHostFragment != null) {
+            if (categoryModel != null) {
                 Bundle args = new Bundle();
                 args.putSerializable(CATEGORY_MODEL_KEY, categoryModel);
 

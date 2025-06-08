@@ -1,24 +1,22 @@
 package com.example.android_doan.view.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.example.android_doan.R;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.model.request.CreateBrandRequest;
 import com.example.android_doan.data.repository.RemoteRepository.BrandManagementRepository;
 import com.example.android_doan.databinding.FragmentAddOrUpdateBrandBinding;
 import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.viewmodel.BrandManagementViewModel;
-import com.example.android_doan.viewmodel.BrandManagementViewModelFactory;
 
 public class AddOrUpdateBrandFragment extends Fragment {
     public static final String BRAND_MODEL_KEY = "com.example.android_doan.view.fragment.BRAND_MODEL_KEY";
@@ -34,10 +32,9 @@ public class AddOrUpdateBrandFragment extends Fragment {
             brandModel = (BrandModel) args.getSerializable(BRAND_MODEL_KEY);
         }
 
-        BrandManagementRepository brandManagementRepository = new BrandManagementRepository();
         brandManagementViewModel = new ViewModelProvider(
                 this,
-                new BrandManagementViewModelFactory(brandManagementRepository)
+                new BaseViewModelFactory<BrandManagementRepository>(new BrandManagementRepository(), BrandManagementViewModel.class)
         ).get(BrandManagementViewModel.class);
     }
 
@@ -62,17 +59,17 @@ public class AddOrUpdateBrandFragment extends Fragment {
         binding = null;
     }
 
-    private void setupData(){
-        if (brandModel != null){
+    private void setupData() {
+        if (brandModel != null) {
             binding.etName.setText(brandModel.getName());
         }
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (brandModel != null){
+                if (brandModel != null) {
                     updateBrand();
                 } else {
                     createBrand();
@@ -81,16 +78,16 @@ public class AddOrUpdateBrandFragment extends Fragment {
         });
     }
 
-    private void handleStatus(){
+    private void handleStatus() {
         brandManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
-            if (apiResult != null){
-                switch(apiResult.getStatus()){
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        switch (apiResult.getMessage()){
+                        switch (apiResult.getMessage()) {
                             case "createBrand":
                                 requireActivity().getSupportFragmentManager().popBackStack();
                                 break;
@@ -108,13 +105,13 @@ public class AddOrUpdateBrandFragment extends Fragment {
         });
     }
 
-    private void updateBrand(){
+    private void updateBrand() {
         String name = binding.etName.getText().toString();
         int id = brandModel.getId();
         brandManagementViewModel.updateBrand(new BrandModel(id, name));
     }
 
-    private void createBrand(){
+    private void createBrand() {
         String name = binding.etName.getText().toString();
         brandManagementViewModel.createBrand(new CreateBrandRequest(name));
     }

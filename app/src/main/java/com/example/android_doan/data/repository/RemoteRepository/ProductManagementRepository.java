@@ -1,15 +1,14 @@
 package com.example.android_doan.data.repository.RemoteRepository;
 
+import com.example.android_doan.base.BasePagingResponse;
+import com.example.android_doan.base.BaseResponse;
 import com.example.android_doan.data.api.user.ApiService;
+import com.example.android_doan.data.model.BrandModel;
+import com.example.android_doan.data.model.CategoryModel;
+import com.example.android_doan.data.model.FileData;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.request.CreateProductRequest;
 import com.example.android_doan.data.model.request.UpdateProductRequest;
-import com.example.android_doan.data.model.response.BrandResponse;
-import com.example.android_doan.data.model.response.CreateProductResponse;
-import com.example.android_doan.data.model.response.GetAllCategoriesResponse;
-import com.example.android_doan.data.model.response.ProductResponse;
-import com.example.android_doan.data.model.response.UploadFileResponse;
-import com.example.android_doan.data.model.response.UploadMultipleFileResponse;
 
 import java.util.List;
 
@@ -18,31 +17,31 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class ProductManagementRepository {
-    public Single<ProductResponse> getAllProduct(int page, int size, String sort, String filter){
+    public Single<BaseResponse<BasePagingResponse<ProductModel>>> getAllProduct(int page, int size, String sort, String filter) {
         return ApiService.getInstance().getAllProduct(page, size, sort, filter);
     }
 
-    public Single<CreateProductResponse> createProduct(CreateProductRequest request){
+    public Single<BaseResponse<ProductModel>> createProduct(CreateProductRequest request) {
         return ApiService.getInstance().createProduct(request);
     }
 
-    public Single<CreateProductResponse> updateProduct(UpdateProductRequest request){
+    public Single<BaseResponse<ProductModel>> updateProduct(UpdateProductRequest request) {
         return ApiService.getInstance().updateProduct(request);
     }
 
-    public Single<BrandResponse> getAllBrand(){
+    public Single<BaseResponse<BasePagingResponse<BrandModel>>> getAllBrand() {
         return ApiService.getInstance().getBrands();
     }
 
-    public Single<GetAllCategoriesResponse> getAllCategories(){
+    public Single<BaseResponse<BasePagingResponse<CategoryModel>>> getAllCategories() {
         return ApiService.getInstance().getAllCategoriesNoPage();
     }
 
-    public Single<UploadFileResponse> uploadFile(RequestBody folder, MultipartBody.Part file){
+    public Single<BaseResponse<FileData>> uploadFile(RequestBody folder, MultipartBody.Part file) {
         return ApiService.getInstance().uploadFile(folder, file);
     }
 
-    public Single<UploadMultipleFileResponse> uploadMultipleFile(RequestBody folder, List<MultipartBody.Part> files){
+    public Single<BaseResponse<List<FileData>>> uploadMultipleFile(RequestBody folder, List<MultipartBody.Part> files) {
         return ApiService.getInstance().uploadMultipleFile(folder, files);
     }
 }

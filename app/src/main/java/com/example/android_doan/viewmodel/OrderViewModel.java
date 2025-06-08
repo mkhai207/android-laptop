@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.android_doan.data.api.user.ApiService;
+import com.example.android_doan.data.model.OrderData;
 import com.example.android_doan.data.model.response.Meta;
-import com.example.android_doan.data.model.response.OrderResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.OrderRepository;
 import com.example.android_doan.utils.Resource;
@@ -23,23 +23,24 @@ import io.reactivex.schedulers.Schedulers;
 public class OrderViewModel extends ViewModel {
     private OrderRepository repository;
     private CompositeDisposable disposables = new CompositeDisposable();
-    private MutableLiveData<List<OrderResponse.OrderData>> orderLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<OrderData>> orderLiveData = new MutableLiveData<>();
     private MutableLiveData<Resource> actionResult = new MutableLiveData<>(new Resource(Resource.Status.SUCCESS, ""));
 
     private int currentPage = 0;
     private int pages = 1;
     private int pageSize = 5;
-    private List<OrderResponse.OrderData> mListOrder = new ArrayList<>();
+    private List<OrderData> mListOrder = new ArrayList<>();
 
-    public MutableLiveData<List<OrderResponse.OrderData>> getOrderLiveData(){
+    public OrderViewModel(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    public MutableLiveData<List<OrderData>> getOrderLiveData() {
         return orderLiveData;
     }
 
-    public MutableLiveData<Resource> getActionResult(){
+    public MutableLiveData<Resource> getActionResult() {
         return actionResult;
-    }
-    public OrderViewModel(OrderRepository repository) {
-        this.repository = repository;
     }
 
 //    public void getOrders(String userId){
@@ -62,8 +63,8 @@ public class OrderViewModel extends ViewModel {
 //        disposables.add(disposable);
 //    }
 
-    public void getOrders(int page){
-        if (actionResult.getValue().getStatus() == Resource.Status.LOADING || page > pages){
+    public void getOrders(int page) {
+        if (actionResult.getValue().getStatus() == Resource.Status.LOADING || page > pages) {
             return;
         }
         actionResult.setValue(Resource.loading());
@@ -72,30 +73,30 @@ public class OrderViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(orderResponse -> {
-                    if (orderResponse != null){
+                    if (orderResponse != null) {
                         Meta meta = orderResponse.getData().getMeta();
-                        if (meta != null){
+                        if (meta != null) {
                             currentPage = meta.getPage();
                             pageSize = meta.getPageSize();
                             pages = meta.getPages();
                         }
-                        List<OrderResponse.OrderData> orders = orderResponse.getData().getResult();
-                        if (orders != null){
+                        List<OrderData> orders = orderResponse.getData().getResult();
+                        if (orders != null) {
                             mListOrder.addAll(orders);
                             orderLiveData.setValue(mListOrder);
                             actionResult.setValue(Resource.success("Load order success"));
                         }
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null){
+                    if (throwable.getMessage() != null) {
                         actionResult.setValue(Resource.error("Load order failure"));
                     }
                 });
         disposables.add(disposable);
     }
 
-    public void loadNextPage(){
-        if (currentPage < pages){
+    public void loadNextPage() {
+        if (currentPage < pages) {
             Log.d("lkhai4617", "load next page");
             getOrders(currentPage + 1);
         }

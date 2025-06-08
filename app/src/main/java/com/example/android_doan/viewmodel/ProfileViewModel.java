@@ -21,45 +21,45 @@ public class ProfileViewModel extends ViewModel {
 
     private MutableLiveData<UserModel> userInfo = new MutableLiveData<>();
 
-    public MutableLiveData<UserModel> getUserInfo(){
-        return userInfo;
-    }
-
-    public MutableLiveData<Resource> getActionResult(){
-        return actionResult;
-    }
-
     public ProfileViewModel(ProfileRepository repository) {
         this.repository = repository;
     }
 
-    public void getAccount(String userId){
+    public MutableLiveData<UserModel> getUserInfo() {
+        return userInfo;
+    }
+
+    public MutableLiveData<Resource> getActionResult() {
+        return actionResult;
+    }
+
+    public void getAccount(String userId) {
         actionResult.setValue(Resource.loading());
         Disposable disposable = repository.getAccount()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    if (response != null && response.getUser().getUserModel() != null){
-                        userInfo.setValue(response.getUser().getUserModel());
+                    if (response != null && response.getData().getUserModel() != null) {
+                        userInfo.setValue(response.getData().getUserModel());
                         actionResult.setValue(Resource.success("Loading account info success"));
                     } else {
                         actionResult.setValue(Resource.error("Loading account info failure"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null){
+                    if (throwable.getMessage() != null) {
                         actionResult.setValue(Resource.error(throwable.getMessage()));
                     }
                 });
         disposables.add(disposable);
     }
 
-    public void logout(){
+    public void logout() {
         actionResult.setValue(Resource.loading());
         Disposable disposable = repository.logout()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    if (response != null && response.getStatusCode() == 200){
+                    if (response != null && response.getStatusCode() == 200) {
                         DataLocalManager.clearAccessToken();
                         DataLocalManager.clearRefreshToken();
                         DataLocalManager.clearUserId();
@@ -69,7 +69,7 @@ public class ProfileViewModel extends ViewModel {
                         actionResult.setValue(Resource.error("Logout failure"));
                     }
                 }, throwable -> {
-                    if (throwable.getMessage() != null){
+                    if (throwable.getMessage() != null) {
                         actionResult.setValue(Resource.error(throwable.getMessage()));
                     }
                 });

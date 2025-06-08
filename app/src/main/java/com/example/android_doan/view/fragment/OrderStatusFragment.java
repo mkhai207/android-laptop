@@ -1,6 +1,10 @@
 package com.example.android_doan.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,19 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.android_doan.adapter.OrderAdminAdapter;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.enums.OrderStatusEnum;
 import com.example.android_doan.data.model.request.UpdateOrderRequest;
 import com.example.android_doan.data.model.response.OrderAdminResponse;
 import com.example.android_doan.data.repository.RemoteRepository.OrderManagementRepository;
 import com.example.android_doan.databinding.FragmentOrderStatusBinding;
 import com.example.android_doan.utils.CustomToast;
-import com.example.android_doan.viewmodel.OrderManagementVIewModelFactory;
 import com.example.android_doan.viewmodel.OrderManagementViewModel;
 
 import java.util.ArrayList;
@@ -37,15 +36,14 @@ public class OrderStatusFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if (args != null){
+        if (args != null) {
             mStatus = (String) args.get("status");
         }
 
-        OrderManagementRepository orderManagementRepository = new OrderManagementRepository();
         orderManagementViewModel =
                 new ViewModelProvider(
                         this,
-                        new OrderManagementVIewModelFactory(orderManagementRepository)
+                        new BaseViewModelFactory<OrderManagementRepository>(new OrderManagementRepository(), OrderManagementViewModel.class)
                 ).get(OrderManagementViewModel.class);
     }
 
@@ -81,24 +79,24 @@ public class OrderStatusFragment extends Fragment {
         rcvOrder.setLayoutManager(linearLayoutManager);
     }
 
-    private void observer(){
+    private void observer() {
         orderManagementViewModel.getAllOrder("status:'" + mStatus + "'");
         orderManagementViewModel.getOrdersLiveData()
                 .observe(getViewLifecycleOwner(), orderAdminResponses -> {
-            orderAdminAdapter.updateData(orderAdminResponses);
-        });
+                    orderAdminAdapter.updateData(orderAdminResponses);
+                });
     }
 
-    private void handleStatus(){
+    private void handleStatus() {
         orderManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
-            if (apiResult != null){
-                switch (apiResult.getStatus()){
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        switch (apiResult.getMessage()){
+                        switch (apiResult.getMessage()) {
                             case "updateOrder":
                                 orderManagementViewModel.refresh("status:'" + mStatus + "'");
                                 break;
@@ -114,7 +112,7 @@ public class OrderStatusFragment extends Fragment {
         });
     }
 
-    private void setupListener(){
+    private void setupListener() {
         orderAdminAdapter.setListener(new OrderAdminAdapter.IOnClickOrder() {
             @Override
             public void onClickUpdateStatus(OrderAdminResponse orderAdminResponse) {

@@ -3,34 +3,28 @@ package com.example.android_doan.view.fragment;
 import static com.example.android_doan.view.fragment.UpdateUserFragment.USER_MODEL_KEY;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android_doan.R;
-import com.example.android_doan.adapter.ProductAdapter;
 import com.example.android_doan.adapter.UserAdapter;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.repository.RemoteRepository.UserManagementRepository;
 import com.example.android_doan.databinding.FragmentUserManagementBinding;
 import com.example.android_doan.utils.CustomToast;
-import com.example.android_doan.utils.GridSpacingItemDecoration;
 import com.example.android_doan.viewmodel.UserManagementViewModel;
-import com.example.android_doan.viewmodel.UserManagementViewModelFactory;
 
 import java.util.ArrayList;
 
@@ -43,11 +37,9 @@ public class UserManagementFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserManagementRepository userManagementRepository = new UserManagementRepository();
         userManagementViewModel = new ViewModelProvider(
-                this, new UserManagementViewModelFactory(userManagementRepository)
-                ).get(UserManagementViewModel.class);
-        Log.d("lkhai4617", "onCreate: ");
+                this, new BaseViewModelFactory<>(new UserManagementRepository(), UserManagementViewModel.class)
+        ).get(UserManagementViewModel.class);
     }
 
     @Override
@@ -87,19 +79,19 @@ public class UserManagementFragment extends Fragment {
         binding = null;
     }
 
-    private void getAllUser(){
+    private void getAllUser() {
         userManagementViewModel.loadNextPage();
         userManagementViewModel.getUsersLiveData().observe(getViewLifecycleOwner(), users -> {
-            if (users != null && !users.isEmpty()){
+            if (users != null && !users.isEmpty()) {
                 userAdapter.updateData(users);
                 Log.d("lkhai4617", "getAllUser: oke " + users.size());
             }
         });
 
-        userManagementViewModel.getIsLoadingLiveData().observe(getViewLifecycleOwner(), isLoading ->{
-            if (isLoading){
+        userManagementViewModel.getIsLoadingLiveData().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 binding.progressBar.setVisibility(View.GONE);
             }
         });
@@ -112,9 +104,9 @@ public class UserManagementFragment extends Fragment {
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0){
+                if (dy > 0) {
                     LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    if (layoutManager != null){
+                    if (layoutManager != null) {
                         int visibleItemCount = layoutManager.getChildCount();
                         int totalItemCount = layoutManager.getItemCount();
                         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
@@ -129,7 +121,7 @@ public class UserManagementFragment extends Fragment {
         });
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,7 +146,7 @@ public class UserManagementFragment extends Fragment {
                 args.putSerializable(USER_MODEL_KEY, userModel);
                 NavHostFragment navHostFragment =
                         (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                if (navHostFragment != null){
+                if (navHostFragment != null) {
                     NavController navController = navHostFragment.getNavController();
                     navController.navigate(R.id.action_userMManagementFragment_to_updateUserFragment, args);
                 }
@@ -166,22 +158,23 @@ public class UserManagementFragment extends Fragment {
             }
         });
     }
-    private void observer(){
-        userManagementViewModel.getUsersLiveData().observe(getViewLifecycleOwner(), users->{
+
+    private void observer() {
+        userManagementViewModel.getUsersLiveData().observe(getViewLifecycleOwner(), users -> {
             userAdapter.updateData(users);
         });
     }
 
-    private void handleStatus(){
-        userManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult->{
-            if (apiResult != null){
-                switch (apiResult.getStatus()){
+    private void handleStatus() {
+        userManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        switch (apiResult.getMessage()){
+                        switch (apiResult.getMessage()) {
                             case "deleteUser":
                                 CustomToast.showToast(requireContext(), "Success", 2000);
                                 break;

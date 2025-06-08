@@ -1,17 +1,16 @@
 package com.example.android_doan.view.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.example.android_doan.R;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.CreateAddressRequest;
 import com.example.android_doan.data.model.response.AddressResponse;
@@ -20,7 +19,6 @@ import com.example.android_doan.data.repository.RemoteRepository.AddressReposito
 import com.example.android_doan.databinding.FragmentAddOrUpdateAddressBinding;
 import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.viewmodel.AddressViewModel;
-import com.example.android_doan.viewmodel.AddressViewModelFactory;
 
 public class AddOrUpdateAddressFragment extends Fragment {
     public static final String ADDRESS_KEY = "com.example.android_doan.view.fragment.ADDRESS_KEY";
@@ -32,13 +30,14 @@ public class AddOrUpdateAddressFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if (args != null){
+        if (args != null) {
             addressResponse = (AddressResponse) args.getSerializable(ADDRESS_KEY);
         }
 
-        AddressRepository addressRepository = new AddressRepository();
-        addressViewModel =
-                new ViewModelProvider(this, new AddressViewModelFactory(addressRepository)).get(AddressViewModel.class);
+        addressViewModel = new ViewModelProvider(
+                this,
+                new BaseViewModelFactory<AddressRepository>(new AddressRepository(), AddressViewModel.class)
+        ).get(AddressViewModel.class);
     }
 
     @Override
@@ -62,8 +61,8 @@ public class AddOrUpdateAddressFragment extends Fragment {
         binding = null;
     }
 
-    private void setupData(){
-        if (addressResponse != null){
+    private void setupData() {
+        if (addressResponse != null) {
             binding.etRecipientName.setText(addressResponse.getRecipientName());
             binding.etPhoneNumber.setText(addressResponse.getPhoneNumber());
             binding.etStreet.setText(addressResponse.getStreet());
@@ -74,11 +73,11 @@ public class AddOrUpdateAddressFragment extends Fragment {
         }
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (addressResponse != null){
+                if (addressResponse != null) {
                     updateAddress();
                 } else {
                     createAddress();
@@ -86,16 +85,17 @@ public class AddOrUpdateAddressFragment extends Fragment {
             }
         });
     }
-    private void handleStatus(){
+
+    private void handleStatus() {
         addressViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
-            if (apiResult != null){
-                switch(apiResult.getStatus()){
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        switch (apiResult.getMessage()){
+                        switch (apiResult.getMessage()) {
                             case "createAddress":
                                 requireActivity().getSupportFragmentManager().popBackStack();
                                 break;
@@ -114,7 +114,7 @@ public class AddOrUpdateAddressFragment extends Fragment {
     }
 
 
-    private void updateAddress(){
+    private void updateAddress() {
         String recipientName = binding.etRecipientName.getText().toString();
         String phone = binding.etPhoneNumber.getText().toString();
         String street = binding.etStreet.getText().toString();
@@ -139,7 +139,7 @@ public class AddOrUpdateAddressFragment extends Fragment {
         addressViewModel.updateAddress(address);
     }
 
-    private void createAddress(){
+    private void createAddress() {
         String recipientName = binding.etRecipientName.getText().toString();
         String phone = binding.etPhoneNumber.getText().toString();
         String street = binding.etStreet.getText().toString();

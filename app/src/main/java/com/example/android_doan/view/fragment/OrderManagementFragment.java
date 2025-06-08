@@ -1,24 +1,22 @@
 package com.example.android_doan.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.example.android_doan.R;
 import com.example.android_doan.adapter.OrderViewPager2Adapter;
+import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.enums.OrderStatusEnum;
 import com.example.android_doan.data.repository.RemoteRepository.OrderManagementRepository;
 import com.example.android_doan.databinding.FragmentOrderManagementBinding;
 import com.example.android_doan.utils.CustomToast;
-import com.example.android_doan.viewmodel.OrderManagementVIewModelFactory;
 import com.example.android_doan.viewmodel.OrderManagementViewModel;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -30,11 +28,10 @@ public class OrderManagementFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OrderManagementRepository orderManagementRepository = new OrderManagementRepository();
         orderManagementViewModel =
                 new ViewModelProvider(
                         this,
-                        new OrderManagementVIewModelFactory(orderManagementRepository)
+                        new BaseViewModelFactory<OrderManagementRepository>(new OrderManagementRepository(), OrderManagementViewModel.class)
                 ).get(OrderManagementViewModel.class);
     }
 
@@ -58,7 +55,7 @@ public class OrderManagementFragment extends Fragment {
         binding = null;
     }
 
-    private void setupViewPager(){
+    private void setupViewPager() {
         orderViewPager2Adapter = new OrderViewPager2Adapter(this);
         binding.viewPager.setAdapter(orderViewPager2Adapter);
 
@@ -67,16 +64,16 @@ public class OrderManagementFragment extends Fragment {
         }).attach();
     }
 
-    private void handleStatus(){
+    private void handleStatus() {
         orderManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
-            if (apiResult != null){
-                switch (apiResult.getStatus()){
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        switch (apiResult.getMessage()){
+                        switch (apiResult.getMessage()) {
                             case "updateOrder":
                                 orderViewPager2Adapter.notifyDataSetChanged();
                                 break;
