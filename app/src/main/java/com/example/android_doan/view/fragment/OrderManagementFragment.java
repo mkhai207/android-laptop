@@ -81,7 +81,7 @@ public class OrderManagementFragment extends Fragment {
                         break;
                     case ERROR:
                         binding.progressBar.setVisibility(View.GONE);
-                        Log.d("lkhai4617", "handleStatus: orderstatusfragment " + apiResult.getMessage());
+                        Log.d("lkhai4617", "handleStatus: orderStatusFragment " + apiResult.getMessage());
                         CustomToast.showToast(requireContext(), apiResult.getMessage(), 2000);
                         break;
                 }

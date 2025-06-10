@@ -31,13 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderHistoryFragment extends Fragment {
+    private final List<OrderData> filterOrder = new ArrayList<>();
     private FragmentOrderHistoryBinding binding;
-    private OrderRepository repository;
     private OrderViewModel orderViewModel;
     private RecyclerView rcvOrders;
     private OrderAdapter adapter;
     private List<OrderData> orders = new ArrayList<>();
-    private List<OrderData> filterOrder = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -172,7 +171,7 @@ public class OrderHistoryFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         break;
                     case ERROR:
-                        binding.progressBar.setVisibility(View.VISIBLE);
+                        binding.progressBar.setVisibility(View.GONE);
                         Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
                         break;
                     default:

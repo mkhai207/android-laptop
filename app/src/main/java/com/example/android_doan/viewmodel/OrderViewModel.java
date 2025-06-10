@@ -29,10 +29,10 @@ public class OrderViewModel extends ViewModel {
     private final MutableLiveData<List<OrderData>> orderLiveData = new MutableLiveData<>();
     private final MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>(new Resource(Resource.Status.SUCCESS, ""));
     private final OrderRepository orderRepository;
+    private final List<OrderData> mListOrder = new ArrayList<>();
     private int currentPage = 0;
     private int pages = 1;
     private int pageSize = 5;
-    private List<OrderData> mListOrder = new ArrayList<>();
 
     public OrderViewModel(OrderRepository repository) {
         this.orderRepository = repository;
@@ -47,7 +47,7 @@ public class OrderViewModel extends ViewModel {
     }
 
     public void getOrders(int page) {
-        if (apiResultLiveData.getValue().getStatus() == Resource.Status.LOADING || page > pages) {
+        if (Objects.requireNonNull(apiResultLiveData.getValue()).getStatus() == Resource.Status.LOADING || page > pages) {
             return;
         }
         apiResultLiveData.setValue(Resource.loading());

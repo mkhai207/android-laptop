@@ -1,4 +1,4 @@
-package com.example.android_doan.view.activity;
+package com.example.android_doan;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +11,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.android_doan.R;
+import com.example.android_doan.data.enums.RoleEnum;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
+import com.example.android_doan.view.activity.AdminActivity;
+import com.example.android_doan.view.activity.HomeActivity;
+import com.example.android_doan.view.activity.LoginActivity;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -46,13 +49,13 @@ public class MainActivity extends AppCompatActivity {
         String accessToken = DataLocalManager.getAccessToken();
         String role = DataLocalManager.getRole();
         if (accessToken != null && !accessToken.isEmpty()) {
-            switch (role) {
-                case "CUSTOMER":
+            switch (RoleEnum.fromString(role)) {
+                case CUSTOMER:
                     startActivity(new Intent(this, HomeActivity.class).setFlags(
                             Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
                     ));
                     break;
-                case "SUPER_ADMIN":
+                case ADMIN:
                     startActivity(new Intent(this, AdminActivity.class).setFlags(
                             Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
                     ));
