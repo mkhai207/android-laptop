@@ -30,6 +30,7 @@ import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.CheckoutRepository;
 import com.example.android_doan.databinding.FragmentCheckoutBinding;
+import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.viewmodel.CheckoutViewModel;
 
@@ -39,7 +40,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class CheckoutFragment extends Fragment {
-    public static final String TAG = "CheckoutFragment";
     public static final String CHECKOUT_FRAGMENT_ITEM = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_ITEM";
     public static final String CHECKOUT_FRAGMENT_TOTAL = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_TOTAL";
     private FragmentCheckoutBinding binding;
@@ -104,7 +104,7 @@ public class CheckoutFragment extends Fragment {
     private void setupData() {
         binding.tvTotalData.setText(FormatUtil.formatCurrency(mTotal));
         checkoutViewModel.getAddressLiveData().observe(getViewLifecycleOwner(), addressResponses -> {
-            if (addressResponses != null) {
+            if (addressResponses != null && !addressResponses.isEmpty()) {
                 AddressResponse addressResponse = addressResponses.get(0);
                 binding.tvFullName.setText(addressResponse.getRecipientName());
                 binding.tvNumPhone.setText(addressResponse.getPhoneNumber());
@@ -134,7 +134,7 @@ public class CheckoutFragment extends Fragment {
             public void onClick(View view) {
                 int checkedId = binding.rbtnGroup.getCheckedRadioButtonId();
                 if (checkedId == -1) {
-                    Toast.makeText(requireContext(), "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT).show();
+                    CustomToast.showToast(requireContext(), "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT);
                     return;
                 }
                 String paymentMethod = "";

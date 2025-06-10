@@ -23,6 +23,7 @@ import com.example.android_doan.data.enums.OrderStatusEnum;
 import com.example.android_doan.data.model.OrderData;
 import com.example.android_doan.data.repository.RemoteRepository.OrderRepository;
 import com.example.android_doan.databinding.FragmentOrderHistoryBinding;
+import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.Resource;
 import com.example.android_doan.viewmodel.OrderViewModel;
 import com.google.android.material.chip.ChipGroup;
@@ -169,10 +170,13 @@ public class OrderHistoryFragment extends Fragment {
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
+                        Log.d("lkhai4617", "OrderHistoryFragment: " + actionResult.getMessage());
+                        
                         break;
                     case ERROR:
                         binding.progressBar.setVisibility(View.GONE);
-                        Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
+                        CustomToast.showToast(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT);
+                        Log.d("lkhai4617", "OrderHistoryFragment: " + actionResult.getMessage());
                         break;
                     default:
                         binding.progressBar.setVisibility(View.VISIBLE);
