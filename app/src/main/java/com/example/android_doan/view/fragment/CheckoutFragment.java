@@ -6,6 +6,10 @@ import static com.example.android_doan.view.fragment.ProductBottomSheetFragment.
 import static com.example.android_doan.view.fragment.ProductDetailFragment.ADD_TO_CART_ACTION;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +18,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.android_doan.R;
 import com.example.android_doan.data.enums.OrderStatusEnum;
@@ -39,13 +37,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CheckoutFragment extends Fragment{
+public class CheckoutFragment extends Fragment {
+    public static final String CHECKOUT_FRAGMENT_ITEM = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_ITEM";
+    public static final String CHECKOUT_FRAGMENT_TOTAL = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_TOTAL";
     private FragmentCheckoutBinding binding;
     private List<GetCartResponse.Data> mCarts;
     private double mTotal;
     private String mAction;
-    public static final String CHECKOUT_FRAGMENT_ITEM = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_ITEM";
-    public static final String CHECKOUT_FRAGMENT_TOTAL = "com.example.android_doan.view.fragment.CHECKOUT_FRAGMENT_TOTAL";
     private CheckoutViewModel checkoutViewModel;
     private CheckoutRepository repository;
 
@@ -53,7 +51,7 @@ public class CheckoutFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if (args != null){
+        if (args != null) {
             mTotal = args.getDouble(CHECKOUT_FRAGMENT_TOTAL);
             mAction = args.getString(ACTION_KEY);
             Serializable serializable = args.getSerializable(CHECKOUT_FRAGMENT_ITEM);
@@ -99,10 +97,10 @@ public class CheckoutFragment extends Fragment{
         binding = null;
     }
 
-    private void setupData(){
+    private void setupData() {
         binding.tvTotalData.setText(FormatUtil.formatCurrency(mTotal));
         checkoutViewModel.getAddressLiveData().observe(getViewLifecycleOwner(), addressResponses -> {
-            if (addressResponses != null){
+            if (addressResponses != null && !addressResponses.isEmpty()) {
                 AddressResponse addressResponse = addressResponses.get(0);
                 binding.tvFullName.setText(addressResponse.getRecipientName());
                 binding.tvNumPhone.setText(addressResponse.getPhoneNumber());
@@ -120,7 +118,7 @@ public class CheckoutFragment extends Fragment{
 //        });
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.tvChangeAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,12 +139,12 @@ public class CheckoutFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 int checkedId = binding.rbtnGroup.getCheckedRadioButtonId();
-                if (checkedId == -1){
+                if (checkedId == -1) {
                     Toast.makeText(requireContext(), "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String paymentMethod = "";
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.rbtn_online:
                         paymentMethod = "ONLINE";
                         break;
@@ -164,7 +162,7 @@ public class CheckoutFragment extends Fragment{
                 UserModel user = new UserModel(Integer.parseInt(DataLocalManager.getUserId()));
 
                 List<OrderRequest.OrderDetail> orderDetails = new ArrayList<>();
-                for (GetCartResponse.Data item : mCarts){
+                for (GetCartResponse.Data item : mCarts) {
                     double price = (long) item.getQuantity() * item.getProduct().getPrice();
                     orderDetails.add(new OrderRequest.OrderDetail(item.getQuantity(), item.getProduct().getId()));
                 }
@@ -172,9 +170,9 @@ public class CheckoutFragment extends Fragment{
                 AddressResponse address = checkoutViewModel.getAddressLiveData().getValue().get(0);
                 OrderRequest request = new OrderRequest(status, paymentMethod, user, orderDetails, address);
                 checkoutViewModel.placeOrder(request, isSuccess -> {
-                    if (isSuccess && Objects.equals(mAction, ADD_TO_CART_ACTION)){
+                    if (isSuccess && Objects.equals(mAction, ADD_TO_CART_ACTION)) {
                         checkoutViewModel.clearCart(isSuccess1 -> {
-                            if (!isSuccess1){
+                            if (!isSuccess1) {
                                 Toast.makeText(requireContext(), "Clear cart failure", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -186,7 +184,7 @@ public class CheckoutFragment extends Fragment{
         });
     }
 
-    private void openAddressFragment(){
+    private void openAddressFragment() {
         NavHostFragment navHostFragment =
                 (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.frag_container);
         if (navHostFragment != null) {

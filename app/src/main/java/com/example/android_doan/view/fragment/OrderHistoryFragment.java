@@ -1,6 +1,11 @@
 package com.example.android_doan.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,17 +16,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.OrderAdapter;
 import com.example.android_doan.data.enums.OrderStatusEnum;
 import com.example.android_doan.data.model.response.OrderResponse;
-import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.OrderRepository;
 import com.example.android_doan.databinding.FragmentOrderHistoryBinding;
 import com.example.android_doan.utils.Resource;
@@ -31,7 +29,6 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class OrderHistoryFragment extends Fragment {
     private FragmentOrderHistoryBinding binding;
@@ -73,10 +70,10 @@ public class OrderHistoryFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        binding =null;
+        binding = null;
     }
 
-    private void setupRcv(){
+    private void setupRcv() {
         rcvOrders = binding.rcvOrders;
         adapter = new OrderAdapter(new ArrayList<>());
         rcvOrders.setAdapter(adapter);
@@ -84,10 +81,10 @@ public class OrderHistoryFragment extends Fragment {
         rcvOrders.setLayoutManager(linearLayoutManager);
     }
 
-    private void getOrders(){
+    private void getOrders() {
         orderViewModel.loadNextPage();
         orderViewModel.getOrderLiveData().observe(getViewLifecycleOwner(), orderData -> {
-            if (orderData != null){
+            if (orderData != null) {
                 orders = orderData;
                 binding.chipGroupFilters.check(R.id.chip_all);
                 adapter.updateData(orders);
@@ -103,9 +100,9 @@ public class OrderHistoryFragment extends Fragment {
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0){
+                if (dy > 0) {
                     LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    if (layoutManager != null){
+                    if (layoutManager != null) {
                         int visibleItemCount = layoutManager.getChildCount();
                         int totalItemCount = layoutManager.getItemCount();
                         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
@@ -121,7 +118,7 @@ public class OrderHistoryFragment extends Fragment {
         });
     }
 
-    private void setupListener(){
+    private void setupListener() {
         binding.chipGroupFilters.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
             @Override
             public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
@@ -131,8 +128,8 @@ public class OrderHistoryFragment extends Fragment {
         });
     }
 
-    private void handleChipGroupFilter(int  checkedId){
-        switch (checkedId){
+    private void handleChipGroupFilter(int checkedId) {
+        switch (checkedId) {
             case R.id.chip_pending:
                 filterOrders(OrderStatusEnum.PENDING);
                 break;
@@ -151,29 +148,31 @@ public class OrderHistoryFragment extends Fragment {
         }
     }
 
-    private void filterOrders(OrderStatusEnum status){
+    private void filterOrders(OrderStatusEnum status) {
         filterOrder.clear();
-        for (OrderResponse.OrderData order : orders){
-            if (order.getStatus().equals(status.toString())){
+        for (OrderResponse.OrderData order : orders) {
+            if (order.getStatus().equals(status.toString())) {
                 filterOrder.add(order);
             }
         }
         adapter.updateData(filterOrder);
     }
 
-    private void handleStatus(){
+    private void handleStatus() {
         orderViewModel.getActionResult().observe(getViewLifecycleOwner(), actionResult -> {
-            if (actionResult != null){
-                switch (actionResult.getStatus()){
+            if (actionResult != null) {
+                switch (actionResult.getStatus()) {
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
+                        Log.d("lkhai4617", "OrderHistoryFragment: " + actionResult.getMessage());
                         break;
                     case ERROR:
-                        binding.progressBar.setVisibility(View.VISIBLE);
+                        binding.progressBar.setVisibility(View.GONE);
                         Toast.makeText(requireContext(), actionResult.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d("lkhai4617", "OrderHistoryFragment: " + actionResult.getMessage());
                         break;
                     default:
                         binding.progressBar.setVisibility(View.VISIBLE);
@@ -183,7 +182,7 @@ public class OrderHistoryFragment extends Fragment {
         });
     }
 
-    private void navigateOrderDetailFragment(OrderResponse.OrderData data, View view){
+    private void navigateOrderDetailFragment(OrderResponse.OrderData data, View view) {
         Bundle args = new Bundle();
         args.putSerializable(OrderDetailFragment.ORDER_DETAILS, data);
 
