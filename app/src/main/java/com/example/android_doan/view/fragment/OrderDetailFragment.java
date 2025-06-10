@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android_doan.adapter.OrderDetailAdapter;
 import com.example.android_doan.data.model.OrderData;
+import com.example.android_doan.data.model.response.AddressResponse;
 import com.example.android_doan.databinding.FragmentOrderDetailBinding;
 import com.example.android_doan.utils.FormatUtil;
 
@@ -74,5 +75,9 @@ public class OrderDetailFragment extends Fragment {
         binding.tvProductCount.setText(productCount);
         binding.tvAddress.setText(mData.getShippingAddress());
         binding.tvPaymentMethod.setText(mData.getPaymentMethod());
+
+        AddressResponse address = mData.getAddress();
+        String addressStr = address.getStreet() + ", " + address.getWard() + ", " + address.getDistrict() + ", " + address.getCity();
+        binding.tvAddress.setText(addressStr);
     }
 }

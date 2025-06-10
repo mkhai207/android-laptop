@@ -8,9 +8,11 @@
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="5dp"
+        android:visibility="gone" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,21 +31,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
                     android:text="Thêm/Sửa Sản Phẩm"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="16dp" />
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_name"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Tên sản phẩm"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -53,11 +56,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_model"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Model"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -67,11 +71,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_cpu"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="CPU"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -81,11 +86,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_ram"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="RAM (GB)"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -95,11 +101,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_memory"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Dung lượng bộ nhớ"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -109,11 +116,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_memory_type"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Loại bộ nhớ (SSD/HDD)"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -123,11 +131,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_gpu"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="GPU"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -137,11 +146,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_screen"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Màn hình"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -151,11 +161,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_price"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Giá (VNĐ)"
                         android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -165,11 +176,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_description"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Mô tả"
                         android:inputType="textMultiLine"
                         android:maxLines="3"
@@ -186,21 +198,21 @@
                         android:id="@+id/iv_thumbnail"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:layout_marginEnd="16dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/laptop_logo"
-                        android:layout_marginEnd="16dp" />
+                        android:src="@drawable/laptop_logo" />
 
                     <Button
                         android:id="@+id/btn_upload_thumbnail"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chọn ảnh"
-                        android:textSize="14sp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:backgroundTint="#FF6200EE"
+                        android:text="Chọn ảnh"
                         android:textColor="@android:color/white"
-                        android:layout_gravity="center_vertical" />
+                        android:textSize="14sp" />
 
                 </RelativeLayout>
 
@@ -208,24 +220,24 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginBottom="8dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_marginEnd="16dp"
                         android:text="Trạng thái"
-                        android:textSize="16sp"
-                        android:layout_marginEnd="16dp" />
+                        android:textSize="16sp" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switch_status"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
 
                 </RelativeLayout>
 
@@ -234,11 +246,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_weight"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Trọng lượng (kg)"
                         android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -248,11 +261,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_quantity"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Số lượng"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -262,11 +276,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_color"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Màu sắc"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -276,11 +291,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_port"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Cổng kết nối"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -290,11 +306,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_os"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Hệ điều hành"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -304,11 +321,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_tag"
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:hint="Tag"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -317,32 +335,32 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="Ảnh Slider"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="8dp" />
+                    android:textSize="16sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rcv_slider_images"
                         android:layout_width="0dp"
                         android:layout_height="100dp"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="16dp" />
+                        android:layout_marginEnd="16dp"
+                        android:layout_weight="1" />
 
                     <Button
                         android:id="@+id/btn_add_slider_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Thêm ảnh"
-                        android:textSize="14sp"
+                        android:layout_gravity="center_vertical"
                         android:backgroundTint="#FF6200EE"
+                        android:text="Thêm ảnh"
                         android:textColor="@android:color/white"
-                        android:layout_gravity="center_vertical" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -350,9 +368,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:text="Danh mục"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="4dp" />
+                    android:textSize="16sp" />
 
                 <Spinner
                     android:id="@+id/spinner_category"
@@ -364,9 +382,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:text="Thương hiệu"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="4dp" />
+                    android:textSize="16sp" />
 
                 <Spinner
                     android:id="@+id/spinner_brand"
@@ -379,10 +397,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="@string/save"
-                    android:textSize="14sp"
                     android:backgroundTint="@color/bg_primary"
-                    android:textColor="@color/white" />
+                    android:text="@string/save"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
             </LinearLayout>
 
         </RelativeLayout>

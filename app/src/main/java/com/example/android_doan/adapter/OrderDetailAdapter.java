@@ -62,7 +62,6 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
                         .load(orderDetail.getProductThumbnail())
                         .error(R.drawable.logo)
                         .into(binding.ivProductImage);
-
                 binding.tvProductName.setText(orderDetail.getProductName());
                 binding.tvProductCode.setText(String.valueOf(orderDetail.getId()));
                 binding.tvQuantity.setText(String.valueOf(orderDetail.getQuantity()));

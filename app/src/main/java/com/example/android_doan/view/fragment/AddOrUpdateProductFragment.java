@@ -490,6 +490,27 @@ public class AddOrUpdateProductFragment extends Fragment {
         CategoryModel category = selectedCategory;
         BrandModel brand = selectedBrand;
 
+//        this.name = name;
+//        this.model = model;
+//        this.cpu = cpu;
+//        this.ram = ram;
+//        this.memory = memory;
+//        this.memoryType = memoryType;
+//        this.gpu = gpu;
+//        this.screen = screen;
+//        this.price = price;
+//        this.description = description;
+//        this.thumbnail = thumbnail;
+//        this.weight = weight;
+//        this.quantity = quantity;
+//        this.color = color;
+//        this.port = port;
+//        this.os = os;
+//        this.tag = tag;
+//        this.slider = slider;
+//        this.category = category;
+//        this.brand = brand;
+
         CreateProductRequest createProductRequest = new CreateProductRequest(
                 name,
                 model,
@@ -504,10 +525,10 @@ public class AddOrUpdateProductFragment extends Fragment {
                 thumbnail,
                 weight,
                 quantity,
-                tag,
-                os,
                 color,
                 port,
+                os,
+                tag,
                 slider,
                 category,
                 brand

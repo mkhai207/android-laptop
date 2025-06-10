@@ -1,5 +1,6 @@
 package com.example.android_doan.data.model;
 
+import com.example.android_doan.data.model.response.AddressResponse;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -42,6 +43,8 @@ public class OrderData implements Serializable {
     @SerializedName("user")
     private UserModel user;
 
+    @SerializedName("address")
+    private AddressResponse address;
     @SerializedName("orderDetails")
     private List<OrderDetail> orderDetails;
 
@@ -87,6 +90,10 @@ public class OrderData implements Serializable {
 
     public String getUpdatedBy() {
         return updatedBy;
+    }
+
+    public AddressResponse getAddress() {
+        return address;
     }
 
     public UserModel getUser() {

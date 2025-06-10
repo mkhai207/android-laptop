@@ -117,7 +117,7 @@ public interface Api {
 //    @POST("api/v1/carts")
 //    Single<AddToCartResponse> addToCart(@Body AddToCartRequest request);
     @POST("api/v1/carts")
-    Single<BaseResponse<Void>> addToCart(@Body AddToCartRequest request);
+    Single<BaseResponse<String>> addToCart(@Body AddToCartRequest request);
 
     @GET("api/v1/carts")
     Single<GetCartResponse> getCart();

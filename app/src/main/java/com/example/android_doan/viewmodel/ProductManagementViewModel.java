@@ -304,7 +304,7 @@ public class ProductManagementViewModel extends ViewModel {
                             try {
                                 String errorJson = errorBody.string();
                                 JSONObject jsonObject = new JSONObject(errorJson);
-                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                String errorMessage = jsonObject.optString("error", "Call api failed");
                                 apiResultLiveData.setValue(Resource.error(errorMessage));
                             } catch (Exception e) {
                                 apiResultLiveData.setValue(Resource.error("Unknown error"));

@@ -8,7 +8,7 @@ import com.example.android_doan.data.model.request.AddToCartRequest;
 import io.reactivex.Single;
 
 public class ProductDetailRepository {
-    public Single<BaseResponse<Void>> addToCart(AddToCartRequest request) {
+    public Single<BaseResponse<String>> addToCart(AddToCartRequest request) {
         return ApiService.getInstance().addToCart(request);
     }
 
