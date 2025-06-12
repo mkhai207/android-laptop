@@ -302,8 +302,9 @@ public class SettingFragment extends Fragment {
         if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
-            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
-            requireActivity().requestPermissions(permissions, REQUEST_CODE);
+//            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
+//            requireActivity().requestPermissions(permissions, REQUEST_CODE);
+            requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
         }
     }
 

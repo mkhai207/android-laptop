@@ -115,66 +115,60 @@ public class CheckoutFragment extends Fragment {
     }
 
     private void setupListener() {
-        binding.tvChangeAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openAddressFragment();
-            }
-        });
+        binding.tvChangeAddress.setOnClickListener(view -> openAddressFragment());
 
-        binding.layoutAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openAddressFragment();
-            }
-        });
+        binding.layoutAddress.setOnClickListener(view -> openAddressFragment());
 
-        binding.btnPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int checkedId = binding.rbtnGroup.getCheckedRadioButtonId();
-                if (checkedId == -1) {
-                    CustomToast.showToast(requireContext(), "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT);
-                    return;
-                }
-                String paymentMethod = "";
-                switch (checkedId) {
-                    case R.id.rbtn_online:
-                        paymentMethod = "ONLINE";
-                        break;
-                    case R.id.rbtn_cash:
-                        paymentMethod = "CASH";
-                        break;
-                }
+        binding.btnPayment.setOnClickListener(view -> {
+            int checkedId = binding.rbtnGroup.getCheckedRadioButtonId();
+            if (checkedId == -1) {
+                CustomToast.showToast(requireContext(), "Vui lòng chọn phương thức thanh toán", Toast.LENGTH_SHORT);
+                return;
+            }
+            String paymentMethod = "";
+            switch (checkedId) {
+                case R.id.rbtn_online:
+                    paymentMethod = "ONLINE";
+                    break;
+                case R.id.rbtn_cash:
+                    paymentMethod = "CASH";
+                    break;
+            }
 
 //                double totalMoney = FormatUtil.parseCurrency(binding.tvTotalData.getText().toString());
 //                String amountPaid = "0";
-                OrderStatusEnum status = OrderStatusEnum.PENDING;
+            OrderStatusEnum status = OrderStatusEnum.PENDING;
 //                String shippingAddress = binding.tvAddress.getText().toString();
 //                String name = binding.tvFullName.getText().toString();
 //                String phone = binding.tvNumPhone.getText().toString();
-                UserModel user = new UserModel(Integer.parseInt(DataLocalManager.getUserId()));
+            UserModel user = new UserModel(Integer.parseInt(DataLocalManager.getUserId()));
 
-                List<OrderRequest.OrderDetail> orderDetails = new ArrayList<>();
-                for (GetCartResponse.Data item : mCarts) {
-                    double price = (long) item.getQuantity() * item.getProduct().getPrice();
-                    orderDetails.add(new OrderRequest.OrderDetail(item.getQuantity(), item.getProduct().getId()));
-                }
-
-                AddressResponse address = checkoutViewModel.getAddressLiveData().getValue().get(0);
-                OrderRequest request = new OrderRequest(status, paymentMethod, user, orderDetails, address);
-                checkoutViewModel.placeOrder(request, isSuccess -> {
-                    if (isSuccess && Objects.equals(mAction, ADD_TO_CART_ACTION)) {
-                        checkoutViewModel.clearCart(isSuccess1 -> {
-                            if (!isSuccess1) {
-                                Toast.makeText(requireContext(), "Clear cart failure", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    NavController navController = Navigation.findNavController(view);
-                    navController.navigate(R.id.action_checkoutFragment_to_orderSuccessFragment);
-                });
+            List<OrderRequest.OrderDetail> orderDetails = new ArrayList<>();
+            for (GetCartResponse.Data item : mCarts) {
+//                double price = item.getQuantity() * item.getProduct().getPrice();
+                orderDetails.add(new OrderRequest.OrderDetail(item.getQuantity(), item.getProduct().getId()));
             }
+
+            // check address is empty
+            if (checkoutViewModel.getAddressLiveData().getValue() == null || checkoutViewModel.getAddressLiveData().getValue().isEmpty()) {
+                CustomToast.showToast(requireContext(), "Vui lòng chọn địa chỉ giao hàng!", Toast.LENGTH_LONG);
+                return;
+            }
+            AddressResponse address = checkoutViewModel.getAddressLiveData().getValue().get(0);
+
+            // create order
+            OrderRequest request = new OrderRequest(status, paymentMethod, user, orderDetails, address);
+            checkoutViewModel.placeOrder(request, isSuccess -> {
+                if (isSuccess && Objects.equals(mAction, ADD_TO_CART_ACTION)) {
+                    checkoutViewModel.clearCart(isSuccess1 -> {
+                        if (!isSuccess1) {
+                            Toast.makeText(requireContext(), "Xóa giỏ hàng thất bại!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_checkoutFragment_to_orderSuccessFragment);
+            });
         });
     }
 
@@ -191,11 +185,6 @@ public class CheckoutFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener(REQUEST_KEY_ADDRESS, getViewLifecycleOwner(), (requestKey, result) -> {
             AddressResponse addressResponse = (AddressResponse) result.getSerializable(ADDRESS_KEY);
             if (addressResponse != null) {
-//                binding.tvFullName.setText(addressResponse.getRecipientName());
-//                binding.tvNumPhone.setText(addressResponse.getPhoneNumber());
-//                String address = addressResponse.getStreet() + ", " + addressResponse.getWard() + ", " +
-//                        addressResponse.getDistrict() + ", " + addressResponse.getCity();
-//                binding.tvAddress.setText(address);
                 List<AddressResponse> address = new ArrayList<>();
                 address.add(addressResponse);
                 checkoutViewModel.getAddressLiveData().setValue(address);

@@ -49,4 +49,84 @@ public class CreateProductRequest {
         this.category = category;
         this.brand = brand;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public String getCpu() {
+        return cpu;
+    }
+
+    public String getRam() {
+        return ram;
+    }
+
+    public String getMemory() {
+        return memory;
+    }
+
+    public String getMemoryType() {
+        return memoryType;
+    }
+
+    public String getGpu() {
+        return gpu;
+    }
+
+    public String getScreen() {
+        return screen;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public String getOs() {
+        return os;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public List<String> getSlider() {
+        return slider;
+    }
+
+    public CategoryModel getCategory() {
+        return category;
+    }
+
+    public BrandModel getBrand() {
+        return brand;
+    }
 }

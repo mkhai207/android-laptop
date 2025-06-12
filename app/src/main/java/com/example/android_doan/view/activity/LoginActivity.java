@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.android_doan.R;
 import com.example.android_doan.base.BaseViewModelFactory;
+import com.example.android_doan.data.enums.RoleEnum;
 import com.example.android_doan.data.repository.RemoteRepository.AuthRepository;
 import com.example.android_doan.viewmodel.AuthViewModel;
 
@@ -37,29 +38,23 @@ public class LoginActivity extends AppCompatActivity {
                 new BaseViewModelFactory<AuthRepository>(new AuthRepository(), AuthViewModel.class)
         ).get(AuthViewModel.class);
 
-//        authViewModel.getUserLiveData().observe(this, userModel -> {
-//            Intent intent = new Intent(this, HomeActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("user_key", userModel);
-//            intent.putExtras(bundle);
-//            if (userModel == null){
-//                Log.d("lkhai4617", "null");
-//            }
-//            startActivity(intent);
-//        });
         authViewModel.getUserLiveData().observe(this, userModel -> {
             if (userModel != null) {
                 Intent intent = new Intent();
-                switch (userModel.getRole().getCode()) {
-                    case "CUSTOMER":
+                Log.d("lkhai4617", "Role: " + RoleEnum.fromString(userModel.getRole().getCode()));
+                switch (RoleEnum.fromString(userModel.getRole().getCode())) {
+                    case CUSTOMER:
                         intent.setClass(this, HomeActivity.class);
                         break;
-                    case "SUPER_ADMIN":
+                    case ADMIN:
+                        Log.d("lkhai4617", "Join with admin");
                         intent.setClass(this, AdminActivity.class);
                         break;
                     default:
+                        Log.d("lkhai4617", "No Role");
                         break;
                 }
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("user_key", userModel);
                 intent.putExtras(bundle);

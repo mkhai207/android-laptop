@@ -1,5 +1,7 @@
 package com.example.android_doan.data.enums;
 
+import android.util.Log;
+
 public enum RoleEnum {
     ADMIN("SUPER_ADMIN"),
     CUSTOMER("CUSTOMER"),
@@ -13,11 +15,15 @@ public enum RoleEnum {
     }
 
     public static RoleEnum fromString(String code) {
-        try {
-            return RoleEnum.valueOf(code.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return UNKNOWN;
+        if (code != null) {
+            for (RoleEnum role : RoleEnum.values()) {
+                if (role.code.equalsIgnoreCase(code)) {
+                    return role;
+                }
+            }
         }
+        Log.e("RoleEnum", "Invalid role code: " + code);
+        return UNKNOWN;
     }
 
     public String getCode() {

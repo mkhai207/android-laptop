@@ -6,19 +6,19 @@ import com.example.android_doan.data.model.CategoryModel;
 import java.util.List;
 
 public class UpdateProductRequest {
-    private String id; // Sử dụng UUID nếu ID là chuỗi UUID
+    private String id;
     private String name;
     private String model;
     private String cpu;
-    private String ram; // Giữ nguyên String nếu server mong đợi kiểu này
+    private String ram;
     private String memory;
     private String memoryType;
     private String gpu;
     private String screen;
-    private String price; // Giữ nguyên String để đúng format
+    private String price;
     private String description;
     private String thumbnail;
-    private int status; // Kiểu int thay vì boolean
+    private int status;
     private String weight;
     private String quantity;
     private String tag;

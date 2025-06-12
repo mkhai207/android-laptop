@@ -11,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.android_doan.data.enums.RoleEnum;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.view.activity.AdminActivity;
 import com.example.android_doan.view.activity.HomeActivity;
@@ -48,22 +49,25 @@ public class MainActivity extends AppCompatActivity {
         String accessToken = DataLocalManager.getAccessToken();
         String role = DataLocalManager.getRole();
         if (accessToken != null && !accessToken.isEmpty()) {
-            switch (role) {
-                case "CUSTOMER":
-                    startActivity(new Intent(this, HomeActivity.class).setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    ));
+            switch (RoleEnum.fromString(role)) {
+                case CUSTOMER:
+                    startActivity(new Intent(this, HomeActivity.class)
+                            .setFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            ));
                     break;
-                case "SUPER_ADMIN":
-                    startActivity(new Intent(this, AdminActivity.class).setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    ));
+                case ADMIN:
+                    startActivity(new Intent(this, AdminActivity.class)
+                            .setFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            ));
                     break;
                 default:
                     break;
             }
         } else {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, LoginActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         }
     }
 

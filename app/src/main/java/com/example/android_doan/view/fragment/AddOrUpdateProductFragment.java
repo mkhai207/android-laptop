@@ -24,6 +24,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,6 +49,7 @@ import com.example.android_doan.viewmodel.ProductManagementViewModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -283,7 +285,9 @@ public class AddOrUpdateProductFragment extends Fragment {
         binding.btnAddSliderImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadMultipleFile();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    uploadMultipleFile();
+                }
             }
         });
 
@@ -366,14 +370,14 @@ public class AddOrUpdateProductFragment extends Fragment {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                textView.setText(getItem(position).getName());
+                textView.setText(Objects.requireNonNull(getItem(position)).getName());
                 return textView;
             }
 
             @Override
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getDropDownView(position, convertView, parent);
-                textView.setText(getItem(position).getName());
+                textView.setText(Objects.requireNonNull(getItem(position)).getName());
                 return textView;
             }
         };
@@ -389,7 +393,7 @@ public class AddOrUpdateProductFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                // TODO document why this method is empty
             }
         });
     }
@@ -402,93 +406,126 @@ public class AddOrUpdateProductFragment extends Fragment {
         binding.rcvSliderImages.setAdapter(sliderImageAdapter);
     }
 
-    private void updateProduct() {
-        String name = binding.etName.getText().toString().trim();
-        String model = binding.etModel.getText().toString().trim();
-        String cpu = binding.etCpu.getText().toString().trim();
-        String ram = binding.etRam.getText().toString().trim();
-
-        String memory = binding.etMemory.getText().toString().trim();
-        String memoryType = binding.etMemoryType.getText().toString().trim();
-        String gpu = binding.etGpu.getText().toString().trim();
-        String screen = binding.etScreen.getText().toString().trim();
-
-        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");
-        ;
-
-        String description = binding.etDescription.getText().toString().trim();
-
-        String weight = binding.etWeight.getText().toString().trim();
-
-        String quantity = binding.etQuantity.getText().toString().trim();
-
-        String color = binding.etColor.getText().toString().trim();
-        String port = binding.etPort.getText().toString().trim();
-        String os = binding.etOs.getText().toString().trim();
-        String tag = binding.etTag.getText().toString().trim();
-
-        String thumbnail = thumbnailUrl;
-        List<String> slider = sliderUrls;
-
-        CategoryModel category = selectedCategory;
-        BrandModel brand = selectedBrand;
-
-        UpdateProductRequest productRequest = new UpdateProductRequest(
-                mProductModel.getId(),
-                name,
-                model,
-                cpu,
-                ram,
-                memory,
-                memoryType,
-                gpu,
-                screen,
-                price,
-                description,
-                thumbnail,
-                status,
-                weight,
-                quantity,
-                tag,
-                os,
-                color,
-                port,
-                slider,
-                category,
-                brand
+    private CreateProductRequest getProductRequestData() {
+        return new CreateProductRequest(
+                binding.etName.getText().toString().trim(),
+                binding.etModel.getText().toString().trim(),
+                binding.etCpu.getText().toString().trim(),
+                binding.etRam.getText().toString().trim(),
+                binding.etMemory.getText().toString().trim(),
+                binding.etMemoryType.getText().toString().trim(),
+                binding.etGpu.getText().toString().trim(),
+                binding.etScreen.getText().toString().trim(),
+                binding.etPrice.getText().toString().replaceAll("[^0-9]", ""),
+                binding.etDescription.getText().toString().trim(),
+                thumbnailUrl,
+                binding.etWeight.getText().toString().trim(),
+                binding.etQuantity.getText().toString().trim(),
+                binding.etColor.getText().toString().trim(),
+                binding.etPort.getText().toString().trim(),
+                binding.etOs.getText().toString().trim(),
+                binding.etTag.getText().toString().trim(),
+                sliderUrls,
+                selectedCategory,
+                selectedBrand
         );
-        productManagementViewModel.updateProduct(productRequest);
+    }
+
+    private void updateProduct() {
+//        String name = binding.etName.getText().toString().trim();
+//        String model = binding.etModel.getText().toString().trim();
+//        String cpu = binding.etCpu.getText().toString().trim();
+//        String ram = binding.etRam.getText().toString().trim();
+//
+//        String memory = binding.etMemory.getText().toString().trim();
+//        String memoryType = binding.etMemoryType.getText().toString().trim();
+//        String gpu = binding.etGpu.getText().toString().trim();
+//        String screen = binding.etScreen.getText().toString().trim();
+//
+//        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");
+//
+//        String description = binding.etDescription.getText().toString().trim();
+//
+//        String weight = binding.etWeight.getText().toString().trim();
+//
+//        String quantity = binding.etQuantity.getText().toString().trim();
+//
+//        String color = binding.etColor.getText().toString().trim();
+//        String port = binding.etPort.getText().toString().trim();
+//        String os = binding.etOs.getText().toString().trim();
+//        String tag = binding.etTag.getText().toString().trim();
+//
+//        String thumbnail = thumbnailUrl;
+//        List<String> slider = sliderUrls;
+//
+//        CategoryModel category = selectedCategory;
+//        BrandModel brand = selectedBrand;
+//
+//        UpdateProductRequest productRequest = new UpdateProductRequest(
+//                mProductModel.getId(),
+//                name,
+//                model,
+//                cpu,
+//                ram,
+//                memory,
+//                memoryType,
+//                gpu,
+//                screen,
+//                price,
+//                description,
+//                thumbnail,
+//                status,
+//                weight,
+//                quantity,
+//                tag,
+//                os,
+//                color,
+//                port,
+//                slider,
+//                category,
+//                brand
+//        );
+        CreateProductRequest data = getProductRequestData();
+        UpdateProductRequest request = new UpdateProductRequest(
+                mProductModel.getId(),
+                data.getName(), data.getModel(), data.getCpu(), data.getRam(), data.getMemory(), data.getMemoryType(),
+                data.getGpu(), data.getScreen(), data.getPrice(), data.getDescription(), data.getThumbnail(),
+                status,
+                data.getWeight(), data.getQuantity(), data.getTag(), data.getOs(), data.getColor(), data.getPort(),
+                data.getSlider(), data.getCategory(), data.getBrand()
+        );
+        productManagementViewModel.updateProduct(request);
     }
 
     private void createProduct() {
-        String name = binding.etName.getText().toString().trim();
-        String model = binding.etModel.getText().toString().trim();
-        String cpu = binding.etCpu.getText().toString().trim();
-        String ram = binding.etRam.getText().toString().trim();
-
-        String memory = binding.etMemory.getText().toString().trim();
-        String memoryType = binding.etMemoryType.getText().toString().trim();
-        String gpu = binding.etGpu.getText().toString().trim();
-        String screen = binding.etScreen.getText().toString().trim();
-
-        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");
-        ;
-
-        String description = binding.etDescription.getText().toString().trim();
-        String weight = binding.etWeight.getText().toString().trim();
-
-        String quantity = binding.etQuantity.getText().toString().trim();
-
-        String color = binding.etColor.getText().toString().trim();
-        String port = binding.etPort.getText().toString().trim();
-        String os = binding.etOs.getText().toString().trim();
-        String tag = binding.etTag.getText().toString().trim();
-
-        String thumbnail = thumbnailUrl;
-        List<String> slider = sliderUrls;
-
-        CategoryModel category = selectedCategory;
-        BrandModel brand = selectedBrand;
+//        String name = binding.etName.getText().toString().trim();
+//        String model = binding.etModel.getText().toString().trim();
+//        String cpu = binding.etCpu.getText().toString().trim();
+//        String ram = binding.etRam.getText().toString().trim();
+//
+//        String memory = binding.etMemory.getText().toString().trim();
+//        String memoryType = binding.etMemoryType.getText().toString().trim();
+//        String gpu = binding.etGpu.getText().toString().trim();
+//        String screen = binding.etScreen.getText().toString().trim();
+//
+//        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");
+//        ;
+//
+//        String description = binding.etDescription.getText().toString().trim();
+//        String weight = binding.etWeight.getText().toString().trim();
+//
+//        String quantity = binding.etQuantity.getText().toString().trim();
+//
+//        String color = binding.etColor.getText().toString().trim();
+//        String port = binding.etPort.getText().toString().trim();
+//        String os = binding.etOs.getText().toString().trim();
+//        String tag = binding.etTag.getText().toString().trim();
+//
+//        String thumbnail = thumbnailUrl;
+//        List<String> slider = sliderUrls;
+//
+//        CategoryModel category = selectedCategory;
+//        BrandModel brand = selectedBrand;
 
 //        this.name = name;
 //        this.model = model;
@@ -511,37 +548,41 @@ public class AddOrUpdateProductFragment extends Fragment {
 //        this.category = category;
 //        this.brand = brand;
 
-        CreateProductRequest createProductRequest = new CreateProductRequest(
-                name,
-                model,
-                cpu,
-                ram,
-                memory,
-                memoryType,
-                gpu,
-                screen,
-                price,
-                description,
-                thumbnail,
-                weight,
-                quantity,
-                color,
-                port,
-                os,
-                tag,
-                slider,
-                category,
-                brand
-        );
+//        CreateProductRequest createProductRequest = new CreateProductRequest(
+//                name,
+//                model,
+//                cpu,
+//                ram,
+//                memory,
+//                memoryType,
+//                gpu,
+//                screen,
+//                price,
+//                description,
+//                thumbnail,
+//                weight,
+//                quantity,
+//                color,
+//                port,
+//                os,
+//                tag,
+//                slider,
+//                category,
+//                brand
+//        );
+        CreateProductRequest createProductRequest = getProductRequestData();
+
         productManagementViewModel.createProduct(createProductRequest);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void uploadFile() {
         if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
-            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
-            requireActivity().requestPermissions(permissions, REQUEST_CODE);
+//            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
+//            requireActivity().requestPermissions(permissions, REQUEST_CODE);
+            requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
         }
     }
 
@@ -553,12 +594,14 @@ public class AddOrUpdateProductFragment extends Fragment {
         activityResultLauncher.launch(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void uploadMultipleFile() {
         if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFilesForSlider();
         } else {
-            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
-            requireActivity().requestPermissions(permissions, REQUEST_CODE_SLIDER);
+//            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
+//            requireActivity().requestPermissions(permissions, REQUEST_CODE_SLIDER);
+            requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
         }
     }
 
@@ -675,7 +718,7 @@ public class AddOrUpdateProductFragment extends Fragment {
                 Log.d("lkhai4617", "checkUploadStatus: Only thumbnail uploaded");
             } else if (thumbnailUri == null && !sliderUris.isEmpty()) {
                 Log.d("lkhai4617", "checkUploadStatus: Only slider uploaded");
-            } else if (thumbnailUri != null && !sliderUris.isEmpty()) {
+            } else if (thumbnailUri != null) {
                 Log.d("lkhai4617", "checkUploadStatus: Both thumbnail and slider uploaded");
             } else {
                 Log.d("lkhai4617", "checkUploadStatus: No upload required");
@@ -686,6 +729,11 @@ public class AddOrUpdateProductFragment extends Fragment {
             } else {
                 createProduct();
             }
+
+            thumbnailUploadResult = null;
+            sliderUploadResult = null;
+            thumbnailUri = null;
+            sliderUris.clear();
         }
     }
 }

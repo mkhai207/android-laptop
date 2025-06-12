@@ -100,7 +100,6 @@ public class AdminActivity extends AppCompatActivity {
     }
 
     private void init() {
-        AuthRepository authRepository = new AuthRepository();
         authViewModel = new ViewModelProvider(
                 this,
                 new BaseViewModelFactory<AuthRepository>(new AuthRepository(), AuthViewModel.class)
