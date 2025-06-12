@@ -22,10 +22,12 @@ import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.response.GetCartResponse;
+import com.example.android_doan.data.repository.RemoteRepository.CartRepository;
 import com.example.android_doan.data.repository.RemoteRepository.ProductDetailRepository;
 import com.example.android_doan.databinding.FragmentProductDetailBinding;
 import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.FormatUtil;
+import com.example.android_doan.viewmodel.CartViewModel;
 import com.example.android_doan.viewmodel.ProductDetailViewModel;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class ProductDetailFragment extends Fragment {
     private RelativeLayout hiddenLayout;
 
     private ProductDetailViewModel productDetailViewModel;
+    private CartViewModel cartViewModel;
 
 
     @Override
@@ -56,6 +59,12 @@ public class ProductDetailFragment extends Fragment {
                         this,
                         new BaseViewModelFactory<ProductDetailRepository>(new ProductDetailRepository(), ProductDetailViewModel.class)
                 ).get(ProductDetailViewModel.class);
+
+        cartViewModel =
+                new ViewModelProvider(
+                        requireActivity(),
+                        new BaseViewModelFactory<CartRepository>(new CartRepository(), CartViewModel.class)
+                ).get(CartViewModel.class);
     }
 
     @Override
@@ -186,6 +195,7 @@ public class ProductDetailFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (resource.getMessage()) {
                             case "addToCart":
+                                cartViewModel.getCart();
                                 CustomToast.showToast(requireContext(), "Thêm vào giỏ hàng thành công!", Toast.LENGTH_LONG);
                                 break;
                         }

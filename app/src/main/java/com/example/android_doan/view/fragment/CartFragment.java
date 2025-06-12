@@ -4,7 +4,6 @@ import static com.example.android_doan.view.fragment.ProductBottomSheetFragment.
 import static com.example.android_doan.view.fragment.ProductDetailFragment.ADD_TO_CART_ACTION;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,9 +111,8 @@ public class CartFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        CartRepository repository = new CartRepository();
         cartViewModel = new ViewModelProvider(
-                this,
+                requireActivity(),
                 new BaseViewModelFactory<CartRepository>(new CartRepository(), CartViewModel.class)
         ).get(CartViewModel.class);
     }
@@ -124,10 +122,7 @@ public class CartFragment extends Fragment {
         cartViewModel.getItemCartLiveData().observe(getViewLifecycleOwner(), itemCarts -> {
             if (itemCarts != null) {
                 mCarts = itemCarts;
-                Log.d("lkhai4617", "updateItemCart: success");
                 cartAdapter.updateItemCart(itemCarts);
-            } else {
-                Log.d("lkhai4617", "loadItemCart: null");
             }
         });
     }
