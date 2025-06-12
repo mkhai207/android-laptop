@@ -34,6 +34,7 @@ import com.example.android_doan.data.model.RoleModel;
 import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.repository.RemoteRepository.UserManagementRepository;
 import com.example.android_doan.databinding.FragmentUpdateUserBinding;
+import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.utils.RealPathUtil;
 import com.example.android_doan.viewmodel.UserManagementViewModel;
@@ -127,6 +128,7 @@ public class UpdateUserFragment extends Fragment {
         initUI();
         setupListener();
         observer();
+        handleStatus();
     }
 
     @Override
@@ -364,5 +366,30 @@ public class UpdateUserFragment extends Fragment {
 
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
+    }
+
+    private void handleStatus() {
+        userManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
+                    case LOADING:
+                        binding.progressBar.setVisibility(View.VISIBLE);
+                        break;
+                    case SUCCESS:
+                        binding.progressBar.setVisibility(View.GONE);
+                        switch (apiResult.getMessage()) {
+                            case "updateUser":
+                                CustomToast.showToast(requireContext(), "Thành công", Toast.LENGTH_SHORT);
+                                requireActivity().getSupportFragmentManager().popBackStack();
+                                break;
+                        }
+                        break;
+                    case ERROR:
+                        binding.progressBar.setVisibility(View.GONE);
+                        CustomToast.showToast(requireContext(), apiResult.getMessage(), 2000);
+                        break;
+                }
+            }
+        });
     }
 }

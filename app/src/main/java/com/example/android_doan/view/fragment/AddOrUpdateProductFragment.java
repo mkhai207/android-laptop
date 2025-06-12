@@ -49,6 +49,7 @@ import com.example.android_doan.viewmodel.ProductManagementViewModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import okhttp3.MediaType;
@@ -312,9 +313,8 @@ public class AddOrUpdateProductFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (apiResult.getMessage()) {
                             case "updateProduct":
-                                requireActivity().getSupportFragmentManager().popBackStack();
-                                break;
                             case "createProduct":
+                                CustomToast.showToast(requireContext(), "Thành công", Toast.LENGTH_SHORT);
                                 requireActivity().getSupportFragmentManager().popBackStack();
                                 break;
                         }
@@ -413,7 +413,7 @@ public class AddOrUpdateProductFragment extends Fragment {
                 binding.etCpu.getText().toString().trim(),
                 binding.etRam.getText().toString().trim(),
                 binding.etMemory.getText().toString().trim(),
-                binding.etMemoryType.getText().toString().trim(),
+                binding.etMemoryType.getText().toString().toUpperCase(Locale.ROOT).trim(),
                 binding.etGpu.getText().toString().trim(),
                 binding.etScreen.getText().toString().trim(),
                 binding.etPrice.getText().toString().replaceAll("[^0-9]", ""),
@@ -696,7 +696,7 @@ public class AddOrUpdateProductFragment extends Fragment {
         if (thumbnailUri != null) {
             if (thumbnailUploadResult == null) {
                 canProceed = false;
-            } else if (!thumbnailUploadResult) {
+            } else if (Boolean.FALSE.equals(thumbnailUploadResult)) {
                 canProceed = false;
                 CustomToast.showToast(requireContext(), "Lỗi upload ảnh", Toast.LENGTH_SHORT);
             }
@@ -705,9 +705,9 @@ public class AddOrUpdateProductFragment extends Fragment {
         if (!sliderUris.isEmpty()) {
             if (sliderUploadResult == null) {
                 canProceed = false;
-            } else if (!sliderUploadResult) {
+            } else if (Boolean.FALSE.equals(sliderUploadResult)) {
                 canProceed = false;
-                Toast.makeText(requireContext(), "Lỗi upload ảnh", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Lỗi upload ảnh slider", Toast.LENGTH_SHORT).show();
             }
         }
 

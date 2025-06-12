@@ -24,6 +24,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -34,6 +35,7 @@ import com.example.android_doan.data.model.RoleModel;
 import com.example.android_doan.data.model.request.CreateUserRequest;
 import com.example.android_doan.data.repository.RemoteRepository.UserManagementRepository;
 import com.example.android_doan.databinding.FragmentAddUserBinding;
+import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.utils.RealPathUtil;
 import com.example.android_doan.viewmodel.UserManagementViewModel;
@@ -212,12 +214,14 @@ public class AddUserFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void uploadAvt() {
         if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
-            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
-            requireActivity().requestPermissions(permissions, REQUEST_CODE);
+//            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
+//            requireActivity().requestPermissions(permissions, REQUEST_CODE);
+            requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
         }
     }
 
@@ -230,11 +234,31 @@ public class AddUserFragment extends Fragment {
     }
 
     private void callApiUploadFile() {
+//        String folder = "avatar";
+//        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
+//        String realPathAvt = RealPathUtil.getRealPath(requireContext(), avatarUri);
+//        File avatar = new File(realPathAvt);
+//        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+//        MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
+//        userManagementViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
         String folder = "avatar";
-        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
+        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("text/plain"), folder);
+
         String realPathAvt = RealPathUtil.getRealPath(requireContext(), avatarUri);
         File avatar = new File(realPathAvt);
-        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
+
+        String mediaType;
+        String fileName = avatar.getName().toLowerCase();
+        if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+            mediaType = "image/jpeg";
+        } else if (fileName.endsWith(".png")) {
+            mediaType = "image/png";
+        } else {
+            Toast.makeText(requireContext(), "Unsupported file format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse(mediaType), avatar);
         MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
         userManagementViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
     }
@@ -282,6 +306,27 @@ public class AddUserFragment extends Fragment {
     }
 
     private void handleStatus() {
-
+        userManagementViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), apiResult -> {
+            if (apiResult != null) {
+                switch (apiResult.getStatus()) {
+                    case LOADING:
+                        binding.progressBar.setVisibility(View.VISIBLE);
+                        break;
+                    case SUCCESS:
+                        binding.progressBar.setVisibility(View.GONE);
+                        switch (apiResult.getMessage()) {
+                            case "createUser":
+                                CustomToast.showToast(requireContext(), "Thành công", Toast.LENGTH_SHORT);
+                                requireActivity().getSupportFragmentManager().popBackStack();
+                                break;
+                        }
+                        break;
+                    case ERROR:
+                        binding.progressBar.setVisibility(View.GONE);
+                        CustomToast.showToast(requireContext(), apiResult.getMessage(), 2000);
+                        break;
+                }
+            }
+        });
     }
 }

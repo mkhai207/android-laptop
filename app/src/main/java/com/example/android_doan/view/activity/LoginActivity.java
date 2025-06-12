@@ -41,13 +41,11 @@ public class LoginActivity extends AppCompatActivity {
         authViewModel.getUserLiveData().observe(this, userModel -> {
             if (userModel != null) {
                 Intent intent = new Intent();
-                Log.d("lkhai4617", "Role: " + RoleEnum.fromString(userModel.getRole().getCode()));
                 switch (RoleEnum.fromString(userModel.getRole().getCode())) {
                     case CUSTOMER:
                         intent.setClass(this, HomeActivity.class);
                         break;
                     case ADMIN:
-                        Log.d("lkhai4617", "Join with admin");
                         intent.setClass(this, AdminActivity.class);
                         break;
                     default:
