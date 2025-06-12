@@ -66,7 +66,7 @@ public class OrderDetailFragment extends Fragment {
     }
 
     private void setupData() {
-        String orderId = "Đơn hàng: " + mData.getId();
+        String orderId = "Đơn hàng: #" + mData.getId();
         binding.tvOrderId.setText(orderId);
         binding.tvOrderStatus.setText(mData.getStatus());
         String date = FormatUtil.formatIsoDate(mData.getCreatedAt());

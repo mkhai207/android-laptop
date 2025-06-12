@@ -88,8 +88,11 @@ public class ProfileFragment extends Fragment {
         binding.layoutAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle args = new Bundle();
+                args.putBoolean("ACTION_BACK_KEY", false);
+
                 NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.action_profileFragment_to_addressFragment);
+                navController.navigate(R.id.action_profileFragment_to_addressFragment, args);
             }
         });
     }

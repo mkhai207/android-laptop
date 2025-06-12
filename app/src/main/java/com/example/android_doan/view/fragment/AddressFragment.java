@@ -37,6 +37,7 @@ public class AddressFragment extends Fragment {
     private AddressViewModel addressViewModel;
     private RecyclerView rcvAddress;
     private AddressAdapter addressAdapter;
+    private Boolean mActionBack = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,10 @@ public class AddressFragment extends Fragment {
                 this,
                 new BaseViewModelFactory<AddressRepository>(new AddressRepository(), AddressViewModel.class)
         ).get(AddressViewModel.class);
+
+        if (getArguments() != null) {
+            mActionBack = getArguments().getBoolean("ACTION_BACK_KEY");
+        }
     }
 
     @Override
@@ -125,7 +130,7 @@ public class AddressFragment extends Fragment {
                 getParentFragmentManager().setFragmentResult(REQUEST_KEY_ADDRESS, result);
                 NavHostFragment navHostFragment =
                         (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.frag_container);
-                if (navHostFragment != null) {
+                if (navHostFragment != null && mActionBack) {
                     NavController navController = navHostFragment.getNavController();
                     navController.popBackStack();
                 }

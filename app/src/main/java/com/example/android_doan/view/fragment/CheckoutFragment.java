@@ -176,8 +176,11 @@ public class CheckoutFragment extends Fragment {
         NavHostFragment navHostFragment =
                 (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.frag_container);
         if (navHostFragment != null) {
+            Bundle args = new Bundle();
+            args.putBoolean("ACTION_BACK_KEY", true);
+
             NavController navController = navHostFragment.getNavController();
-            navController.navigate(R.id.action_checkoutFragment_to_addressFragment);
+            navController.navigate(R.id.action_checkoutFragment_to_addressFragment, args);
         }
     }
 
