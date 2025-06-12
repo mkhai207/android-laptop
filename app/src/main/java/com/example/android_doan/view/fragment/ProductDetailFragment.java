@@ -24,6 +24,7 @@ import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.repository.RemoteRepository.ProductDetailRepository;
 import com.example.android_doan.databinding.FragmentProductDetailBinding;
+import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.FormatUtil;
 import com.example.android_doan.viewmodel.ProductDetailViewModel;
 
@@ -73,6 +74,7 @@ public class ProductDetailFragment extends Fragment {
         setupUI();
         setupListener();
         observer();
+        handleStatus();
     }
 
     private void setupViewPager2() {
@@ -91,13 +93,6 @@ public class ProductDetailFragment extends Fragment {
                 showMoreDescription();
             }
         });
-
-//        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                requireActivity().getSupportFragmentManager().popBackStack();
-//            }
-//        });
 
         binding.btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,23 +176,26 @@ public class ProductDetailFragment extends Fragment {
 
             }
         });
+    }
 
+    private void handleStatus() {
         productDetailViewModel.getApiResultLiveData().observe(getViewLifecycleOwner(), resource -> {
             if (resource != null) {
                 switch (resource.getStatus()) {
                     case SUCCESS:
-                        // Handle success case
                         binding.progressBar.setVisibility(View.GONE);
-                        Toast.makeText(requireContext(), "Thành công", Toast.LENGTH_SHORT).show();
+                        switch (resource.getMessage()) {
+                            case "addToCart":
+                                CustomToast.showToast(requireContext(), "Thêm vào giỏ hàng thành công!", Toast.LENGTH_LONG);
+                                break;
+                        }
                         break;
                     case ERROR:
                         binding.progressBar.setVisibility(View.GONE);
-                        Toast.makeText(requireContext(), resource.getMessage(), Toast.LENGTH_SHORT).show();
-                        // Handle error case
+                        CustomToast.showToast(requireContext(), resource.getMessage(), Toast.LENGTH_SHORT);
                         break;
                     case LOADING:
                         binding.progressBar.setVisibility(View.VISIBLE);
-                        // Handle loading state if needed
                         break;
                 }
             }

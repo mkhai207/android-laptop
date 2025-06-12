@@ -142,5 +142,7 @@
     <string name="hint_district">Quận</string>
     <string name="hint_city">Thành phố</string>
     <string name="update_order_status">Cập nhật trạng thái</string>
+    <string name="clear_filter">Refresh</string>
+    <string name="empty">Trống</string>
 
 </resources>

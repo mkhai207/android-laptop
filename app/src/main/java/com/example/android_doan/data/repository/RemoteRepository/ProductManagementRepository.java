@@ -30,7 +30,7 @@ public class ProductManagementRepository {
     }
 
     public Single<BaseResponse<BasePagingResponse<BrandModel>>> getAllBrand() {
-        return ApiService.getInstance().getBrands();
+        return ApiService.getInstance().getBrands(0, Integer.MAX_VALUE, "createdAt,desc");
     }
 
     public Single<BaseResponse<BasePagingResponse<CategoryModel>>> getAllCategories() {

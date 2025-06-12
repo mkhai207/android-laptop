@@ -129,7 +129,7 @@ public class AddUserFragment extends Fragment {
 
         userManagementViewModel.getFileLiveData().observe(getViewLifecycleOwner(), fileData -> {
             if (fileData != null) {
-                avatarStr = fileData.getFileName();
+                avatarStr = fileData.getFileLink();
                 createUser();
             }
         });
@@ -219,8 +219,6 @@ public class AddUserFragment extends Fragment {
         if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
-//            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
-//            requireActivity().requestPermissions(permissions, REQUEST_CODE);
             requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
         }
     }
@@ -234,13 +232,6 @@ public class AddUserFragment extends Fragment {
     }
 
     private void callApiUploadFile() {
-//        String folder = "avatar";
-//        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
-//        String realPathAvt = RealPathUtil.getRealPath(requireContext(), avatarUri);
-//        File avatar = new File(realPathAvt);
-//        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
-//        MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
-//        userManagementViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
         String folder = "avatar";
         RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("text/plain"), folder);
 
@@ -316,7 +307,6 @@ public class AddUserFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (apiResult.getMessage()) {
                             case "createUser":
-                                CustomToast.showToast(requireContext(), "Thành công", Toast.LENGTH_SHORT);
                                 requireActivity().getSupportFragmentManager().popBackStack();
                                 break;
                         }

@@ -1,6 +1,5 @@
 package com.example.android_doan.view.fragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,17 +19,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.android_doan.R;
 import com.example.android_doan.adapter.ProductAdapter;
 import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.model.ProductModel;
 import com.example.android_doan.data.model.SortOption;
-import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.HomeRepository;
 import com.example.android_doan.databinding.FragmentHomeBinding;
 import com.example.android_doan.utils.GridSpacingItemDecoration;
@@ -40,20 +34,22 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HomeViewModel homeViewModel;
-    private HomeRepository homeRepository;
     private ProductAdapter productAdapter;
     private RecyclerView rcvProduct;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("lkhai4617", "onCreate: HomeFragment");
         homeViewModel = new ViewModelProvider(
                 this,
                 new BaseViewModelFactory<HomeRepository>(new HomeRepository(), HomeViewModel.class)
         ).get(HomeViewModel.class);
+//        homeViewModel.getSortLiveData().setValue("createdAt,desc");
 
         super.onCreate(savedInstanceState);
     }
@@ -61,6 +57,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("lkhai4617", "onCreateView: HomeFragment");
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         rcvProduct = binding.rcvProduct;
@@ -74,7 +71,7 @@ public class HomeFragment extends Fragment {
         rcvProduct.addItemDecoration(gridSpacingItemDecoration);
 
         AppCompatActivity activity = ((AppCompatActivity) requireActivity());
-        activity.getSupportActionBar().setTitle(getResources().getString(R.string.home));
+        Objects.requireNonNull(activity.getSupportActionBar()).setTitle(getResources().getString(R.string.home));
 
         return binding.getRoot();
     }
@@ -82,7 +79,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("access_token", DataLocalManager.getAccessToken());
+        Log.d("lkhai4617", "onViewCreated: HomeFragment");
+        homeViewModel.refresh();
         loadUserInfo();
         loadBrands();
         loadProduct();
@@ -103,8 +101,15 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("lkhai4617", "onResume: HomeFragment");
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("lkhai4617", "onDestroy: HomeFragment");
         binding = null;
     }
 
@@ -117,19 +122,6 @@ public class HomeFragment extends Fragment {
                     Glide.with(requireContext())
                             .load(userModel.getAvatar())
                             .error(R.drawable.ic_user)
-                            .listener(new RequestListener<Drawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                    Log.e("lkhai4617", "Glide load failed: " + e.getMessage());
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    Log.d("lkhai4617", "Glide load success");
-                                    return false;
-                                }
-                            })
                             .into(binding.imgAvatar);
                 }
             }
@@ -152,29 +144,6 @@ public class HomeFragment extends Fragment {
                 binding.progressBar.setVisibility(View.GONE);
             }
         });
-//        rcvProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//            }
-//
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                if (dy > 0){
-//                    GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-//                    if (layoutManager != null){
-//                        int visibleItemCount = layoutManager.getChildCount();
-//                        int totalItemCount = layoutManager.getItemCount();
-//                        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-//
-//                        if (homeViewModel.getIsLoadingLiveData().getValue() != null && !homeViewModel.getIsLoadingLiveData().getValue() &&
-//                                (visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 5) {
-//                            homeViewModel.loadNextPage();
-//                        }
-//                    }
-//                }
-//            }
-//        });
 
         binding.nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -219,35 +188,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void filterProduct() {
-//        binding.chipGroupBrands.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
-//            @Override
-//            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
-//                StringBuilder filter = new StringBuilder();
-//                if (!checkedIds.isEmpty()){
-//                    filter.append("(");
-//                    List<String> brandsCondition = new ArrayList<>();
-//                    for (int checkedId : checkedIds){
-//                        Chip chip = group.findViewById(checkedId);
-//                        if (chip != null && chip.getTag() != null){
-//                            Integer brandId = (Integer) chip.getTag();
-//                            brandsCondition.add("brand: '" + brandId + "'");
-//                        }
-//                    }
-//                    filter.append(String.join(" or ", brandsCondition));
-//                    filter.append(")");
-//                }
-//
-//                String query = binding.searchView.getQuery().toString();
-//                if (query != null) {
-//                    if (filter.length() > 0) {
-//                        filter.append(" and ");
-//                    }
-//                    filter.append("(name~'").append(query).append("')");
-//                }
-//                homeViewModel.getFilterLiveData().setValue(filter.toString());
-//            }
-//        });
-
         binding.chipGroupBrands.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
             @Override
             public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
@@ -329,24 +269,20 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         });
+
+        binding.btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.chipGroupBrands.clearCheck();
+                binding.searchView.setQuery("", false);
+                binding.searchView.clearFocus();
+                binding.tvSelectedFilter.setText("Trống");
+                homeViewModel.refresh();
+            }
+        });
     }
 
     private void updateFilterWithSearchQuery(String query) {
-//        String currentFilter = homeViewModel.getFilterLiveData().getValue();
-//        StringBuilder newFilter = new StringBuilder();
-//
-//        if (currentFilter != null && !currentFilter.isEmpty()) {
-//            newFilter.append(currentFilter);
-//        }
-//
-//        if (query != null) {
-//            if (newFilter.length() > 0) {
-//                newFilter.append(" and ");
-//            }
-//            newFilter.append("(name~'").append(query).append("')");
-//        }
-//
-//        homeViewModel.getFilterLiveData().setValue(newFilter.toString());
 
         StringBuilder filter = new StringBuilder();
         List<Integer> checkedBrandIds = binding.chipGroupBrands.getCheckedChipIds();

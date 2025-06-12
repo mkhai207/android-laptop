@@ -3,7 +3,6 @@ package com.example.android_doan.view.fragment;
 import static com.example.android_doan.view.fragment.UpdateUserFragment.USER_MODEL_KEY;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +60,7 @@ public class UserManagementFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        userManagementViewModel.refresh();
         getAllUser();
         setupListener();
         observer();
@@ -70,7 +70,6 @@ public class UserManagementFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        userManagementViewModel.refreshUsers();
     }
 
     @Override
@@ -84,15 +83,6 @@ public class UserManagementFragment extends Fragment {
         userManagementViewModel.getUsersLiveData().observe(getViewLifecycleOwner(), users -> {
             if (users != null && !users.isEmpty()) {
                 userAdapter.updateData(users);
-                Log.d("lkhai4617", "getAllUser: oke " + users.size());
-            }
-        });
-
-        userManagementViewModel.getIsLoadingLiveData().observe(getViewLifecycleOwner(), isLoading -> {
-            if (isLoading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
-            } else {
-                binding.progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -129,7 +119,7 @@ public class UserManagementFragment extends Fragment {
                         (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 if (navHostFragment != null) {
                     NavController navController = navHostFragment.getNavController();
-                    navController.navigate(R.id.action_userMManagementFragment_to_addUserFragment);
+                    navController.navigate(R.id.action_userManagementFragment_to_addUserFragment);
                 }
             }
         });
@@ -148,7 +138,7 @@ public class UserManagementFragment extends Fragment {
                         (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 if (navHostFragment != null) {
                     NavController navController = navHostFragment.getNavController();
-                    navController.navigate(R.id.action_userMManagementFragment_to_updateUserFragment, args);
+                    navController.navigate(R.id.action_userManagementFragment_to_updateUserFragment, args);
                 }
             }
 

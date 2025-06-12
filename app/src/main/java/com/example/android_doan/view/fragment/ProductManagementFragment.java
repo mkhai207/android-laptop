@@ -3,6 +3,7 @@ package com.example.android_doan.view.fragment;
 import static com.example.android_doan.view.fragment.AddOrUpdateProductFragment.PRODUCT_MODEL_KEY;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class ProductManagementFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d("lkhai4617", "onCreate: ProductManagementFragment");
         productManagementViewModel = new ViewModelProvider(
                 this,
                 new BaseViewModelFactory<ProductManagementRepository>(new ProductManagementRepository(), ProductManagementViewModel.class)
@@ -46,6 +47,7 @@ public class ProductManagementFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("lkhai4617", "onCreateView: ProductManagementFragment");
         binding = FragmentProductManagementBinding.inflate(inflater, container, false);
         setupRecyclerView();
         return binding.getRoot();
@@ -54,6 +56,8 @@ public class ProductManagementFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("lkhai4617", "onViewCreated: ProductManagementFragment");
+        productManagementViewModel.refresh();
         getAllProduct();
         handleStatus();
         setupListener();
@@ -62,12 +66,13 @@ public class ProductManagementFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        productManagementViewModel.refresh();
+        Log.d("lkhai4617", "onResume: ProductManagementFragment");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("lkhai4617", "onDestroy: ProductManagementFragment");
         binding = null;
     }
 

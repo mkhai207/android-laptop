@@ -1,7 +1,5 @@
 package com.example.android_doan.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -33,7 +31,7 @@ public class UserManagementViewModel extends ViewModel {
     private MutableLiveData<List<UserModel>> usersLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoadingLiveData = new MutableLiveData<>(false);
     private MutableLiveData<UserModel> userLiveData = new MutableLiveData<>();
-    private MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>();
+    private MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>(new Resource(Resource.Status.SUCCESS, ""));
     private MutableLiveData<FileData> fileLiveData = new MutableLiveData<>();
     private CompositeDisposable disposables = new CompositeDisposable();
     private List<UserModel> mListUser = new ArrayList<>();
@@ -66,11 +64,11 @@ public class UserManagementViewModel extends ViewModel {
     }
 
     public void getAllUser(int page) {
-        if (isLoadingLiveData.getValue() == Boolean.TRUE || page > pages) {
+        if (apiResultLiveData.getValue().getStatus() == Resource.Status.LOADING || page > pages) {
             return;
         }
         isLoadingLiveData.setValue(true);
-        String sort = "";
+        String sort = "createdAt,desc";
         Disposable disposable = userManagementRepository.getAllUser(page, pageSize, sort)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -86,9 +84,8 @@ public class UserManagementViewModel extends ViewModel {
                         if (users != null) {
                             mListUser.addAll(users);
                             usersLiveData.setValue(mListUser);
-                            isLoadingLiveData.setValue(false);
+                            apiResultLiveData.setValue(Resource.success("getAllUser"));
                         }
-                        isLoadingLiveData.setValue(false);
                     }
                 }, throwable -> {
                     isLoadingLiveData.setValue(false);
@@ -116,7 +113,6 @@ public class UserManagementViewModel extends ViewModel {
 
     public void loadNextPage() {
         if (currentPage < pages) {
-            Log.d("lkhai4617", "load next page");
             getAllUser(currentPage + 1);
         }
     }
@@ -258,12 +254,20 @@ public class UserManagementViewModel extends ViewModel {
         disposables.add(disposable);
     }
 
-    public void refreshUsers() {
+//    public void refreshUsers() {
+//        currentPage = 0;
+//        mListUser.clear();
+//        usersLiveData.setValue(mListUser);
+
+    /// /        loadNextPage();
+//        getAllUser(1);
+//    }
+    public void refresh() {
         currentPage = 0;
+        pages = 1;
         mListUser.clear();
         usersLiveData.setValue(mListUser);
-//        loadNextPage();
-        getAllUser(1);
+        loadNextPage();
     }
 
     @Override

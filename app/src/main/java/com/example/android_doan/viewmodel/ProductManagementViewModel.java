@@ -87,7 +87,7 @@ public class ProductManagementViewModel extends ViewModel {
             return;
         }
         apiResultLiveData.setValue(Resource.loading());
-        String sort = "";
+        String sort = "createdAt,desc";
         String filter = "";
         Disposable disposable = productManagementRepository.getAllProduct(page, pageSize, sort, filter)
                 .subscribeOn(Schedulers.io())
@@ -134,17 +134,17 @@ public class ProductManagementViewModel extends ViewModel {
 
     public void loadNextPage() {
         if (currentPage < pages) {
-            Log.d("lkhai4617", "load next page");
             getAllProduct(currentPage + 1);
+            Log.d("lkhai4617", "loadNextPage: currentPage: " + currentPage);
         }
     }
 
     public void refresh() {
         currentPage = 0;
+        pages = 1;
         mListProduct.clear();
         productsLiveData.setValue(mListProduct);
-//        loadNextPage();
-        getAllProduct(1);
+        loadNextPage();
     }
 
     public void getBrands() {

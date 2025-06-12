@@ -22,6 +22,6 @@ public class HomeRepository {
     }
 
     public Single<BaseResponse<BasePagingResponse<BrandModel>>> getBrands() {
-        return ApiService.getInstance().getBrands();
+        return ApiService.getInstance().getBrands(0, Integer.MAX_VALUE, "createdAt,desc");
     }
 }

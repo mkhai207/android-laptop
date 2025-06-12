@@ -9,8 +9,8 @@ import com.example.android_doan.data.model.request.CreateBrandRequest;
 import io.reactivex.Single;
 
 public class BrandManagementRepository {
-    public Single<BaseResponse<BasePagingResponse<BrandModel>>> getBrand() {
-        return ApiService.getInstance().getBrands();
+    public Single<BaseResponse<BasePagingResponse<BrandModel>>> getBrand(int page, int size, String sort) {
+        return ApiService.getInstance().getBrands(page, size, sort);
     }
 
     public Single<BaseResponse<BrandModel>> createBrand(CreateBrandRequest request) {

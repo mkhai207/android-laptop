@@ -5,7 +5,6 @@ import static com.example.android_doan.view.fragment.AddOrUpdateBrandFragment.BR
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,7 @@ import com.example.android_doan.data.model.BrandModel;
 import com.example.android_doan.data.repository.RemoteRepository.BrandManagementRepository;
 import com.example.android_doan.databinding.FragmentBrandManagementBinding;
 import com.example.android_doan.utils.CustomToast;
+import com.example.android_doan.utils.Resource;
 import com.example.android_doan.viewmodel.BrandManagementViewModel;
 
 import java.util.ArrayList;
@@ -58,6 +58,7 @@ public class BrandManagementFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        brandManagementViewModel.refresh();
         getAllBrand();
         handleStatus();
         setupListener();
@@ -66,7 +67,6 @@ public class BrandManagementFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        brandManagementViewModel.refresh();
     }
 
     @Override
@@ -112,11 +112,34 @@ public class BrandManagementFragment extends Fragment {
     }
 
     private void getAllBrand() {
-        brandManagementViewModel.getBrand();
+        brandManagementViewModel.loadNextPage();
         brandManagementViewModel.getBrandsLiveData().observe(getViewLifecycleOwner(), brands -> {
             if (brands != null && !brands.isEmpty()) {
                 brandAdapter.updateData(brands);
-                Log.d("lkhai4617", "getAllBrand: oke " + brands.size());
+            }
+        });
+
+        rcvBrand.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (layoutManager != null) {
+                        int visibleItemCount = layoutManager.getChildCount();
+                        int totalItemCount = layoutManager.getItemCount();
+                        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                        if (brandManagementViewModel.getApiResultLiveData().getValue() != null && brandManagementViewModel.getApiResultLiveData().getValue().getStatus() != Resource.Status.LOADING &&
+                                (visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 4) {
+                            brandManagementViewModel.loadNextPage();
+                        }
+                    }
+                }
             }
         });
     }

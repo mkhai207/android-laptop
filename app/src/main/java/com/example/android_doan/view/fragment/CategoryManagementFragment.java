@@ -5,7 +5,6 @@ import static com.example.android_doan.view.fragment.AddOrUpdateCategoryFragment
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,6 @@ public class CategoryManagementFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCategoryManagementBinding.inflate(inflater, container, false);
-
         setupRecyclerView();
         return binding.getRoot();
     }
@@ -59,6 +57,7 @@ public class CategoryManagementFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        categoryManagementViewModel.refresh();
         getAllCategory();
         handleStatus();
         setupListener();
@@ -93,7 +92,6 @@ public class CategoryManagementFragment extends Fragment {
         categoryManagementViewModel.getCategoriesLiveData().observe(getViewLifecycleOwner(), categories -> {
             if (categories != null && !categories.isEmpty()) {
                 categoryAdapter.updateData(categories);
-                Log.d("lkhai4617", "getAllUser: oke " + categories.size());
             }
         });
 

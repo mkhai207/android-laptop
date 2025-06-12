@@ -33,7 +33,7 @@ public class HomeViewModel extends ViewModel {
     private final CompositeDisposable disposables = new CompositeDisposable();
     public MutableLiveData<BasePagingResponse<BrandModel>> brandsLiveData = new MutableLiveData<>();
     public MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>();
-    public MutableLiveData<String> sortLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> sortLiveData = new MutableLiveData<>("createdAt,desc");
     public MutableLiveData<String> filterLiveData = new MutableLiveData<>();
     private HomeRepository homeRepository;
     private int currentPage = 0;
@@ -134,11 +134,6 @@ public class HomeViewModel extends ViewModel {
                             mListProduct.addAll(products);
                             productsLiveData.setValue(mListProduct);
                             isLoadingLiveData.setValue(false);
-                        } else {
-//                            if (page == 1) {
-//                                mListProduct.clear();
-//                            }
-//                            productsLiveData.setValue(mListProduct);
                         }
                         isLoadingLiveData.setValue(false);
                     }
@@ -168,7 +163,7 @@ public class HomeViewModel extends ViewModel {
 
     public void loadNextPage() {
         if (currentPage < pages) {
-            Log.d("lkhai4617", "load next page");
+            Log.d("lkhai4617", "loadNextPage: currentPage: " + currentPage);
             loadProducts(currentPage + 1);
         }
     }
@@ -208,7 +203,17 @@ public class HomeViewModel extends ViewModel {
         currentPage = 0;
         pages = 1;
         mListProduct.clear();
-//        productsLiveData.setValue(new ArrayList<>(mListProduct));
+        productsLiveData.setValue(mListProduct);
+        loadNextPage();
+    }
+
+    public void refresh() {
+        sortLiveData.setValue("createdAt,desc");
+        filterLiveData.setValue("");
+
+        currentPage = 0;
+        pages = 1;
+        mListProduct.clear();
         productsLiveData.setValue(mListProduct);
         loadNextPage();
     }

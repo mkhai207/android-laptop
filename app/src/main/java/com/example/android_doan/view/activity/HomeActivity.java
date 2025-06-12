@@ -20,6 +20,7 @@ public class HomeActivity extends AppCompatActivity {
     private NavController navController;
     private BottomNavigationView bottomNav;
     private ActivityHomeBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.frag_container);
-        if (navHostFragment != null){
+        if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
             AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
             NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration);
@@ -47,9 +48,6 @@ public class HomeActivity extends AppCompatActivity {
             switch (destinationId) {
                 case R.id.homeFragment:
                     bottomNav.getMenu().findItem(R.id.homeFragment).setChecked(true);
-                    break;
-                case R.id.searchFragment:
-                    bottomNav.getMenu().findItem(R.id.searchFragment).setChecked(true);
                     break;
                 case R.id.cartFragment:
                     bottomNav.getMenu().findItem(R.id.cartFragment).setChecked(true);

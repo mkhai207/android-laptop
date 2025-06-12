@@ -17,7 +17,7 @@
             android:title="@string/brand_management"
             android:icon="@drawable/ic_factory"/>
 
-        <item android:id="@+id/userMManagementFragment"
+        <item android:id="@+id/userManagementFragment"
             android:title="@string/customer_management"
             android:icon="@drawable/ic_user"/>
 

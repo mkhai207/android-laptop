@@ -58,7 +58,7 @@ public class CategoryManagementViewModel extends ViewModel {
             return;
         }
         apiResultLiveData.setValue(Resource.loading());
-        String sort = "";
+        String sort = "createdAt,desc";
         Disposable disposable = categoryManagementRepository.getAllCategories(page, pageSize, sort)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -213,6 +213,7 @@ public class CategoryManagementViewModel extends ViewModel {
 
     public void refresh() {
         currentPage = 0;
+        pages = 1;
         mListCategory.clear();
         categoriesLiveData.setValue(mListCategory);
         loadNextPage();

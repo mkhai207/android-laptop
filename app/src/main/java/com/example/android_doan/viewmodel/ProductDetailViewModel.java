@@ -1,7 +1,5 @@
 package com.example.android_doan.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -45,7 +43,7 @@ public class ProductDetailViewModel extends ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response != null && response.getStatusCode() == 200) {
-                        Log.d("lkhai4617", "addToCart: success");
+                        apiResultLiveData.setValue(Resource.success("addToCart"));
                     }
                 }, throwable -> {
                     if (throwable instanceof HttpException) {
