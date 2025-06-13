@@ -1,5 +1,7 @@
 package com.example.android_doan.view.fragment;
 
+import static androidx.navigation.fragment.FragmentKt.findNavController;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,10 +99,9 @@ public class AddOrUpdateAddressFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (apiResult.getMessage()) {
                             case "createAddress":
-                                requireActivity().getSupportFragmentManager().popBackStack();
-                                break;
                             case "updateAddress":
-                                requireActivity().getSupportFragmentManager().popBackStack();
+//                                requireActivity().getSupportFragmentManager().popBackStack();
+                                findNavController(this).popBackStack();
                                 break;
                         }
                         break;

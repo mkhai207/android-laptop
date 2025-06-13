@@ -1,5 +1,7 @@
 package com.example.android_doan.view.fragment;
 
+import static androidx.navigation.fragment.FragmentKt.findNavController;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,10 +91,9 @@ public class AddOrUpdateBrandFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (apiResult.getMessage()) {
                             case "createBrand":
-                                requireActivity().getSupportFragmentManager().popBackStack();
-                                break;
                             case "updateBrand":
-                                requireActivity().getSupportFragmentManager().popBackStack();
+//                                requireActivity().getSupportFragmentManager().popBackStack();
+                                findNavController(this).popBackStack();
                                 break;
                         }
                         break;

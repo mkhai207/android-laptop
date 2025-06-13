@@ -1,5 +1,7 @@
 package com.example.android_doan.view.fragment;
 
+import static androidx.navigation.fragment.FragmentKt.findNavController;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -271,7 +273,8 @@ public class UpdateUserFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (actionResult.getMessage()) {
                             case "updateUser":
-                                requireActivity().getSupportFragmentManager().popBackStack();
+//                                requireActivity().getSupportFragmentManager().popBackStack();
+                                findNavController(this).popBackStack();
                                 break;
                         }
                         break;

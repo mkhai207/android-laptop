@@ -28,10 +28,12 @@ import com.example.android_doan.data.model.request.OrderRequest;
 import com.example.android_doan.data.model.response.AddressResponse;
 import com.example.android_doan.data.model.response.GetCartResponse;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
+import com.example.android_doan.data.repository.RemoteRepository.CartRepository;
 import com.example.android_doan.data.repository.RemoteRepository.CheckoutRepository;
 import com.example.android_doan.databinding.FragmentCheckoutBinding;
 import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.utils.FormatUtil;
+import com.example.android_doan.viewmodel.CartViewModel;
 import com.example.android_doan.viewmodel.CheckoutViewModel;
 
 import java.io.Serializable;
@@ -47,7 +49,7 @@ public class CheckoutFragment extends Fragment {
     private double mTotal;
     private String mAction;
     private CheckoutViewModel checkoutViewModel;
-    private CheckoutRepository repository;
+    private CartViewModel cartViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,11 @@ public class CheckoutFragment extends Fragment {
                 requireActivity(),
                 new BaseViewModelFactory<CheckoutRepository>(new CheckoutRepository(), CheckoutViewModel.class)
         ).get(CheckoutViewModel.class);
+
+        cartViewModel = new ViewModelProvider(
+                requireActivity(),
+                new BaseViewModelFactory<CartRepository>(new CartRepository(), CartViewModel.class)
+        ).get(CartViewModel.class);
 
         String userId = DataLocalManager.getUserId();
         checkoutViewModel.getAddressDefault("user:'" + userId + "' and isDefault: " + true);
@@ -164,6 +171,7 @@ public class CheckoutFragment extends Fragment {
                         if (!isSuccess1) {
                             Toast.makeText(requireContext(), "Xóa giỏ hàng thất bại!", Toast.LENGTH_SHORT).show();
                         }
+                        cartViewModel.getCart();
                     });
                 }
                 NavController navController = Navigation.findNavController(view);

@@ -1,5 +1,7 @@
 package com.example.android_doan.view.fragment;
 
+import static androidx.navigation.fragment.FragmentKt.findNavController;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,10 +109,9 @@ public class AddOrUpdateCategoryFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (apiResult.getMessage()) {
                             case "createCategory":
-                                requireActivity().getSupportFragmentManager().popBackStack();
-                                break;
                             case "updateCategory":
-                                requireActivity().getSupportFragmentManager().popBackStack();
+//                                requireActivity().getSupportFragmentManager().popBackStack();
+                                findNavController(this).popBackStack();
                                 break;
                         }
                         break;

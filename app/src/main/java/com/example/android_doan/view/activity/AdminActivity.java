@@ -48,6 +48,7 @@ public class AdminActivity extends AppCompatActivity {
 
         init();
         setupToolbar();
+        setupDrawerToggle();
         setupDataDrawerHeader();
         setupDrawerListener();
         handleActionBack();
@@ -55,32 +56,25 @@ public class AdminActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         setSupportActionBar(adminActivityBinding.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+    }
 
-        adminActivityBinding.toolbar.setNavigationOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(AdminActivity.this, R.id.nav_host_fragment);
-            if (!navController.popBackStack()) {
-                finish();
-            }
-        });
+    private void setupDrawerToggle() {
+       
     }
 
     private void setupDrawerListener() {
-        //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();
-//            NavigationUI.setupWithNavController(activityAdminBinding.bottomNav, navController);
 
             NavigationUI.setupWithNavController(adminActivityBinding.navView, navController);
 
-//            AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
-//                    .setOpenableLayout(adminActivityBinding.drawerLayout)
-//                    .build();
-//            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-            NavigationUI.setupActionBarWithNavController(this, navController);
+            androidx.navigation.ui.AppBarConfiguration appBarConfiguration =
+                    new androidx.navigation.ui.AppBarConfiguration.Builder(navController.getGraph())
+                            .setOpenableLayout(adminActivityBinding.drawerLayout)
+                            .build();
+            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
             adminActivityBinding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -97,6 +91,18 @@ public class AdminActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, adminActivityBinding.drawerLayout)
+                || super.onSupportNavigateUp();
     }
 
     private void init() {

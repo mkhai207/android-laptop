@@ -1,5 +1,7 @@
 package com.example.android_doan.view.fragment;
 
+import static androidx.navigation.fragment.FragmentKt.findNavController;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
@@ -315,7 +317,8 @@ public class AddOrUpdateProductFragment extends Fragment {
                             case "updateProduct":
                             case "createProduct":
                                 CustomToast.showToast(requireContext(), "Thành công", Toast.LENGTH_SHORT);
-                                requireActivity().getSupportFragmentManager().popBackStack();
+//                                requireActivity().getSupportFragmentManager().popBackStack();
+                                findNavController(this).popBackStack();
                                 break;
                         }
                         break;
@@ -432,59 +435,6 @@ public class AddOrUpdateProductFragment extends Fragment {
     }
 
     private void updateProduct() {
-//        String name = binding.etName.getText().toString().trim();
-//        String model = binding.etModel.getText().toString().trim();
-//        String cpu = binding.etCpu.getText().toString().trim();
-//        String ram = binding.etRam.getText().toString().trim();
-//
-//        String memory = binding.etMemory.getText().toString().trim();
-//        String memoryType = binding.etMemoryType.getText().toString().trim();
-//        String gpu = binding.etGpu.getText().toString().trim();
-//        String screen = binding.etScreen.getText().toString().trim();
-//
-//        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");
-//
-//        String description = binding.etDescription.getText().toString().trim();
-//
-//        String weight = binding.etWeight.getText().toString().trim();
-//
-//        String quantity = binding.etQuantity.getText().toString().trim();
-//
-//        String color = binding.etColor.getText().toString().trim();
-//        String port = binding.etPort.getText().toString().trim();
-//        String os = binding.etOs.getText().toString().trim();
-//        String tag = binding.etTag.getText().toString().trim();
-//
-//        String thumbnail = thumbnailUrl;
-//        List<String> slider = sliderUrls;
-//
-//        CategoryModel category = selectedCategory;
-//        BrandModel brand = selectedBrand;
-//
-//        UpdateProductRequest productRequest = new UpdateProductRequest(
-//                mProductModel.getId(),
-//                name,
-//                model,
-//                cpu,
-//                ram,
-//                memory,
-//                memoryType,
-//                gpu,
-//                screen,
-//                price,
-//                description,
-//                thumbnail,
-//                status,
-//                weight,
-//                quantity,
-//                tag,
-//                os,
-//                color,
-//                port,
-//                slider,
-//                category,
-//                brand
-//        );
         CreateProductRequest data = getProductRequestData();
         UpdateProductRequest request = new UpdateProductRequest(
                 mProductModel.getId(),
@@ -498,78 +448,6 @@ public class AddOrUpdateProductFragment extends Fragment {
     }
 
     private void createProduct() {
-//        String name = binding.etName.getText().toString().trim();
-//        String model = binding.etModel.getText().toString().trim();
-//        String cpu = binding.etCpu.getText().toString().trim();
-//        String ram = binding.etRam.getText().toString().trim();
-//
-//        String memory = binding.etMemory.getText().toString().trim();
-//        String memoryType = binding.etMemoryType.getText().toString().trim();
-//        String gpu = binding.etGpu.getText().toString().trim();
-//        String screen = binding.etScreen.getText().toString().trim();
-//
-//        String price = binding.etPrice.getText().toString().replaceAll("[^0-9]", "");
-//        ;
-//
-//        String description = binding.etDescription.getText().toString().trim();
-//        String weight = binding.etWeight.getText().toString().trim();
-//
-//        String quantity = binding.etQuantity.getText().toString().trim();
-//
-//        String color = binding.etColor.getText().toString().trim();
-//        String port = binding.etPort.getText().toString().trim();
-//        String os = binding.etOs.getText().toString().trim();
-//        String tag = binding.etTag.getText().toString().trim();
-//
-//        String thumbnail = thumbnailUrl;
-//        List<String> slider = sliderUrls;
-//
-//        CategoryModel category = selectedCategory;
-//        BrandModel brand = selectedBrand;
-
-//        this.name = name;
-//        this.model = model;
-//        this.cpu = cpu;
-//        this.ram = ram;
-//        this.memory = memory;
-//        this.memoryType = memoryType;
-//        this.gpu = gpu;
-//        this.screen = screen;
-//        this.price = price;
-//        this.description = description;
-//        this.thumbnail = thumbnail;
-//        this.weight = weight;
-//        this.quantity = quantity;
-//        this.color = color;
-//        this.port = port;
-//        this.os = os;
-//        this.tag = tag;
-//        this.slider = slider;
-//        this.category = category;
-//        this.brand = brand;
-
-//        CreateProductRequest createProductRequest = new CreateProductRequest(
-//                name,
-//                model,
-//                cpu,
-//                ram,
-//                memory,
-//                memoryType,
-//                gpu,
-//                screen,
-//                price,
-//                description,
-//                thumbnail,
-//                weight,
-//                quantity,
-//                color,
-//                port,
-//                os,
-//                tag,
-//                slider,
-//                category,
-//                brand
-//        );
         CreateProductRequest createProductRequest = getProductRequestData();
 
         productManagementViewModel.createProduct(createProductRequest);
@@ -580,8 +458,6 @@ public class AddOrUpdateProductFragment extends Fragment {
         if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
-//            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
-//            requireActivity().requestPermissions(permissions, REQUEST_CODE);
             requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
         }
     }
@@ -599,8 +475,6 @@ public class AddOrUpdateProductFragment extends Fragment {
         if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFilesForSlider();
         } else {
-//            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
-//            requireActivity().requestPermissions(permissions, REQUEST_CODE_SLIDER);
             requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
         }
     }

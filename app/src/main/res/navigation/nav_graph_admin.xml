@@ -37,8 +37,7 @@
         tools:layout="@layout/fragment_category_management">
         <action
             android:id="@+id/action_categoryManagementFragment_to_addOrUpdateCategoryFragment"
-            app:destination="@id/addOrUpdateCategoryFragment"
-            app:popUpTo="@id/categoryManagementFragment" />
+            app:destination="@id/addOrUpdateCategoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/brandManagementFragment"
@@ -47,8 +46,7 @@
         tools:layout="@layout/fragment_brand_management">
         <action
             android:id="@+id/action_brandManagementFragment_to_addOrUpdateBrandFragment"
-            app:destination="@id/addOrUpdateBrandFragment"
-            app:popUpTo="@id/brandManagementFragment" />
+            app:destination="@id/addOrUpdateBrandFragment" />
     </fragment>
     <fragment
         android:id="@+id/userManagementFragment"
@@ -57,12 +55,10 @@
         tools:layout="@layout/fragment_user_management">
         <action
             android:id="@+id/action_userManagementFragment_to_addUserFragment"
-            app:destination="@id/addUserFragment"
-            app:popUpTo="@id/userManagementFragment" />
+            app:destination="@id/addUserFragment" />
         <action
             android:id="@+id/action_userManagementFragment_to_updateUserFragment"
-            app:destination="@id/updateUserFragment"
-            app:popUpTo="@id/userManagementFragment" />
+            app:destination="@id/updateUserFragment" />
     </fragment>
     <fragment
         android:id="@+id/addUserFragment"
