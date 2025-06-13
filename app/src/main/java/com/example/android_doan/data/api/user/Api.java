@@ -11,6 +11,7 @@ import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.model.request.AddToCartRequest;
 import com.example.android_doan.data.model.request.ChangePasswordRequest;
 import com.example.android_doan.data.model.request.CreateAddressRequest;
+import com.example.android_doan.data.model.request.CreateAdminOrderRequest;
 import com.example.android_doan.data.model.request.CreateBrandRequest;
 import com.example.android_doan.data.model.request.CreateCategoryRequest;
 import com.example.android_doan.data.model.request.CreateProductRequest;
@@ -114,6 +115,9 @@ public interface Api {
 
     @PUT("api/v1/admin-orders")
     Single<BaseResponse<OrderAdminResponse>> updateOrder(@Body UpdateOrderRequest request);
+
+    @PUT("api/v1/admin-orders")
+    Single<BaseResponse<OrderAdminResponse>> createOrder(@Body CreateAdminOrderRequest request);
 
     // api upload file
     @Multipart

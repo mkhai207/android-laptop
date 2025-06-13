@@ -1,5 +1,7 @@
 package com.example.android_doan.view.fragment;
 
+import static androidx.navigation.Navigation.findNavController;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.android_doan.R;
 import com.example.android_doan.adapter.OrderViewPager2Adapter;
 import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.enums.OrderStatusEnum;
@@ -48,6 +52,7 @@ public class OrderManagementFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupViewPager();
         handleStatus();
+        setupListener();
     }
 
     @Override
@@ -97,6 +102,16 @@ public class OrderManagementFragment extends Fragment {
                         CustomToast.showToast(requireContext(), apiResult.getMessage(), 2000);
                         break;
                 }
+            }
+        });
+    }
+
+    private void setupListener() {
+        binding.btnCreateOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = findNavController(v);
+                navController.navigate(R.id.action_orderFragment_to_addOrderFragment);
             }
         });
     }

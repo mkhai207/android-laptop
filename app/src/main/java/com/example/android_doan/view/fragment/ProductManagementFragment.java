@@ -29,10 +29,13 @@ import com.example.android_doan.viewmodel.ProductManagementViewModel;
 import java.util.ArrayList;
 
 public class ProductManagementFragment extends Fragment {
+    public static final String REQUEST_KEY_PRODUCT = "com.example.android_doan.view.fragment.REQUEST_KEY_PRODUCT";
+    public static final String PRODUCT_KEY = "com.example.android_doan.view.fragment.PRODUCT_KEY";
     private FragmentProductManagementBinding binding;
     private ProductManagementViewModel productManagementViewModel;
     private ProductAdminAdapter productAdminAdapter;
     private RecyclerView rcvProduct;
+    private Boolean mActionBack = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +45,10 @@ public class ProductManagementFragment extends Fragment {
                 this,
                 new BaseViewModelFactory<ProductManagementRepository>(new ProductManagementRepository(), ProductManagementViewModel.class)
         ).get(ProductManagementViewModel.class);
+
+        if (getArguments() != null) {
+            mActionBack = getArguments().getBoolean("ACTION_BACK_KEY");
+        }
     }
 
     @Override
@@ -149,10 +156,6 @@ public class ProductManagementFragment extends Fragment {
         });
 
         productAdminAdapter.setListener(new ProductAdminAdapter.IOnClickProduct() {
-            @Override
-            public void onClickItemProduct() {
-
-            }
 
             @Override
             public void onClickEdit(ProductModel productModel) {
@@ -162,6 +165,19 @@ public class ProductManagementFragment extends Fragment {
             @Override
             public void onCLickDelete(ProductModel productModel) {
 
+            }
+
+            @Override
+            public void onClickSelect(ProductModel productModel) {
+                Bundle result = new Bundle();
+                result.putSerializable(PRODUCT_KEY, productModel);
+                getParentFragmentManager().setFragmentResult(REQUEST_KEY_PRODUCT, result);
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                if (navHostFragment != null && mActionBack) {
+                    NavController navController = navHostFragment.getNavController();
+                    navController.popBackStack();
+                }
             }
         });
     }

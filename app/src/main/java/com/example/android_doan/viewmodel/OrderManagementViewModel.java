@@ -3,6 +3,8 @@ package com.example.android_doan.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.android_doan.data.model.UserModel;
+import com.example.android_doan.data.model.request.CreateAdminOrderRequest;
 import com.example.android_doan.data.model.request.UpdateOrderRequest;
 import com.example.android_doan.data.model.response.OrderAdminResponse;
 import com.example.android_doan.data.repository.RemoteRepository.OrderManagementRepository;
@@ -24,10 +26,15 @@ public class OrderManagementViewModel extends ViewModel {
     private OrderManagementRepository orderManagementRepository;
     private MutableLiveData<List<OrderAdminResponse>> ordersLiveData = new MutableLiveData<>();
     private MutableLiveData<Resource> apiResultLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<UserModel>> usersLiveData = new MutableLiveData<>();
     private CompositeDisposable disposables = new CompositeDisposable();
 
     public OrderManagementViewModel(OrderManagementRepository orderManagementRepository) {
         this.orderManagementRepository = orderManagementRepository;
+    }
+
+    public MutableLiveData<List<UserModel>> getUsersLiveData() {
+        return usersLiveData;
     }
 
     public MutableLiveData<List<OrderAdminResponse>> getOrdersLiveData() {
@@ -106,6 +113,72 @@ public class OrderManagementViewModel extends ViewModel {
                 });
         disposables.add(disposable);
     }
+
+    public void getAllUser() {
+        apiResultLiveData.setValue(Resource.loading());
+        String sort = "createdAt,desc";
+        Disposable disposable = orderManagementRepository.getAllUser(0, Integer.MAX_VALUE, sort)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 200) {
+                        usersLiveData.setValue(response.getData().getResult());
+                    }
+                }, throwable -> {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
+                    }
+                });
+        disposables.add(disposable);
+    }
+
+    public void createOrder(CreateAdminOrderRequest request) {
+        apiResultLiveData.setValue(Resource.loading());
+        Disposable disposable = orderManagementRepository.createOrder(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response != null && response.getStatusCode() == 200) {
+                        apiResultLiveData.setValue(Resource.success("createOrder"));
+                    }
+                }, throwable -> {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
+                        if (errorBody != null) {
+                            try {
+                                String errorJson = errorBody.string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String errorMessage = jsonObject.optString("message", "Call api failed");
+                                apiResultLiveData.setValue(Resource.error(errorMessage));
+                            } catch (Exception e) {
+                                apiResultLiveData.setValue(Resource.error("Unknown error"));
+                            }
+                        } else {
+                            apiResultLiveData.setValue(Resource.error("Unknown server error"));
+                        }
+                    } else {
+                        apiResultLiveData.setValue(Resource.error(throwable.getMessage()));
+                    }
+                });
+        disposables.add(disposable);
+    }
+
 
     public void refresh(String filter) {
         getAllOrder(filter);

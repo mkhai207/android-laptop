@@ -78,11 +78,11 @@ public class ProductAdminAdapter extends RecyclerView.Adapter<ProductAdminAdapte
     }
 
     public interface IOnClickProduct {
-        void onClickItemProduct();
-
         void onClickEdit(ProductModel productModel);
 
         void onCLickDelete(ProductModel productModel);
+
+        void onClickSelect(ProductModel productModel);
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
@@ -108,6 +108,15 @@ public class ProductAdminAdapter extends RecyclerView.Adapter<ProductAdminAdapte
                     @Override
                     public void onClick(View view) {
                         showPopupMenu(view, productModel);
+                    }
+                });
+
+                binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            listener.onClickSelect(productModel);
+                        }
                     }
                 });
             }

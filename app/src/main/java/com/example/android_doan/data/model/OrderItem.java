@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class OrderDetail implements Serializable {
+public class OrderItem implements Serializable {
     @SerializedName("id")
-    private int id;
+    private String id;
 
     @SerializedName("price")
     private double price;
@@ -20,7 +20,7 @@ public class OrderDetail implements Serializable {
     @SerializedName("productThumbnail")
     private String productThumbnail;
 
-    public OrderDetail(int id, double price, int quantity, String productName, String productThumbnail) {
+    public OrderItem(String id, double price, int quantity, String productName, String productThumbnail) {
         this.id = id;
         this.price = price;
         this.quantity = quantity;
@@ -28,11 +28,11 @@ public class OrderDetail implements Serializable {
         this.productThumbnail = productThumbnail;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
