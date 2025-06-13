@@ -19,9 +19,11 @@ import androidx.navigation.Navigation;
 import com.bumptech.glide.Glide;
 import com.example.android_doan.R;
 import com.example.android_doan.base.BaseViewModelFactory;
+import com.example.android_doan.data.enums.RoleEnum;
 import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.ProfileRepository;
 import com.example.android_doan.databinding.FragmentProfileBinding;
+import com.example.android_doan.view.activity.AdminActivity;
 import com.example.android_doan.view.activity.LoginActivity;
 import com.example.android_doan.viewmodel.ProfileViewModel;
 
@@ -50,6 +52,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initUI();
         setupDaTa();
         setupListener();
         handleStatus();
@@ -61,7 +64,26 @@ public class ProfileFragment extends Fragment {
         binding = null;
     }
 
+    private void initUI() {
+        RoleEnum role = RoleEnum.fromString(DataLocalManager.getRole());
+        if (role.equals(RoleEnum.ADMIN)) {
+            binding.layoutAdminPage.setVisibility(View.VISIBLE);
+        } else {
+            binding.layoutAdminPage.setVisibility(View.GONE);
+        }
+    }
+
     private void setupListener() {
+        binding.layoutAdminPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(requireActivity(), AdminActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
         binding.layoutOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

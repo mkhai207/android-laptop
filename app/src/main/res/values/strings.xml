@@ -144,5 +144,6 @@
     <string name="update_order_status">Cập nhật trạng thái</string>
     <string name="clear_filter">Refresh</string>
     <string name="empty">Trống</string>
+    <string name="admin_page">Trang quản trị</string>
 
 </resources>

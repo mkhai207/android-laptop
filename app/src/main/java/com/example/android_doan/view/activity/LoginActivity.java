@@ -48,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
                     case ADMIN:
                         intent.setClass(this, AdminActivity.class);
                         break;
+                    case STAFF:
+                        intent.setClass(this, AdminActivity.class);
+                        break;
                     default:
                         Log.d("lkhai4617", "No Role");
                         break;

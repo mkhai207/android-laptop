@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.activity.OnBackPressedCallback;
@@ -22,6 +23,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.example.android_doan.R;
 import com.example.android_doan.base.BaseViewModelFactory;
+import com.example.android_doan.data.enums.RoleEnum;
+import com.example.android_doan.data.repository.LocalRepository.DataLocalManager;
 import com.example.android_doan.data.repository.RemoteRepository.AdminHomeRepository;
 import com.example.android_doan.data.repository.RemoteRepository.AuthRepository;
 import com.example.android_doan.databinding.ActivityAdminBinding;
@@ -50,6 +53,7 @@ public class AdminActivity extends AppCompatActivity {
         setupToolbar();
         setupDrawerToggle();
         setupDataDrawerHeader();
+        hideMenuItemByRole();
         setupDrawerListener();
         handleActionBack();
     }
@@ -59,7 +63,7 @@ public class AdminActivity extends AppCompatActivity {
     }
 
     private void setupDrawerToggle() {
-       
+
     }
 
     private void setupDrawerListener() {
@@ -82,7 +86,14 @@ public class AdminActivity extends AppCompatActivity {
                     if (item.getItemId() == R.id.nav_logout) {
                         showLogoutConfirmationDialog();
                         return true;
+                    } else if (item.getItemId() == R.id.action_home) {
+                        Intent intent = new Intent();
+                        intent.setClass(AdminActivity.this, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
+
+
                     boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
                     if (handled) {
                         adminActivityBinding.drawerLayout.closeDrawer(GravityCompat.START);
@@ -172,5 +183,23 @@ public class AdminActivity extends AppCompatActivity {
                 headerBinding.tvFullName.setText(userModel.getFullName());
             }
         });
+    }
+
+    private void hideMenuItemByRole() {
+        RoleEnum role = RoleEnum.fromString(DataLocalManager.getRole());
+        Menu navMenu = adminActivityBinding.navView.getMenu();
+        if (role.equals(RoleEnum.STAFF)) {
+            navMenu.findItem(R.id.action_home).setVisible(false);
+            navMenu.findItem(R.id.userManagementFragment).setVisible(false);
+            navMenu.findItem(R.id.brandManagementFragment).setVisible(false);
+            navMenu.findItem(R.id.categoryManagementFragment).setVisible(false);
+            navMenu.findItem(R.id.statisticFragment).setVisible(false);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adminActivityBinding = null;
     }
 }

@@ -62,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
                                     Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
                             ));
                     break;
+                case STAFF:
+                    startActivity(new Intent(this, AdminActivity.class)
+                            .setFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            ));
+                    break;
                 default:
                     break;
             }
