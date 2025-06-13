@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -160,7 +161,6 @@ public class SettingFragment extends Fragment {
                         break;
                     case SUCCESS:
                         binding.progressBar.setVisibility(View.GONE);
-                        Log.d("lkhai4617", actionResult.getMessage());
                         if (DataLocalManager.getAccessToken() == null) {
                             Intent intent = new Intent(requireContext(), LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -170,7 +170,6 @@ public class SettingFragment extends Fragment {
 
                         switch (actionResult.getMessage()) {
                             case "getUser":
-                                // Do nothing, data is already set in observer
                                 break;
                             case "updateUser":
                                 Log.d("lkhai4617", actionResult.getMessage());
@@ -251,7 +250,12 @@ public class SettingFragment extends Fragment {
                     binding.edtFullName.setEnabled(true);
                     binding.edtAddress.setEnabled(true);
                     binding.edtBirthday.setEnabled(true);
+                    // Enable spinner
                     binding.spinnerGender.setEnabled(true);
+                    binding.spinnerGender.setClickable(true);
+                    binding.spinnerGender.setFocusable(true);
+                    binding.spinnerGender.setOnTouchListener(null);
+
                     binding.edtPhone.setEnabled(true);
                     binding.ivEdit.setVisibility(View.VISIBLE);
                 } else {
@@ -260,7 +264,16 @@ public class SettingFragment extends Fragment {
                     binding.edtFullName.setEnabled(false);
                     binding.edtAddress.setEnabled(false);
                     binding.edtBirthday.setEnabled(false);
+                    // Disable spinner
                     binding.spinnerGender.setEnabled(false);
+                    binding.spinnerGender.setClickable(false);
+                    binding.spinnerGender.setFocusable(false);
+                    binding.spinnerGender.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            return true;
+                        }
+                    });
                     binding.edtPhone.setEnabled(false);
                     binding.ivEdit.setVisibility(View.GONE);
 
@@ -302,8 +315,6 @@ public class SettingFragment extends Fragment {
         if (requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
             openFile();
         } else {
-//            String[] permissions = {Manifest.permission.READ_MEDIA_IMAGES};
-//            requireActivity().requestPermissions(permissions, REQUEST_CODE);
             requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
         }
     }
@@ -340,14 +351,6 @@ public class SettingFragment extends Fragment {
     }
 
     private void callApiUploadFile() {
-//        String folder = "avatar";
-//        RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("multipart/form-data"), folder);
-//        String realPathAvt = RealPathUtil.getRealPath(requireContext(), avtUri);
-//        File avatar = new File(realPathAvt);
-//        RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), avatar);
-//        MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("file", avatar.getName(), requestBodyAvt);
-//        settingViewModel.uploadFile(requestBodyFolder, multipartBodyAvt);
-
         String folder = "avatar";
         RequestBody requestBodyFolder = RequestBody.create(MediaType.parse("text/plain"), folder);
 
@@ -380,7 +383,6 @@ public class SettingFragment extends Fragment {
 //        String shoppingAddress = binding.edtShoppingAddress.getText().toString();
 
         UserModel userModel = new UserModel(userId, true, avatarStr, fullname, address, phone, gender, birthday);
-        Log.d("lkhai4617", "onClick: " + avatarStr);
         settingViewModel.updateUser(userModel);
     }
 }

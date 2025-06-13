@@ -12,4 +12,16 @@ public class UpdateOrderRequest {
         this.status = status;
         this.address = address;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public AddressResponse getAddress() {
+        return address;
+    }
 }

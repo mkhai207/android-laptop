@@ -40,7 +40,7 @@ public class OrderManagementViewModel extends ViewModel {
 
     public void getAllOrder(String filter) {
         apiResultLiveData.setValue(Resource.loading());
-        Disposable disposable = orderManagementRepository.getAllOrder(filter)
+        Disposable disposable = orderManagementRepository.getAllOrder("status: '" + filter + "'")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {

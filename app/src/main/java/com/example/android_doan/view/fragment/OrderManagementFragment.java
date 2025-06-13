@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.android_doan.adapter.OrderViewPager2Adapter;
 import com.example.android_doan.base.BaseViewModelFactory;
@@ -58,10 +59,21 @@ public class OrderManagementFragment extends Fragment {
     private void setupViewPager() {
         orderViewPager2Adapter = new OrderViewPager2Adapter(this);
         binding.viewPager.setAdapter(orderViewPager2Adapter);
+        binding.viewPager.setOffscreenPageLimit(1);
 
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
             tab.setText(OrderStatusEnum.values()[position].name());
         }).attach();
+
+        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                String status = OrderStatusEnum.values()[position].name();
+                Log.d("OrderManagementFragment", "Tab selected: " + status);
+                orderManagementViewModel.getAllOrder(status);
+            }
+        });
     }
 
     private void handleStatus() {

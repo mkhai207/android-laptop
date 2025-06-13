@@ -64,6 +64,12 @@ public class OrderStatusFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        orderManagementViewModel.getAllOrder(mStatus);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         binding = null;
@@ -80,11 +86,11 @@ public class OrderStatusFragment extends Fragment {
     }
 
     private void observer() {
-        orderManagementViewModel.getAllOrder("status:'" + mStatus + "'");
         orderManagementViewModel.getOrdersLiveData()
                 .observe(getViewLifecycleOwner(), orderAdminResponses -> {
                     orderAdminAdapter.updateData(orderAdminResponses);
                 });
+        orderManagementViewModel.getAllOrder(mStatus);
     }
 
     private void handleStatus() {
@@ -98,7 +104,7 @@ public class OrderStatusFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (apiResult.getMessage()) {
                             case "updateOrder":
-                                orderManagementViewModel.refresh("status:'" + mStatus + "'");
+                                orderManagementViewModel.refresh(mStatus);
                                 break;
                         }
                         break;
