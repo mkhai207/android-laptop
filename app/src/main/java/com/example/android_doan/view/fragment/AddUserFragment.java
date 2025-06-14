@@ -125,10 +125,6 @@ public class AddUserFragment extends Fragment {
     }
 
     private void observer() {
-        userManagementViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user -> {
-            requireActivity().getSupportFragmentManager().popBackStack();
-        });
-
         userManagementViewModel.getFileLiveData().observe(getViewLifecycleOwner(), fileData -> {
             if (fileData != null) {
                 avatarStr = fileData.getFileLink();

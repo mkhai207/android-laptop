@@ -1,5 +1,7 @@
 package com.example.android_doan.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -73,7 +75,7 @@ public class UserManagementViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    if (response != null && response.getStatusCode() == 200) {
+                    if (response != null) {
                         Meta meta = response.getData().getMeta();
                         if (meta != null) {
                             currentPage = meta.getPage();
@@ -113,6 +115,7 @@ public class UserManagementViewModel extends ViewModel {
 
     public void loadNextPage() {
         if (currentPage < pages) {
+            Log.d("lkhai4617", "loadNextPage: currentPage: " + currentPage);
             getAllUser(currentPage + 1);
         }
     }

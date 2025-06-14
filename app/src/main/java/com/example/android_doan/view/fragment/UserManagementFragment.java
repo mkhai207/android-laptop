@@ -23,6 +23,7 @@ import com.example.android_doan.data.model.UserModel;
 import com.example.android_doan.data.repository.RemoteRepository.UserManagementRepository;
 import com.example.android_doan.databinding.FragmentUserManagementBinding;
 import com.example.android_doan.utils.CustomToast;
+import com.example.android_doan.utils.Resource;
 import com.example.android_doan.viewmodel.UserManagementViewModel;
 
 import java.util.ArrayList;
@@ -62,9 +63,8 @@ public class UserManagementFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         userManagementViewModel.refresh();
         getAllUser();
-        setupListener();
-        observer();
         handleStatus();
+        setupListener();
     }
 
     @Override
@@ -101,8 +101,8 @@ public class UserManagementFragment extends Fragment {
                         int totalItemCount = layoutManager.getItemCount();
                         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-                        if (userManagementViewModel.getIsLoadingLiveData().getValue() != null && !userManagementViewModel.getIsLoadingLiveData().getValue() &&
-                                (visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 2) {
+                        if (userManagementViewModel.getApiResultLiveData().getValue() != null && userManagementViewModel.getApiResultLiveData().getValue().getStatus() != Resource.Status.LOADING &&
+                                (visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 4) {
                             userManagementViewModel.loadNextPage();
                         }
                     }
@@ -146,12 +146,6 @@ public class UserManagementFragment extends Fragment {
             public void onCLickDelete(UserModel userModel) {
                 userManagementViewModel.deleteUser(userModel.getId());
             }
-        });
-    }
-
-    private void observer() {
-        userManagementViewModel.getUsersLiveData().observe(getViewLifecycleOwner(), users -> {
-            userAdapter.updateData(users);
         });
     }
 

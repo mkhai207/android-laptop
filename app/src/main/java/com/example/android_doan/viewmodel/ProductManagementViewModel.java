@@ -134,8 +134,8 @@ public class ProductManagementViewModel extends ViewModel {
 
     public void loadNextPage() {
         if (currentPage < pages) {
-            getAllProduct(currentPage + 1);
             Log.d("lkhai4617", "loadNextPage: currentPage: " + currentPage);
+            getAllProduct(currentPage + 1);
         }
     }
 
