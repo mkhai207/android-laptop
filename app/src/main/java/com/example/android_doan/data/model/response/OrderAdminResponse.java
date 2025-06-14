@@ -1,5 +1,7 @@
 package com.example.android_doan.data.model.response;
 
+import com.example.android_doan.data.model.OrderData;
+import com.example.android_doan.data.model.OrderDetail;
 import com.example.android_doan.data.model.UserModel;
 import com.google.gson.annotations.SerializedName;
 
@@ -43,7 +45,7 @@ public class OrderAdminResponse implements Serializable {
     private AddressResponse address;
 
     @SerializedName("orderDetails")
-    private List<OrderResponse.OrderDetail> orderDetails;
+    private List<OrderDetail> orderDetails;
 
     public int getId() {
         return id;
@@ -97,7 +99,25 @@ public class OrderAdminResponse implements Serializable {
         return address;
     }
 
-    public List<OrderResponse.OrderDetail> getOrderDetails() {
+    public List<OrderDetail> getOrderDetails() {
         return orderDetails;
+    }
+
+    public OrderData mapToOrderData() {
+        return new OrderData(
+                this.id,
+                this.status,
+                this.totalMoney,
+                this.paymentMethod,
+                this.shippingAddress,
+                this.name,
+                this.phone,
+                this.createdAt,
+                this.createdBy,
+                this.updatedAt,
+                this.updatedBy,
+                this.user,
+                this.orderDetails
+        );
     }
 }

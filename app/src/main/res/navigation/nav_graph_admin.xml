@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_orderFragment_to_addOrderFragment"
             app:destination="@id/addOrderFragment" />
+        <action
+            android:id="@+id/action_orderFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticFragment"
@@ -102,4 +105,10 @@
             android:id="@+id/action_addOrderFragment_to_productManagementFragment"
             app:destination="@id/productManagementFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.example.android_doan.view.fragment.OrderDetailFragment"
+        android:label="@string/order_detail"
+        tools:layout="@layout/fragment_order_detail" />
 </navigation>

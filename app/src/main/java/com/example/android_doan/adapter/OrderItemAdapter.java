@@ -1,6 +1,7 @@
 package com.example.android_doan.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -16,9 +17,14 @@ import java.util.List;
 
 public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.OrderItemViewHolder> {
     private List<OrderItem> mList;
+    private IOnClickOrderItem listener;
 
     public OrderItemAdapter(List<OrderItem> mList) {
         this.mList = mList;
+    }
+
+    public void setListener(IOnClickOrderItem listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -31,7 +37,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     @Override
     public void onBindViewHolder(@NonNull OrderItemViewHolder holder, int position) {
         OrderItem orderItem = mList.get(position);
-        holder.bind(orderItem, holder);
+        holder.bind(orderItem, holder, listener);
     }
 
     @Override
@@ -52,6 +58,12 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         return mList;
     }
 
+    public interface IOnClickOrderItem {
+        void onClickIncreaseQuantity(OrderItem orderItem);
+
+        void onClickDecreaseQuantity(OrderItem orderItem);
+    }
+
     public static class OrderItemViewHolder extends RecyclerView.ViewHolder {
         private ItemAdminOrderItemBinding binding;
 
@@ -60,7 +72,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
             this.binding = binding;
         }
 
-        public void bind(OrderItem orderItem, OrderItemViewHolder holder) {
+        public void bind(OrderItem orderItem, OrderItemViewHolder holder, IOnClickOrderItem listener) {
             if (orderItem != null) {
                 Glide.with(holder.itemView.getContext())
                         .load(orderItem.getProductThumbnail())
@@ -69,6 +81,24 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
                 binding.productName.setText(orderItem.getProductName());
                 binding.productQuantity.setText(String.valueOf(orderItem.getQuantity()));
                 binding.productPrice.setText(FormatUtil.formatCurrency(orderItem.getPrice()));
+
+                binding.btnIncrease.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            listener.onClickIncreaseQuantity(orderItem);
+                        }
+                    }
+                });
+
+                binding.btnDecrease.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null && orderItem.getQuantity() > 1) {
+                            listener.onClickDecreaseQuantity(orderItem);
+                        }
+                    }
+                });
             }
         }
     }

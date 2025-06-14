@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
 
 public class UserManagementRepository {
     public Single<BaseResponse<BasePagingResponse<UserModel>>> getAllUser(int page, int size, String sort) {
-        return ApiService.getInstance().getAllUser(page, size, sort);
+        return ApiService.getInstance().getAllUser(page, size, sort, null);
     }
 
     public Single<BaseResponse<UserModel>> createUser(CreateUserRequest request) {

@@ -61,7 +61,8 @@ public interface Api {
     @GET("api/v1/users")
     Single<BaseResponse<BasePagingResponse<UserModel>>> getAllUser(@Query("page") int page,
                                                                    @Query("size") int size,
-                                                                   @Query("sort") String sort);
+                                                                   @Query("sort") String sort,
+                                                                   @Query("filter") String filter);
 
     @POST("api/v1/users")
     Single<BaseResponse<UserModel>> createUser(@Body CreateUserRequest request);

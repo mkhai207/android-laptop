@@ -74,5 +74,7 @@ public class OrderDetailFragment extends Fragment {
         binding.tvProductCount.setText(productCount);
         binding.tvAddress.setText(mData.getShippingAddress());
         binding.tvPaymentMethod.setText(mData.getPaymentMethod());
+        binding.tvRecipientName.setText(mData.getName());
+        binding.tvPhoneNumber.setText(mData.getPhone());
     }
 }

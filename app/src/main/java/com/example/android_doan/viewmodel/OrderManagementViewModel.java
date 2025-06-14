@@ -118,12 +118,14 @@ public class OrderManagementViewModel extends ViewModel {
     public void getAllUser() {
         apiResultLiveData.setValue(Resource.loading());
         String sort = "createdAt,desc";
-        Disposable disposable = orderManagementRepository.getAllUser(0, Integer.MAX_VALUE, sort)
+        String filter = "role : '2' and active: '1' ";
+        Disposable disposable = orderManagementRepository.getAllUser(0, Integer.MAX_VALUE, sort, filter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response != null && response.getStatusCode() == 200) {
                         usersLiveData.setValue(response.getData().getResult());
+                        apiResultLiveData.setValue(Resource.success("getAllUser"));
                     }
                 }, throwable -> {
                     if (throwable instanceof HttpException) {

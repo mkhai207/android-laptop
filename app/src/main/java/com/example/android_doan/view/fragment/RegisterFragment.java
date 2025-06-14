@@ -2,6 +2,13 @@ package com.example.android_doan.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,23 +17,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-
 import com.example.android_doan.R;
 import com.example.android_doan.data.model.request.RegisterRequest;
 import com.example.android_doan.databinding.FragmentRegisterBinding;
+import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.viewmodel.AuthViewModel;
 
 public class RegisterFragment extends Fragment {
+    private final String[] mListGender = {"MALE", "FEMALE", "OTHER"};
     private Context context;
     private AuthViewModel authViewModel;
     private FragmentRegisterBinding binding;
-    private final String[] mListGender = {"MALE", "FEMALE", "OTHER"};
     private String gender;
 
     @Override
@@ -42,6 +43,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        observer();
         NavController navController = Navigation.findNavController(requireActivity(), R.id.frg_container);
 
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +60,7 @@ public class RegisterFragment extends Fragment {
                 String email = binding.edtEmail.getText().toString();
                 String password = binding.edtPassword.getText().toString();
                 String confirmPassword = binding.edtConfirmPassword.getText().toString();
-                if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword) && confirmPassword.equals(password)){
+                if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword) && confirmPassword.equals(password)) {
                     RegisterRequest registerRequest = new RegisterRequest(fullName, email, password, gender);
                     authViewModel.register(registerRequest);
                 }
@@ -66,7 +68,7 @@ public class RegisterFragment extends Fragment {
         });
     }
 
-    private void initSpinner(){
+    private void initSpinner() {
         ArrayAdapter arrayAdapter = new ArrayAdapter(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, mListGender);
         binding.spinnerGender.setAdapter(arrayAdapter);
 
@@ -75,9 +77,20 @@ public class RegisterFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 gender = adapterView.getItemAtPosition(i).toString();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 gender = "MALE";
+            }
+        });
+    }
+
+    private void observer() {
+        authViewModel.getStatusRegister().observe(getViewLifecycleOwner(), isSuccess -> {
+            if (isSuccess) {
+                CustomToast.showToast(requireContext(), "Thành công!", Toast.LENGTH_SHORT);
+            } else {
+                CustomToast.showToast(requireContext(), "Thất bại!", Toast.LENGTH_SHORT);
             }
         });
     }

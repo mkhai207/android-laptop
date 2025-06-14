@@ -16,6 +16,7 @@ import com.example.android_doan.R;
 import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.enums.RoleEnum;
 import com.example.android_doan.data.repository.RemoteRepository.AuthRepository;
+import com.example.android_doan.utils.CustomToast;
 import com.example.android_doan.viewmodel.AuthViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -65,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
         authViewModel.getErrorLiveData().observe(this, error -> {
             Log.d("lkhai4617", error);
-            Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+            CustomToast.showToast(this, error, Toast.LENGTH_SHORT);
         });
 
         authViewModel.getStatusRegister().observe(this, isSuccess -> {

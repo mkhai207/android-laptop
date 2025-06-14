@@ -254,14 +254,6 @@ public class UserManagementViewModel extends ViewModel {
         disposables.add(disposable);
     }
 
-//    public void refreshUsers() {
-//        currentPage = 0;
-//        mListUser.clear();
-//        usersLiveData.setValue(mListUser);
-
-    /// /        loadNextPage();
-//        getAllUser(1);
-//    }
     public void refresh() {
         currentPage = 0;
         pages = 1;

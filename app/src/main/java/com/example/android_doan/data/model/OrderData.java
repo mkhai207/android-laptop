@@ -44,6 +44,22 @@ public class OrderData implements Serializable {
     @SerializedName("orderDetails")
     private List<OrderDetail> orderDetails;
 
+    public OrderData(int id, String status, double totalMoney, String paymentMethod, String shippingAddress, String name, String phone, String createdAt, String createdBy, String updatedAt, String updatedBy, UserModel user, List<OrderDetail> orderDetails) {
+        this.id = id;
+        this.status = status;
+        this.totalMoney = totalMoney;
+        this.paymentMethod = paymentMethod;
+        this.shippingAddress = shippingAddress;
+        this.name = name;
+        this.phone = phone;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.updatedAt = updatedAt;
+        this.updatedBy = updatedBy;
+        this.user = user;
+        this.orderDetails = orderDetails;
+    }
+
     public int getId() {
         return id;
     }

@@ -230,6 +230,31 @@ public class AddOrderFragment extends Fragment {
         orderItemAdapter = new OrderItemAdapter(new ArrayList<>());
         binding.rcvOrderItems.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rcvOrderItems.setAdapter(orderItemAdapter);
+        orderItemAdapter.updateData(mListProduct);
+
+        orderItemAdapter.setListener(new OrderItemAdapter.IOnClickOrderItem() {
+            @Override
+            public void onClickIncreaseQuantity(OrderItem orderItem) {
+                for (OrderItem item : mListProduct) {
+                    if (Objects.equals(item.getId(), orderItem.getId())) {
+                        item.setQuantity(item.getQuantity() + 1);
+                        orderItemAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onClickDecreaseQuantity(OrderItem orderItem) {
+                for (OrderItem item : mListProduct) {
+                    if (Objects.equals(item.getId(), orderItem.getId())) {
+                        item.setQuantity(item.getQuantity() - 1);
+                        orderItemAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     private void createOrder() {

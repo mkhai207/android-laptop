@@ -54,6 +54,8 @@ public class OrderAdminAdapter extends RecyclerView.Adapter<OrderAdminAdapter.Or
 
     public interface IOnClickOrder {
         void onClickUpdateStatus(OrderAdminResponse orderAdminResponse);
+
+        void onClickViewDetail(OrderAdminResponse orderAdminResponse);
     }
 
     public static class OrderAdminViewHolder extends RecyclerView.ViewHolder {
@@ -87,6 +89,15 @@ public class OrderAdminAdapter extends RecyclerView.Adapter<OrderAdminAdapter.Or
                     public void onClick(View view) {
                         if (listener != null) {
                             listener.onClickUpdateStatus(order);
+                        }
+                    }
+                });
+
+                binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            listener.onClickViewDetail(order);
                         }
                     }
                 });

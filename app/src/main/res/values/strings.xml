@@ -147,5 +147,6 @@
     <string name="admin_page">Trang quản trị</string>
     <string name="list_product">Danh sách sản phẩm</string>
     <string name="create_order">Tạo đơn hàng</string>
+    <string name="user">Người dùng</string>
 
 </resources>

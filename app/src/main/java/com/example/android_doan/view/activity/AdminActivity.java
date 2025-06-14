@@ -189,7 +189,7 @@ public class AdminActivity extends AppCompatActivity {
         RoleEnum role = RoleEnum.fromString(DataLocalManager.getRole());
         Menu navMenu = adminActivityBinding.navView.getMenu();
         if (role.equals(RoleEnum.STAFF)) {
-            navMenu.findItem(R.id.action_home).setVisible(false);
+//            navMenu.findItem(R.id.action_home).setVisible(false);
             navMenu.findItem(R.id.userManagementFragment).setVisible(false);
             navMenu.findItem(R.id.brandManagementFragment).setVisible(false);
             navMenu.findItem(R.id.categoryManagementFragment).setVisible(false);

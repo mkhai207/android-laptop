@@ -10,9 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.android_doan.R;
 import com.example.android_doan.adapter.OrderAdminAdapter;
 import com.example.android_doan.base.BaseViewModelFactory;
 import com.example.android_doan.data.enums.OrderStatusEnum;
@@ -131,6 +134,15 @@ public class OrderStatusFragment extends Fragment {
                 });
 
                 fragment.show(requireActivity().getSupportFragmentManager(), "update_order_status_dialog_fragment");
+            }
+
+            @Override
+            public void onClickViewDetail(OrderAdminResponse orderAdminResponse) {
+                Bundle args = new Bundle();
+                args.putSerializable(OrderDetailFragment.ORDER_DETAILS, orderAdminResponse.mapToOrderData());
+
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+                navController.navigate(R.id.action_orderFragment_to_orderDetailFragment, args);
             }
         });
     }

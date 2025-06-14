@@ -19,8 +19,8 @@ public class OrderManagementRepository {
         return ApiService.getInstance().updateOrder(request);
     }
 
-    public Single<BaseResponse<BasePagingResponse<UserModel>>> getAllUser(int page, int size, String sort) {
-        return ApiService.getInstance().getAllUser(page, size, sort);
+    public Single<BaseResponse<BasePagingResponse<UserModel>>> getAllUser(int page, int size, String sort, String filter) {
+        return ApiService.getInstance().getAllUser(page, size, sort, filter);
     }
 
     public Single<BaseResponse<OrderAdminResponse>> createOrder(CreateAdminOrderRequest request) {
