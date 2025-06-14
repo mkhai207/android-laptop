@@ -52,7 +52,8 @@ public class OrderViewModel extends ViewModel {
         }
         apiResultLiveData.setValue(Resource.loading());
         String userId = DataLocalManager.getUserId();
-        Disposable disposable = orderRepository.getOrder(userId, page, pageSize)
+        String sort = "createdAt,desc";
+        Disposable disposable = orderRepository.getOrder(userId, page, pageSize, sort)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(orderResponse -> {

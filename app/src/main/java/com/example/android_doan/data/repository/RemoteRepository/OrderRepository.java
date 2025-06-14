@@ -8,7 +8,7 @@ import com.example.android_doan.data.model.OrderData;
 import io.reactivex.Single;
 
 public class OrderRepository {
-    public Single<BaseResponse<BasePagingResponse<OrderData>>> getOrder(String userId, int page, int size) {
-        return ApiService.getInstance().getOrder(userId, page, size);
+    public Single<BaseResponse<BasePagingResponse<OrderData>>> getOrder(String userId, int page, int size, String sort) {
+        return ApiService.getInstance().getOrder(userId, page, size, sort);
     }
 }

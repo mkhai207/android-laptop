@@ -2,7 +2,6 @@ package com.example.android_doan.data.model.request;
 
 import com.example.android_doan.data.enums.OrderStatusEnum;
 import com.example.android_doan.data.model.UserModel;
-import com.example.android_doan.data.model.response.AddressResponse;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -19,14 +18,22 @@ public class OrderRequest {
     @SerializedName("orderDetails")
     private List<OrderDetail> orderDetails;
 
-    private AddressResponse address;
+    //    private AddressResponse address;
+    @SerializedName("shippingAddress")
+    private String shippingAddress;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("phone")
+    private String phone;
 
-    public OrderRequest(OrderStatusEnum status, String paymentMethod, UserModel user, List<OrderDetail> orderDetails, AddressResponse address) {
+    public OrderRequest(OrderStatusEnum status, String paymentMethod, UserModel user, List<OrderDetail> orderDetails, String shippingAddress, String name, String phone) {
         this.status = status;
         this.paymentMethod = paymentMethod;
         this.user = user;
         this.orderDetails = orderDetails;
-        this.address = address;
+        this.shippingAddress = shippingAddress;
+        this.name = name;
+        this.phone = phone;
     }
 
     public String getPaymentMethod() {

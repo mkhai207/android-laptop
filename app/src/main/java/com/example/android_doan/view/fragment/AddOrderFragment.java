@@ -123,6 +123,7 @@ public class AddOrderFragment extends Fragment {
                         binding.progressBar.setVisibility(View.GONE);
                         switch (apiResult.getMessage()) {
                             case "createOrder":
+                                CustomToast.showToast(requireContext(), "Thành công", Toast.LENGTH_SHORT);
                                 findNavController(this).popBackStack();
                                 break;
                         }

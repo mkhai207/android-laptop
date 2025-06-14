@@ -16,7 +16,7 @@ public class CreateAdminOrderRequest {
     private List<OrderItem> orderDetails;
     @SerializedName("user")
     private UserModel user;
-    @SerializedName("shipping_address")
+    @SerializedName("shippingAddress")
     private String shippingAddress;
     @SerializedName("name")
     private String name;

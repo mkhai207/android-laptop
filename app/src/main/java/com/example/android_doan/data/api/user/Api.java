@@ -108,7 +108,8 @@ public interface Api {
     @GET("api/v1/user-orders/{userId}")
     Single<BaseResponse<BasePagingResponse<OrderData>>> getOrder(@Path("userId") String userId,
                                                                  @Query("page") int page,
-                                                                 @Query("size") int size);
+                                                                 @Query("size") int size,
+                                                                 @Query("sort") String sort);
 
     @GET("api/v1/orders")
     Single<BaseResponse<BasePagingResponse<OrderAdminResponse>>> getAllOrder(@Query("filter") String filter,

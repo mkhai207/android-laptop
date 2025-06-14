@@ -152,7 +152,6 @@ public class CheckoutFragment extends Fragment {
 
             List<OrderRequest.OrderDetail> orderDetails = new ArrayList<>();
             for (GetCartResponse.Data item : mCarts) {
-//                double price = item.getQuantity() * item.getProduct().getPrice();
                 orderDetails.add(new OrderRequest.OrderDetail(item.getQuantity(), item.getProduct().getId()));
             }
 
@@ -162,9 +161,10 @@ public class CheckoutFragment extends Fragment {
                 return;
             }
             AddressResponse address = checkoutViewModel.getAddressLiveData().getValue().get(0);
+            String addressString = address.getStreet() + ", " + address.getWard() + ", " + address.getDistrict() + ", " + address.getCity();
 
             // create order
-            OrderRequest request = new OrderRequest(status, paymentMethod, user, orderDetails, address);
+            OrderRequest request = new OrderRequest(status, paymentMethod, user, orderDetails, addressString, address.getRecipientName(), address.getPhoneNumber());
             checkoutViewModel.placeOrder(request, isSuccess -> {
                 if (isSuccess && Objects.equals(mAction, ADD_TO_CART_ACTION)) {
                     checkoutViewModel.clearCart(isSuccess1 -> {
