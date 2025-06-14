@@ -11,8 +11,8 @@ import com.example.android_doan.data.model.response.OrderAdminResponse;
 import io.reactivex.Single;
 
 public class OrderManagementRepository {
-    public Single<BaseResponse<BasePagingResponse<OrderAdminResponse>>> getAllOrder(String filter) {
-        return ApiService.getInstance().getAllOrder(filter);
+    public Single<BaseResponse<BasePagingResponse<OrderAdminResponse>>> getAllOrder(String filter, String sort) {
+        return ApiService.getInstance().getAllOrder(filter, sort);
     }
 
     public Single<BaseResponse<OrderAdminResponse>> updateOrder(UpdateOrderRequest request) {

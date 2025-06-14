@@ -5,6 +5,7 @@ import static com.example.android_doan.view.fragment.ProductManagementFragment.P
 import static com.example.android_doan.view.fragment.ProductManagementFragment.REQUEST_KEY_PRODUCT;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,14 @@ public class AddOrderFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (selectedUser != null) {
+            outState.putSerializable("SELECTED_USER_KEY", selectedUser);
+        }
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         orderManagementViewModel =
@@ -67,6 +76,9 @@ public class AddOrderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            selectedUser = (UserModel) savedInstanceState.getSerializable("SELECTED_USER_KEY");
+        }
         observer();
         handleStatus();
         initUI();
@@ -85,6 +97,16 @@ public class AddOrderFragment extends Fragment {
             if (users != null && !users.isEmpty()) {
                 mListUser = users;
                 setupSpinner();
+
+                if (selectedUser != null) {
+                    for (int i = 0; i < mListUser.size(); i++) {
+                        if (mListUser.get(i).getId() == selectedUser.getId()) {
+                            selectedUser = mListUser.get(i);
+                            binding.spinnerUsers.setSelection(i);
+                            break;
+                        }
+                    }
+                }
             }
         });
         orderManagementViewModel.getAllUser();
@@ -132,6 +154,20 @@ public class AddOrderFragment extends Fragment {
                 createOrder();
             }
         });
+
+        binding.spinnerUsers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                UserModel userModel = (UserModel) adapterView.getSelectedItem();
+                selectedUser = new UserModel(userModel.getId());
+                Log.d("lkhai4617", "onItemSelected: " + selectedUser.getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void setupSpinner() {
@@ -158,19 +194,6 @@ public class AddOrderFragment extends Fragment {
         };
         userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerUsers.setAdapter(userAdapter);
-
-        binding.spinnerUsers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                UserModel userModel = (UserModel) adapterView.getSelectedItem();
-                selectedUser = new UserModel(userModel.getId());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     private void openProductManagement() {

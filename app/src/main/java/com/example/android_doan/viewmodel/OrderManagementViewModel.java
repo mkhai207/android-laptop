@@ -47,7 +47,8 @@ public class OrderManagementViewModel extends ViewModel {
 
     public void getAllOrder(String filter) {
         apiResultLiveData.setValue(Resource.loading());
-        Disposable disposable = orderManagementRepository.getAllOrder("status: '" + filter + "'")
+        String sort = "createdAt,desc";
+        Disposable disposable = orderManagementRepository.getAllOrder("status: '" + filter + "'", sort)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
@@ -153,7 +154,7 @@ public class OrderManagementViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    if (response != null && response.getStatusCode() == 200) {
+                    if (response != null && response.getStatusCode() == 201) {
                         apiResultLiveData.setValue(Resource.success("createOrder"));
                     }
                 }, throwable -> {

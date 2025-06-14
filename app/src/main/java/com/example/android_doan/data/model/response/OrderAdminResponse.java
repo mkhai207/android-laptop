@@ -31,9 +31,14 @@ public class OrderAdminResponse implements Serializable {
     @SerializedName("updatedBy")
     private String updatedBy;
 
+    @SerializedName("name")
+    private String name;
+    @SerializedName("shippingAddress")
+    private String shippingAddress;
+    @SerializedName("phone")
+    private String phone;
     @SerializedName("user")
     private UserModel user;
-
     @SerializedName("address")
     private AddressResponse address;
 
@@ -54,6 +59,18 @@ public class OrderAdminResponse implements Serializable {
 
     public String getPaymentMethod() {
         return paymentMethod;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public String getCreatedAt() {

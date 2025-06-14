@@ -13,17 +13,15 @@ import com.example.android_doan.utils.FormatUtil;
 
 import java.util.List;
 
-public class OrderAdminAdapter extends RecyclerView.Adapter<OrderAdminAdapter.OrderAdminViewHolder>{
+public class OrderAdminAdapter extends RecyclerView.Adapter<OrderAdminAdapter.OrderAdminViewHolder> {
     private List<OrderAdminResponse> mListOrder;
     private IOnClickOrder listener;
-    public interface IOnClickOrder{
-        void onClickUpdateStatus(OrderAdminResponse orderAdminResponse);
-    }
+
     public OrderAdminAdapter(List<OrderAdminResponse> mListOrder) {
         this.mListOrder = mListOrder;
     }
 
-    public void setListener(IOnClickOrder listener){
+    public void setListener(IOnClickOrder listener) {
         this.listener = listener;
     }
 
@@ -42,48 +40,57 @@ public class OrderAdminAdapter extends RecyclerView.Adapter<OrderAdminAdapter.Or
 
     @Override
     public int getItemCount() {
-        if (mListOrder!= null){
+        if (mListOrder != null) {
             return mListOrder.size();
         }
         return 0;
     }
 
-    public static class OrderAdminViewHolder extends RecyclerView.ViewHolder{
+    public void updateData(List<OrderAdminResponse> orders) {
+        mListOrder.clear();
+        mListOrder.addAll(orders);
+        notifyDataSetChanged();
+    }
+
+    public interface IOnClickOrder {
+        void onClickUpdateStatus(OrderAdminResponse orderAdminResponse);
+    }
+
+    public static class OrderAdminViewHolder extends RecyclerView.ViewHolder {
         private ItemOrderAdminBinding binding;
+
         public OrderAdminViewHolder(@NonNull ItemOrderAdminBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bind(OrderAdminResponse order, IOnClickOrder listener){
+        public void bind(OrderAdminResponse order, IOnClickOrder listener) {
             if (order != null) {
                 binding.tvStatus.setText(order.getStatus().toUpperCase());
                 binding.tvOrderDate.setText(FormatUtil.formatIsoDate(order.getCreatedAt()));
                 binding.tvOrderId.setText(String.valueOf(order.getId()));
                 binding.tvQuantity.setText(String.valueOf(order.getOrderDetails().size()));
                 binding.tvTotal.setText(FormatUtil.formatCurrency(order.getTotalMoney()));
-                if (order.getAddress() != null){
-                    binding.tvRecipientName.setText(order.getAddress().getRecipientName());
-                    binding.tvPhoneNumber.setText(order.getAddress().getPhoneNumber());
+                if (order.getAddress() != null) {
+                    binding.tvRecipientName.setText(order.getAddress().getRecipientName() != null ? order.getAddress().getRecipientName() : "");
+                    binding.tvPhoneNumber.setText(order.getAddress().getPhoneNumber() != null ? order.getAddress().getPhoneNumber() : "");
                     String address = order.getAddress().getStreet() + ", " + order.getAddress().getWard() + ", " + order.getAddress().getDistrict() + ", " + order.getAddress().getCity();
-                    binding.tvShippingAddress.setText(address);
+                    binding.tvShippingAddress.setText(address != null ? address : "");
+                } else {
+                    binding.tvRecipientName.setText(order.getName());
+                    binding.tvPhoneNumber.setText(order.getPhone());
+                    binding.tvShippingAddress.setText(order.getShippingAddress());
                 }
 
                 binding.btnUpdateStatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (listener != null){
+                        if (listener != null) {
                             listener.onClickUpdateStatus(order);
                         }
                     }
                 });
             }
         }
-    }
-
-    public void updateData(List<OrderAdminResponse> orders){
-        mListOrder.clear();
-        mListOrder.addAll(orders);
-        notifyDataSetChanged();
     }
 }

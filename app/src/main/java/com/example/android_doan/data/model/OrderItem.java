@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class OrderItem implements Serializable {
-    @SerializedName("id")
+    @SerializedName("productId")
     private String id;
 
     @SerializedName("price")

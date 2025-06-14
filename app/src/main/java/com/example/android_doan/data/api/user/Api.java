@@ -111,12 +111,13 @@ public interface Api {
                                                                  @Query("size") int size);
 
     @GET("api/v1/orders")
-    Single<BaseResponse<BasePagingResponse<OrderAdminResponse>>> getAllOrder(@Query("filter") String filter);
+    Single<BaseResponse<BasePagingResponse<OrderAdminResponse>>> getAllOrder(@Query("filter") String filter,
+                                                                             @Query("sort") String sort);
 
     @PUT("api/v1/admin-orders")
     Single<BaseResponse<OrderAdminResponse>> updateOrder(@Body UpdateOrderRequest request);
 
-    @PUT("api/v1/admin-orders")
+    @POST("api/v1/admin-orders")
     Single<BaseResponse<OrderAdminResponse>> createOrder(@Body CreateAdminOrderRequest request);
 
     // api upload file
