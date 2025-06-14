@@ -69,7 +69,7 @@ public class UserManagementViewModel extends ViewModel {
         if (apiResultLiveData.getValue().getStatus() == Resource.Status.LOADING || page > pages) {
             return;
         }
-        isLoadingLiveData.setValue(true);
+        apiResultLiveData.setValue(Resource.loading());
         String sort = "createdAt,desc";
         Disposable disposable = userManagementRepository.getAllUser(page, pageSize, sort)
                 .subscribeOn(Schedulers.io())
@@ -90,7 +90,6 @@ public class UserManagementViewModel extends ViewModel {
                         }
                     }
                 }, throwable -> {
-                    isLoadingLiveData.setValue(false);
                     if (throwable instanceof HttpException) {
                         HttpException httpException = (HttpException) throwable;
                         ResponseBody errorBody = Objects.requireNonNull(httpException.response()).errorBody();
