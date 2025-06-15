@@ -129,7 +129,7 @@ public class OrderStatusFragment extends Fragment {
                 fragment.setListener(new UpdateOrderStatusDialogFragment.IOnStatusUpdatedListener() {
                     @Override
                     public void onStatusUpdated(OrderStatusEnum newStatus) {
-                        orderManagementViewModel.updateOrder(new UpdateOrderRequest(orderAdminResponse.getId(), newStatus.toString(), orderAdminResponse.getAddress()));
+                        orderManagementViewModel.updateOrder(new UpdateOrderRequest(orderAdminResponse.getId(), newStatus.toString()));
                     }
                 });
 

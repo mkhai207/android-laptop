@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 public enum OrderStatusEnum {
     PENDING,
-//    UNPAID,
+    //    UNPAID,
 //    PAID,
     SHIPPING,
     COMPLETED,
@@ -16,5 +16,14 @@ public enum OrderStatusEnum {
         return Arrays.stream(OrderStatusEnum.values())
                 .map(Enum::name)
                 .collect(Collectors.toList());
+    }
+
+    public static OrderStatusEnum fromString(String status) {
+        for (OrderStatusEnum s : OrderStatusEnum.values()) {
+            if (s.name().equalsIgnoreCase(status)) {
+                return s;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant for status: " + status);
     }
 }

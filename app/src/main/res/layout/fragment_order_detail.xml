@@ -8,6 +8,17 @@
     android:padding="16dp"
     tools:context=".view.fragment.OrderDetailFragment">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_order_id"
         android:layout_width="wrap_content"
@@ -67,7 +78,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_product_count" />
 
     <TextView
-        android:id="@+id/tv_order_info_title"
+        android:id="@+id/tv_order_user_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -77,6 +88,19 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rcv_order_items" />
+
+    <ImageView
+        android:id="@+id/btn_edit_recipient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:padding="5dp"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_order_user_info_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_order_user_info_title"
+        app:tint="@color/blue" />
 
     <TextView
         android:id="@+id/tv_address_label"
@@ -89,47 +113,23 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_order_info_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_order_user_info_title" />
 
-    <TextView
-        android:id="@+id/tv_address"
-        android:layout_width="0dp"
+    <EditText
+        android:id="@+id/edt_address"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:padding="5dp"
-        android:text="@string/ex_address"
+        android:background="@android:color/transparent"
+        android:enabled="false"
+        android:hint="@string/hint_address"
+        android:padding="10dp"
         android:textColor="@color/text_color"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_address_label" />
-
-    <TextView
-        android:id="@+id/tv_payment_method_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/payment_method"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_address" />
-
-    <TextView
-        android:id="@+id/tv_payment_method"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:padding="5dp"
-        android:text="@string/online"
-        android:textColor="@color/text_color"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_payment_method_label" />
 
     <TextView
         android:id="@+id/tv_recipient_name_label"
@@ -142,18 +142,21 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_payment_method" />
+        app:layout_constraintTop_toBottomOf="@id/edt_address" />
 
-    <TextView
-        android:id="@+id/tv_recipient_name"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/edt_recipient_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:padding="5dp"
-        android:text="@string/hint_recipient_name"
+        android:background="@android:color/transparent"
+        android:enabled="false"
+        android:hint="@string/hint_recipient_name"
+        android:padding="10dp"
         android:textColor="@color/text_color"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_recipient_name_label" />
 
@@ -168,18 +171,60 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_recipient_name" />
+        app:layout_constraintTop_toBottomOf="@id/edt_recipient_name" />
+
+
+    <EditText
+        android:id="@+id/edt_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:background="@android:color/transparent"
+        android:enabled="false"
+        android:hint="@string/hint_phone"
+        android:padding="10dp"
+        android:textColor="@color/text_color"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_phone_number_label" />
 
     <TextView
-        android:id="@+id/tv_phone_number"
+        android:id="@+id/tv_payment_method_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/payment_method"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_order_info_title"
+        app:layout_constraintTop_toBottomOf="@id/edt_phone_number" />
+
+    <TextView
+        android:id="@+id/tv_payment_method"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:padding="5dp"
-        android:text="@string/hint_phone"
+        android:text="@string/online"
         android:textColor="@color/text_color"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_phone_number_label" />
+        app:layout_constraintTop_toBottomOf="@id/tv_payment_method_label" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/bg_primary"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
