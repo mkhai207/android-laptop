@@ -138,6 +138,12 @@ public class AddOrUpdateAddressFragment extends Fragment {
                         isDefault,
                         userModel
                 );
+
+        if (recipientName.isBlank() || phone.isBlank() || street.isBlank() || ward.isBlank() || district.isBlank() || city.isBlank()) {
+            CustomToast.showToast(requireContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT);
+            return;
+        }
+
         addressViewModel.updateAddress(address);
     }
 
@@ -162,6 +168,11 @@ public class AddOrUpdateAddressFragment extends Fragment {
                         isDefault,
                         userModel
                 );
+
+        if (recipientName.isBlank() || phone.isBlank() || street.isBlank() || ward.isBlank() || district.isBlank() || city.isBlank()) {
+            CustomToast.showToast(requireContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT);
+            return;
+        }
         addressViewModel.createAddress(createAddressRequest);
     }
 }

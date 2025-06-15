@@ -31,6 +31,19 @@ public class AddressResponse implements Serializable {
         this.user = user;
     }
 
+//    public CreateAddressRequest mapToCreateAddressRequest() {
+//        return new CreateAddressRequest(
+//                this.recipientName,
+//                this.phoneNumber,
+//                this.street,
+//                this.ward,
+//                this.district,
+//                this.city,
+//                this.isDefault,
+//                this.user
+//        );
+//    }
+
     public int getId() {
         return id;
     }

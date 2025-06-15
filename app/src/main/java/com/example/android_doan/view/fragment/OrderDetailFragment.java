@@ -162,14 +162,17 @@ public class OrderDetailFragment extends Fragment {
 
                 if (recipientName.isBlank()) {
                     CustomToast.showToast(requireContext(), "Vui lòng nhập tên người nhân!", Toast.LENGTH_SHORT);
+                    return;
                 }
 
                 if (phone.isBlank()) {
                     CustomToast.showToast(requireContext(), "Vui lòng nhập SĐT người nhân!", Toast.LENGTH_SHORT);
+                    return;
                 }
 
                 if (shippingAddress.isBlank()) {
                     CustomToast.showToast(requireContext(), "Vui lòng nhập địa chỉ nhận hàng!", Toast.LENGTH_SHORT);
+                    return;
                 }
 
                 UpdateOrderRequest request = new UpdateOrderRequest(mData.getId(), mData.getStatus());
